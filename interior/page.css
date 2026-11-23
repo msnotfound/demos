@@ -1,0 +1,571 @@
+/* Hallmark · shape: Narrative Workflow · genre: editorial · theme: Loom (deal 3/3, seed kestrel-stone-architectural-interior-905b) · job: book · draw: ks-2026
+ * hero: Poster · nav: ruled-bar · footer: quiet-mast · imagery: architectural photographs + real matched renovation pair · signature: pixel-aligned Victorian renovation curtain + 18-week ruled programme · loom: ecru + indigo
+ * axes: light/roman-serif/cool · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P9 H9 E9 S9 R9 V9 · weakest: mobile poster crop, handled with calm left-bottom scrim and balanced display scale */
+@import url("./tokens.css");
+@import url("./base.css");
+
+html, body {
+  overflow-x: clip;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+.wrap {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  line-height: 1.04;
+  letter-spacing: var(--tracking-display);
+  font-synthesis: none;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+h3 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-title);
+  line-height: 1.25;
+}
+
+.num {
+  font-family: var(--font-outlier);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Ruled Loom Top Navigation */
+.site-nav {
+  background: var(--color-paper);
+  border-bottom: var(--rule-ink) solid var(--color-rule-ink);
+}
+
+.nav-inner {
+  min-height: 76px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--color-ink);
+  text-decoration: none;
+  line-height: 1;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.nav-links a {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding-block: var(--space-2xs);
+  transition: border-color var(--dur-short) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .nav-links a:hover { border-color: var(--color-accent); }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 var(--space-lg);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out);
+}
+
+.btn:active { transform: scale(0.97); }
+@media (hover: hover) {
+  .btn:hover { background: var(--color-accent-2); }
+}
+
+.link-rule {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  padding-block: var(--space-xs);
+  border-bottom: 2px solid currentColor;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--dur-short) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .link-rule:hover { border-color: var(--color-accent); }
+}
+
+/* Poster Hero — pure Loom architecture */
+.poster-hero {
+  position: relative;
+  min-height: min(82dvh, 760px);
+  display: flex;
+  align-items: center;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  overflow: hidden;
+}
+
+.poster-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(0.96);
+}
+
+.poster-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--color-ink) 72%, transparent) 0%,
+    color-mix(in oklab, var(--color-ink) 42%, transparent) 48%,
+    color-mix(in oklab, var(--color-ink) 12%, transparent) 100%
+  );
+  pointer-events: none;
+}
+
+.poster-hero .wrap {
+  width: 100%;
+}
+
+.poster-content {
+  position: relative;
+  z-index: var(--z-raised);
+  padding-block: var(--space-3xl);
+  max-width: 580px;
+}
+
+.poster-content h1 {
+  font-size: var(--text-display);
+  line-height: 1;
+  color: var(--color-paper);
+  margin-bottom: var(--space-md);
+}
+
+.poster-content p {
+  font-size: var(--text-lead);
+  color: var(--color-paper);
+  max-width: 38ch;
+  line-height: 1.48;
+  margin-bottom: var(--space-xl);
+}
+
+.poster-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+/* Section 2: Full-Width Real Before/After Renovation Curtain */
+.section {
+  padding-block: var(--space-3xl);
+}
+
+.section--sand {
+  background: var(--color-paper-2);
+}
+
+.sec-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--gap-columns);
+  align-items: end;
+  margin-bottom: var(--space-xl);
+}
+
+.sec-head h2 {
+  font-size: var(--text-section);
+}
+
+.sec-head p {
+  color: var(--color-muted);
+  font-size: var(--text-md);
+  max-width: 44ch;
+}
+
+.curtain-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+}
+
+.curtain-controls {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.text-toggle {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding-block: var(--space-2xs);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out);
+}
+
+.text-toggle[aria-pressed="true"] {
+  color: var(--color-ink);
+  border-color: var(--color-accent);
+}
+
+.curtain-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1376 / 768;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+  cursor: ew-resize;
+  outline: 1px solid color-mix(in oklab, var(--color-ink) 10%, transparent);
+  outline-offset: -1px;
+}
+
+.curtain-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.curtain-layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.curtain-before {
+  clip-path: inset(0 50% 0 0);
+  will-change: clip-path;
+}
+
+.curtain-rule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: var(--color-paper);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.curtain-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border: 1px solid var(--color-rule-ink);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-outlier);
+  font-size: var(--text-xs);
+}
+
+/* Loom Pattern-Book Specification Rows */
+.spec-sheet {
+  margin-top: var(--space-xl);
+  border-top: var(--rule-ink) solid var(--color-rule-ink);
+}
+
+.spec-row {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.35fr) minmax(0, 1fr);
+  gap: var(--gap-columns);
+  align-items: baseline;
+  padding-block: var(--space-md);
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.spec-label {
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.spec-value {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--color-ink);
+}
+
+/* Section 3: Loom Signature Ruled Time Scale (Weeks 0 to 18) */
+.schedule-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.schedule-table {
+  min-width: 720px;
+}
+
+.scale-head {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  padding-bottom: var(--space-sm);
+  border-bottom: var(--rule-ink) solid var(--color-rule-ink);
+  align-items: end;
+}
+
+.scale-title {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.scale-ticks {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  font-family: var(--font-outlier);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+.phase-row {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  align-items: center;
+  min-height: 80px;
+  border-bottom: var(--rule-hair) solid var(--color-rule);
+}
+
+.phase-name {
+  font-weight: 500;
+  font-size: var(--text-md);
+  color: var(--color-ink);
+  padding-right: var(--space-md);
+}
+
+.phase-track {
+  position: relative;
+  height: 80px;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  align-items: center;
+}
+
+.phase-grid-cell {
+  height: 100%;
+  border-left: var(--rule-hair) solid var(--color-rule);
+}
+
+.phase-bar {
+  position: absolute;
+  height: 14px;
+  background: var(--color-paper-3);
+}
+
+.phase-bar--start {
+  height: 14px;
+  width: 14px;
+  background: var(--color-ink);
+}
+
+.phase-bar--handover {
+  height: 4px;
+  background: var(--color-accent);
+}
+
+/* Section 4: Quiet Two-Column Ruled Commissions */
+.commissions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2xl) var(--gap-columns);
+}
+
+.commission figure {
+  margin: 0;
+}
+
+.commission img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(0.96);
+  outline: 1px solid color-mix(in oklab, var(--color-ink) 8%, transparent);
+  outline-offset: -1px;
+}
+
+.commission figcaption {
+  margin-top: var(--space-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.commission figcaption strong {
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+/* Section 5: Deep Dyed Indigo Inquiry Band */
+.band-indigo {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  padding-block: var(--space-3xl);
+}
+
+.indigo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: var(--gap-columns);
+  align-items: start;
+}
+
+.indigo-grid h2 {
+  font-size: var(--text-section);
+  color: var(--color-accent-ink);
+  margin-bottom: var(--space-md);
+}
+
+.indigo-copy {
+  color: var(--color-accent-ink);
+  max-width: 40ch;
+  margin-bottom: var(--space-xl);
+}
+
+.practice-facts {
+  border-top: var(--rule-hair) solid color-mix(in oklab, var(--color-accent-ink) 32%, transparent);
+  padding-top: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-accent-ink);
+}
+
+.visit-form {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.visit-form label {
+  display: grid;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-accent-ink);
+}
+
+.visit-form input,
+.visit-form select,
+.visit-form textarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: 0;
+  border: var(--rule-hair) solid color-mix(in oklab, var(--color-accent-ink) 45%, transparent);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.visit-form textarea { min-height: 92px; resize: vertical; }
+
+.band-indigo .btn {
+  background: var(--color-paper);
+  color: var(--color-accent);
+  justify-self: start;
+}
+
+.band-indigo :focus-visible {
+  outline: 2px solid var(--color-accent-ink);
+  outline-offset: 2px;
+}
+
+.visit-confirm {
+  display: none;
+  padding: var(--space-md);
+  border: var(--rule-hair) solid var(--color-accent-ink);
+  font-size: var(--text-sm);
+}
+
+.visit-confirm.is-visible { display: block; }
+
+/* Quiet Loom Footer */
+.site-footer {
+  padding-block: var(--space-xl);
+  border-top: var(--rule-hair) solid var(--color-rule);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.footer-inner a {
+  color: var(--color-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-rule-ink);
+}
+
+@media (max-width: 960px) {
+  .wrap { padding-inline: var(--space-lg); }
+  .sec-head, .commissions-grid, .indigo-grid, .spec-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .nav-links { display: none; }
+}

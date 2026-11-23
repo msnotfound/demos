@@ -1,0 +1,53 @@
+:root {
+  color-scheme: dark;
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5625rem; --text-2xl: 1.953rem; --text-3xl: 2.441rem;
+  --text-display-s: clamp(2.25rem, 4vw + 0.5rem, 3.75rem);
+  --text-display: clamp(2.85rem, 4.8vw + 0.9rem, 4.85rem);
+  --text-section: clamp(2rem, 2.5vw + 1rem, 3.35rem);
+  --text-figure: clamp(3.5rem, 6vw + 1rem, 6.25rem);
+  --text-title: clamp(1.25rem, 0.75vw + 0.875rem, 1.625rem);
+  --text-lead: clamp(1.0625rem, 0.35vw + 0.95rem, 1.25rem);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
+  --container: 1320px; --gutter: 48px; --gap-columns: 32px;
+  --z-base: 1; --z-raised: 10; --z-sticky-nav: 300;
+
+  /* Ultraviolet night colourway */
+  --color-paper: oklch(14% 0.02 290);
+  --color-paper-2: oklch(17.5% 0.025 290);
+  --color-paper-3: oklch(21% 0.03 290);
+  --color-ink: oklch(93% 0.03 300);
+  --color-ink-2: oklch(80% 0.04 300);
+  --color-muted: oklch(68% 0.05 300);
+  --color-rule: oklch(28% 0.04 290);
+  --color-rule-2: oklch(44% 0.07 292);
+  --color-accent: oklch(55% 0.25 290);
+  --color-accent-deep: oklch(48% 0.24 290);
+  --color-accent-soft: oklch(36% 0.09 293);
+  --color-accent-ink: oklch(97% 0.01 300);
+  --color-focus: oklch(62% 0.22 290);
+
+  /* Lavender contrast band tokens */
+  --color-lav-paper: oklch(94.5% 0.024 300);
+  --color-lav-ink: oklch(18% 0.02 300);
+  --color-lav-muted: oklch(44% 0.045 300);
+  --color-lav-rule: oklch(83% 0.04 300);
+  --color-lav-accent: oklch(50% 0.25 290);
+
+  /* Record band tokens */
+  --color-rec-paper: oklch(50% 0.25 290);
+  --color-rec-ink: oklch(96% 0.015 300);
+  --color-rec-pill: oklch(99% 0.005 300);
+  --color-rec-rule: oklch(72% 0.14 292);
+
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Onest", ui-sans-serif, system-ui, sans-serif;
+  --font-outlier: "IBM Plex Mono", ui-monospace, monospace;
+  --radius-card: 16px;
+  --radius-pill: 999px;
+  --rule-hair: 1px;
+  --shadow-card: 0 1px 2px oklch(8% 0.02 290 / 0.35);
+  --tracking-display: -0.03em;
+  --display-weight: 500;
+}
