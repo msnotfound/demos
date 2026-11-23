@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mayank Sahu | Web Engineering &amp; AI Systems Studio</title>
+  <title>Mayank Sahu | Custom Websites &amp; AI Automation Engineering</title>
   <link rel="preconnect" href="https://api.fontshare.com" />
   <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,14 +11,15 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: oklch(0.985 0.002 250);
-      --surface: oklch(0.956 0.004 250);
+      --bg: oklch(0.986 0.002 250);
+      --surface: oklch(0.958 0.004 250);
       --surface-dark: oklch(0.15 0.008 255);
-      --line: oklch(0.88 0.006 250);
+      --line: oklch(0.885 0.006 250);
       --ink: oklch(0.16 0.01 255);
-      --ink-muted: oklch(0.46 0.01 255);
-      --cobalt: oklch(0.48 0.19 258);
+      --ink-muted: oklch(0.45 0.01 255);
+      --cobalt: oklch(0.47 0.19 258);
       --cobalt-ink: oklch(0.99 0.002 250);
+      --wa: oklch(0.47 0.14 152);
       --font-sans: "Switzer", -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: "IBM Plex Mono", ui-monospace, monospace;
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -58,13 +59,13 @@
       position: sticky;
       top: 0;
       z-index: 40;
-      background: color-mix(in oklch, var(--bg) 92%, transparent);
+      background: color-mix(in oklch, var(--bg) 94%, transparent);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--line);
     }
 
     .topbar-inner {
-      max-width: 1380px;
+      max-width: 1360px;
       margin: 0 auto;
       height: 62px;
       padding: 0 28px;
@@ -102,7 +103,7 @@
     }
 
     .btn-primary {
-      padding: 9px 17px;
+      padding: 10px 18px;
       background: var(--cobalt);
       color: var(--cobalt-ink);
       font-weight: 500;
@@ -113,8 +114,20 @@
       justify-content: center;
     }
 
+    .btn-wa {
+      padding: 10px 18px;
+      background: var(--wa);
+      color: oklch(0.99 0.004 150);
+      font-weight: 500;
+      font-size: 0.88rem;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .btn-secondary {
-      padding: 9px 17px;
+      padding: 10px 17px;
       border: 1px solid var(--line);
       background: var(--bg);
       color: var(--ink);
@@ -126,23 +139,28 @@
       justify-content: center;
     }
 
-    /* Main Hero & Live Proofing Stage */
+    @media (hover: hover) {
+      .btn-primary:hover, .btn-wa:hover { filter: brightness(1.07); }
+      .btn-secondary:hover { border-color: var(--ink); }
+    }
+
     .wrap {
-      max-width: 1380px;
+      max-width: 1360px;
       margin: 0 auto;
       padding: 0 28px;
     }
 
+    /* Customer-First Hero */
     .hero-top {
-      padding: 36px 0 28px;
+      padding: 40px 0 30px;
       display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.75fr);
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.8fr);
       gap: 32px;
       align-items: end;
     }
 
     h1 {
-      font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+      font-size: clamp(2.4rem, 4.5vw, 3.85rem);
       font-weight: 600;
       line-height: 1.01;
       letter-spacing: -0.035em;
@@ -151,23 +169,24 @@
 
     .hero-right {
       display: grid;
-      gap: 14px;
+      gap: 16px;
     }
 
     .hero-right p {
-      font-size: 0.96rem;
+      font-size: 0.98rem;
       color: var(--ink-muted);
+      text-wrap: pretty;
     }
 
     .hero-btns { display: flex; flex-wrap: wrap; gap: 10px; }
 
-    /* Interactive Proofing Stage */
+    /* Live Industry Showcase Stage */
     .stage-shell {
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 14px;
       padding: 12px;
-      margin-bottom: 64px;
+      margin-bottom: 56px;
     }
 
     .stage-bar {
@@ -186,9 +205,9 @@
     }
 
     .demo-tab {
-      padding: 7px 13px;
+      padding: 8px 14px;
       border-radius: 7px;
-      font-size: 0.84rem;
+      font-size: 0.85rem;
       color: var(--ink-muted);
       border: 1px solid transparent;
     }
@@ -266,22 +285,88 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
-      padding: 10px 4px 2px;
-      font-size: 0.84rem;
+      padding: 11px 6px 2px;
+      font-size: 0.86rem;
       color: var(--ink-muted);
     }
 
-    /* Archive & Directory */
+    .stage-foot a {
+      color: var(--cobalt);
+      font-weight: 500;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    /* Trust & Engineering Proof Band */
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 56px;
+    }
+
+    .trust-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 22px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .trust-k {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--cobalt);
+    }
+
+    .trust-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.015em;
+    }
+
+    .trust-card p {
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+    }
+
+    .trust-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+    }
+
+    .trust-links a {
+      color: var(--cobalt);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+
+    /* Live Directory */
     .section {
-      padding: 60px 0;
+      padding: 56px 0;
       border-top: 1px solid var(--line);
     }
 
+    .sec-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
     h2 {
-      font-size: clamp(1.55rem, 2.6vw, 2.15rem);
+      font-size: clamp(1.55rem, 2.6vw, 2.2rem);
       font-weight: 600;
       letter-spacing: -0.025em;
-      margin-bottom: 22px;
     }
 
     .table-wrap {
@@ -315,14 +400,13 @@
     td.muted { color: var(--ink-muted); }
     td.links { text-align: right; white-space: nowrap; }
     td.links a {
-      margin-left: 14px;
       color: var(--cobalt);
       font-weight: 500;
       text-decoration: underline;
       text-underline-offset: 0.2em;
     }
 
-    /* Estimator */
+    /* Fixed-Scope Estimator */
     .quote-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
@@ -393,22 +477,50 @@
       font-size: 0.9rem;
     }
 
+    .cta-stack {
+      display: grid;
+      gap: 9px;
+    }
+
+    .copy-feedback {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--wa);
+      min-height: 18px;
+    }
+
     footer {
       border-top: 1px solid var(--line);
       padding: 28px 0 44px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 14px;
-      font-size: 0.85rem;
+      gap: 16px;
+      font-size: 0.86rem;
       color: var(--ink-muted);
     }
 
-    footer a { text-decoration: underline; text-underline-offset: 0.25em; }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    footer a {
+      color: var(--ink);
+      text-decoration: underline;
+      text-underline-offset: 0.25em;
+    }
 
     @media (max-width: 960px) {
-      .hero-top, .quote-grid { grid-template-columns: minmax(0, 1fr); }
+      .hero-top, .quote-grid, .trust-grid { grid-template-columns: minmax(0, 1fr); }
       .nav-links, .brand-role { display: none; }
+    }
+
+    @media (max-width: 760px) {
+      .vp-toggle-wrap { display: none; }
+      .viewport-stage { height: 460px; }
     }
 
     @media (max-width: 600px) {
@@ -425,122 +537,126 @@
         <span class="brand-role">Web Engineering &amp; AI Systems</span>
       </a>
       <nav class="nav-links" aria-label="Primary">
-        <a href="#work">Live demos</a>
-        <a href="#archive">Version archive</a>
+        <a href="#work">Live showcases</a>
+        <a href="#proof">How I work</a>
         <a href="#quote">Fixed pricing</a>
         <a href="https://github.com/msnotfound" target="_blank" rel="noopener">GitHub</a>
       </nav>
-      <a href="#quote" class="btn-primary">Start a build</a>
+      <a href="https://wa.me/919302493307?text=Hi%20Mayank%2C%20I%27d%20like%20to%20discuss%20a%20website%20or%20AI%20workflow%20project." target="_blank" rel="noopener" class="btn-wa">Chat on WhatsApp</a>
     </div>
   </header>
 
   <main class="wrap" id="top">
     <section class="hero-top">
-      <h1>Five distinct craft builds, zero shared templates</h1>
+      <h1>Custom websites &amp; AI workflows, shipped in days</h1>
       <div class="hero-right">
         <p>
-          Inspect each vertical below at desktop or mobile width, and toggle directly between the flagship v2 build and the preserved original v0 snapshot.
+          Explore five live industry builds below, each engineered from scratch with interactive conversion tools, crisp mobile speed, and 100% source code ownership.
         </p>
         <div class="hero-btns">
-          <a href="#quote" class="btn-primary">Estimate your scope</a>
-          <a href="mailto:108mayanksahu@gmail.com?subject=Project%20Brief" class="btn-secondary">Email a brief</a>
+          <a href="#quote" class="btn-primary">Estimate your project</a>
+          <a href="https://wa.me/919302493307?text=Hi%20Mayank%2C%20saw%20your%20studio%20work%20and%20want%20to%20scope%20a%20project." target="_blank" rel="noopener" class="btn-wa">WhatsApp directly</a>
+          <a href="mailto:108mayanksahu@gmail.com?subject=Project%20Brief" class="btn-secondary">Email brief</a>
         </div>
       </div>
     </section>
 
-    <section class="stage-shell" id="work" aria-label="Interactive live proofing stage">
+    <section class="stage-shell" id="work" aria-label="Interactive live industry showcase">
       <div class="stage-bar">
-        <div class="demo-tabs" role="tablist" aria-label="Vertical demos">
-          <button type="button" class="demo-tab" role="tab" aria-selected="true" data-key="interior">Interior Renovation</button>
-          <button type="button" class="demo-tab" role="tab" aria-selected="false" data-key="ai">AI Pipeline Studio</button>
-          <button type="button" class="demo-tab" role="tab" aria-selected="false" data-key="realestate">Architectural Brokerage</button>
+        <div class="demo-tabs" role="tablist" aria-label="Industry showcases">
+          <button type="button" class="demo-tab" role="tab" aria-selected="true" data-key="interior">Interior Architecture</button>
+          <button type="button" class="demo-tab" role="tab" aria-selected="false" data-key="ai">AI Workflow Studio</button>
+          <button type="button" class="demo-tab" role="tab" aria-selected="false" data-key="realestate">Modernist Real Estate</button>
           <button type="button" class="demo-tab" role="tab" aria-selected="false" data-key="bakery">Artisan Bakehouse</button>
-          <button type="button" class="demo-tab" role="tab" aria-selected="false" data-key="wedding">Provencal Wedding</button>
+          <button type="button" class="demo-tab" role="tab" aria-selected="false" data-key="wedding">Provençal Wedding</button>
         </div>
 
         <div class="stage-tools">
-          <div class="seg-group" role="group" aria-label="Switch viewport size">
+          <div class="seg-group vp-toggle-wrap" role="group" aria-label="Switch preview width">
             <button type="button" class="seg-btn" id="vpDesktop" aria-pressed="true">Desktop</button>
-            <button type="button" class="seg-btn" id="vpMobile" aria-pressed="false">Mobile 390px</button>
+            <button type="button" class="seg-btn" id="vpMobile" aria-pressed="false">Mobile</button>
           </div>
-          <div class="seg-group" role="group" aria-label="Switch design version">
-            <button type="button" class="seg-btn" id="btnAfter" aria-pressed="true">Flagship (v2)</button>
-            <button type="button" class="seg-btn" id="btnBefore" aria-pressed="false">Original (v0)</button>
-          </div>
-          <a id="openFull" class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;" href="./interior/" target="_blank" rel="noopener">Open full tab</a>
+          <a id="openFull" class="btn-primary" style="padding: 7px 14px; font-size: 0.82rem;" href="./interior/" target="_blank" rel="noopener">Open full interactive site</a>
         </div>
       </div>
 
       <div class="viewport-stage" id="viewportStage">
-        <iframe id="demoFrame" src="./interior/" title="Live vertical demo preview"></iframe>
+        <iframe id="demoFrame" src="./interior/" title="Live industry showcase preview"></iframe>
       </div>
 
       <div class="stage-foot">
-        <span id="demoCaption">Kestrel &amp; Stone: Pixel-aligned stripped-brick to finished-joinery renovation curtain + daylight material board.</span>
-        <span class="mono" id="demoUrl">./interior/</span>
+        <span id="demoCaption">Kestrel &amp; Stone: UK interior renovation studio with real before/after room curtain and daylight material board.</span>
+        <a id="openFullFoot" href="./interior/" target="_blank" rel="noopener">Launch fullscreen</a>
       </div>
     </section>
 
-    <section class="section" id="archive">
-      <h2>Direct links &amp; preserved before/after archive</h2>
+    <section class="trust-grid" id="proof" aria-label="Engineering standards and shipped code">
+      <article class="trust-card">
+        <span class="trust-k">01 | Direct execution</span>
+        <h3>Built directly by the engineer you speak with</h3>
+        <p>No account managers or agency handoffs. Fast replies across UK, EU, US, and IST hours via WhatsApp or email.</p>
+      </article>
+      <article class="trust-card">
+        <span class="trust-k">02 | Low-risk milestones</span>
+        <h3>Live staging URL before your final 50%</h3>
+        <p>Start with 50% upfront, inspect every screen and mobile interaction on a live preview link, and pay the balance on launch.</p>
+      </article>
+      <article class="trust-card">
+        <span class="trust-k">03 | Production systems</span>
+        <h3>Full Git repo handover &amp; backend engineering</h3>
+        <p>Beyond frontend design, I ship fault-tolerant webhooks, LLM pipelines, and database backends you fully own.</p>
+        <div class="trust-links">
+          <a href="https://github.com/msnotfound/hookguard" target="_blank" rel="noopener">HookGuard</a>
+          <a href="https://github.com/msnotfound/mnemium" target="_blank" rel="noopener">Mnemium</a>
+          <a href="https://github.com/msnotfound/fleetorch" target="_blank" rel="noopener">Fleetorch</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="directory">
+      <div class="sec-head">
+        <h2>Live industry showcases</h2>
+      </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Vertical</th>
-              <th>Art Direction</th>
-              <th>Signature Interactive Craft</th>
-              <th style="text-align: right;">Open</th>
+              <th>Showcase</th>
+              <th>Industry</th>
+              <th>Built-in Conversion Tool</th>
+              <th style="text-align: right;">Visit</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>Kestrel &amp; Stone</strong></td>
-              <td class="muted">UK Architectural Monograph</td>
-              <td class="muted">Pixel-aligned real before/after renovation curtain + daylight material study</td>
-              <td class="links"><a href="./interior/" target="_blank" rel="noopener">Flagship v2</a></td>
+              <td class="muted">Interior Architecture &amp; Renovation</td>
+              <td class="muted">Draggable before/after room curtain, daylight material board, site walkthrough form</td>
+              <td class="links"><a href="./interior/" target="_blank" rel="noopener">Open live site</a></td>
             </tr>
             <tr>
               <td><strong>Relay Foundry</strong></td>
-              <td class="muted">Precision Dark Telemetry Blueprint</td>
-              <td class="muted">Live SVG node-graph webhook &amp; DLQ simulator + automation cost bench</td>
-              <td class="links">
-                <a href="./ai-studio/" target="_blank" rel="noopener">Flagship v2</a>
-                <a href="./before/ai-studio/" target="_blank" rel="noopener">Original v0</a>
-              </td>
+              <td class="muted">AI Automation &amp; Webhooks</td>
+              <td class="muted">Interactive SVG node-graph pipeline simulator &amp; automation cost bench</td>
+              <td class="links"><a href="./ai-studio/" target="_blank" rel="noopener">Open live site</a></td>
             </tr>
             <tr>
               <td><strong>Alder &amp; Mere</strong></td>
-              <td class="muted">Full-Bleed Editorial Brokerage</td>
-              <td class="muted">3-residence hero switcher, interactive SVG floorplan drawer, UK stamp duty desk</td>
-              <td class="links">
-                <a id="reAfterLink" href="https://msnotfound.github.io/real-estate-demo/" target="_blank" rel="noopener">Flagship v2</a>
-                <a id="reBeforeLink" href="https://msnotfound.github.io/real-estate-demo/before/" target="_blank" rel="noopener">Original v0</a>
-              </td>
+              <td class="muted">Architectural Real Estate</td>
+              <td class="muted">Full-bleed residence switcher, per-home SVG floorplan drawer, UK stamp duty desk</td>
+              <td class="links"><a id="reLiveLink" href="https://msnotfound.github.io/real-estate-demo/" target="_blank" rel="noopener">Open live site</a></td>
             </tr>
             <tr>
               <td><strong>Fournil Bakehouse</strong></td>
-              <td class="muted">Stone-Paper Broadsheet</td>
-              <td class="muted">Live oven deck temperature timeline + visual 6-slot kraft box builder &amp; ticket</td>
-              <td class="links">
-                <a href="./bakery/" target="_blank" rel="noopener">Flagship v2</a>
-                <a href="./before/bakery/" target="_blank" rel="noopener">Original v0</a>
-              </td>
+              <td class="muted">Food &amp; Local Pre-Order Commerce</td>
+              <td class="muted">Live oven schedule, visual 6-slot pastry box builder, printable pickup ticket</td>
+              <td class="links"><a href="./bakery/" target="_blank" rel="noopener">Open live site</a></td>
             </tr>
             <tr>
               <td><strong>Camille &amp; Julien</strong></td>
-              <td class="muted">Fine-Art Linen Stationery</td>
-              <td class="muted">3-day weekend folio with dress-code swatches + wax-seal letterpress RSVP</td>
-              <td class="links">
-                <a href="./wedding/" target="_blank" rel="noopener">Flagship v2</a>
-                <a href="./before/wedding/" target="_blank" rel="noopener">Original v0</a>
-              </td>
-            </tr>
-            <tr>
-              <td><strong>Studio Root Archive</strong></td>
-              <td class="muted">Previous Storefront</td>
-              <td class="muted">Preserved original landing page snapshot</td>
-              <td class="links"><a href="./before/" target="_blank" rel="noopener">Original v0</a></td>
+              <td class="muted">Destination Event &amp; RSVP</td>
+              <td class="muted">3-day Provençal itinerary with dress-code swatches, calendar export, wax-seal RSVP</td>
+              <td class="links"><a href="./wedding/" target="_blank" rel="noopener">Open live site</a></td>
             </tr>
           </tbody>
         </table>
@@ -548,37 +664,46 @@
     </section>
 
     <section class="section" id="quote">
-      <h2>Fixed-scope build estimator</h2>
+      <div class="sec-head">
+        <h2>Fixed-scope project estimator</h2>
+        <div class="seg-group" role="group" aria-label="Display currency">
+          <button type="button" class="seg-btn curr-btn" data-curr="USD" aria-pressed="true">USD</button>
+          <button type="button" class="seg-btn curr-btn" data-curr="GBP" aria-pressed="false">GBP</button>
+          <button type="button" class="seg-btn curr-btn" data-curr="EUR" aria-pressed="false">EUR</button>
+          <button type="button" class="seg-btn curr-btn" data-curr="INR" aria-pressed="false">INR</button>
+        </div>
+      </div>
+
       <div class="quote-grid">
         <div>
-          <div class="scope-grid" role="group" aria-label="Base scope">
+          <div class="scope-grid" role="group" aria-label="Select base project scope">
             <button type="button" class="scope-card" data-price="350" data-days="3" data-name="Editorial Landing Page" aria-pressed="true">
               <strong>Editorial Landing Page</strong>
-              <span class="mono" style="color: var(--cobalt);">$350 | 3 days</span>
-              <span style="font-size: 0.84rem; color: var(--ink-muted);">Custom design, bespoke interactive feature, mobile polish</span>
+              <span class="mono scope-price" style="color: var(--cobalt);">$350 | 3 days</span>
+              <span style="font-size: 0.84rem; color: var(--ink-muted);">Custom art direction, interactive section, fast mobile layout</span>
             </button>
-            <button type="button" class="scope-card" data-price="500" data-days="5" data-name="Multi-Page Studio Site" aria-pressed="false">
-              <strong>Multi-Page Studio / Service Site</strong>
-              <span class="mono" style="color: var(--cobalt);">$500 | 5 days</span>
-              <span style="font-size: 0.84rem; color: var(--ink-muted);">Portfolio galleries, booking/lead forms, SEO &amp; speed pass</span>
+            <button type="button" class="scope-card" data-price="480" data-days="5" data-name="Multi-Page Studio Site" aria-pressed="false">
+              <strong>Multi-Page Studio / Business Site</strong>
+              <span class="mono scope-price" style="color: var(--cobalt);">$480 | 5 days</span>
+              <span style="font-size: 0.84rem; color: var(--ink-muted);">Project galleries, booking/lead forms, SEO &amp; speed pass</span>
             </button>
-            <button type="button" class="scope-card" data-price="450" data-days="6" data-name="Small-Business E-Commerce" aria-pressed="false">
+            <button type="button" class="scope-card" data-price="550" data-days="6" data-name="Small-Business E-Commerce Store" aria-pressed="false">
               <strong>Small-Business E-Commerce</strong>
-              <span class="mono" style="color: var(--cobalt);">$450 | 6 days</span>
+              <span class="mono scope-price" style="color: var(--cobalt);">$550 | 6 days</span>
               <span style="font-size: 0.84rem; color: var(--ink-muted);">Product upload admin, direct payment checkout, order dashboard</span>
             </button>
-            <button type="button" class="scope-card" data-price="600" data-days="7" data-name="AI &amp; Webhook Pipeline" aria-pressed="false">
+            <button type="button" class="scope-card" data-price="650" data-days="7" data-name="AI &amp; Webhook Automation Pipeline" aria-pressed="false">
               <strong>AI &amp; Webhook Pipeline</strong>
-              <span class="mono" style="color: var(--cobalt);">$600 | 7 days</span>
-              <span style="font-size: 0.84rem; color: var(--ink-muted);">WhatsApp/CRM triage, Claude/OpenAI APIs, Postgres queues</span>
+              <span class="mono scope-price" style="color: var(--cobalt);">$650 | 7 days</span>
+              <span style="font-size: 0.84rem; color: var(--ink-muted);">WhatsApp/CRM triage, Claude/OpenAI APIs, PostgreSQL queues</span>
             </button>
           </div>
 
           <p class="mono" style="font-size: 0.72rem; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 10px;">Optional add-ons</p>
           <div class="addon-row">
-            <button type="button" class="addon-chip" data-add="100" data-days="1" aria-pressed="false">+ Interactive calculator / configurator ($100)</button>
-            <button type="button" class="addon-chip" data-add="120" data-days="1" aria-pressed="false">+ Technical SEO &amp; Core Web Vitals pass ($120)</button>
-            <button type="button" class="addon-chip" data-add="150" data-days="2" aria-pressed="false">+ WhatsApp + CRM webhook sync ($150)</button>
+            <button type="button" class="addon-chip" data-add="100" data-days="1" data-label="Interactive calculator / configurator" aria-pressed="false">+ Interactive calculator / configurator</button>
+            <button type="button" class="addon-chip" data-add="120" data-days="1" data-label="Technical SEO & Core Web Vitals pass" aria-pressed="false">+ Technical SEO &amp; Core Web Vitals pass</button>
+            <button type="button" class="addon-chip" data-add="150" data-days="2" data-label="WhatsApp + CRM webhook sync" aria-pressed="false">+ WhatsApp + CRM webhook sync</button>
           </div>
         </div>
 
@@ -586,20 +711,30 @@
           <div>
             <div class="mono" style="font-size: 0.72rem; text-transform: uppercase; color: var(--ink-muted);">Estimated fixed fee</div>
             <div class="big-price" id="qPrice">$350</div>
-            <div class="mono" style="font-size: 0.8rem; color: var(--ink-muted);" id="qMeta">Editorial Landing Page | 3-day turnaround | ~INR 29,575</div>
+            <div class="mono" style="font-size: 0.8rem; color: var(--ink-muted);" id="qMeta">Editorial Landing Page | 3-day turnaround</div>
           </div>
           <div>
             <div class="split-row"><span>50% milestone upfront</span><span class="mono" id="qHalf1">$175</span></div>
             <div class="split-row"><span>50% on live launch</span><span class="mono" id="qHalf2">$175</span></div>
           </div>
-          <a id="qCta" href="mailto:108mayanksahu@gmail.com?subject=Project%20Brief%20(Editorial%20Landing%20Page%20-%20%24350)" class="btn-primary" style="width: 100%; padding: 13px;">Send brief with this estimate</a>
+          <div class="cta-stack">
+            <a id="qWa" href="#" target="_blank" rel="noopener" class="btn-wa" style="width: 100%; padding: 13px;">Send scope on WhatsApp</a>
+            <a id="qMail" href="#" class="btn-primary" style="width: 100%; padding: 12px;">Send scope via Email</a>
+            <button type="button" id="qCopy" class="btn-secondary" style="width: 100%; padding: 11px;">Copy brief summary</button>
+            <div class="copy-feedback" id="copyStatus" role="status"></div>
+          </div>
         </aside>
       </div>
     </section>
 
     <footer>
-      <span>Mayank Sahu | +91 9302493307 | 108mayanksahu@gmail.com</span>
-      <span><a href="https://github.com/msnotfound" target="_blank" rel="noopener">github.com/msnotfound</a> | <a href="https://mayanksahu.is-a.dev/" target="_blank" rel="noopener">mayanksahu.is-a.dev</a></span>
+      <span>Mayank Sahu | Independent Web &amp; AI Systems Engineer</span>
+      <div class="footer-links">
+        <a href="https://wa.me/919302493307" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="mailto:108mayanksahu@gmail.com">108mayanksahu@gmail.com</a>
+        <a href="https://github.com/msnotfound" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://mayanksahu.is-a.dev/" target="_blank" rel="noopener">Engineering Portfolio</a>
+      </div>
     </footer>
   </main>
 
@@ -607,67 +742,42 @@
     const isLocal = location.hostname === "127.0.0.1" || location.hostname === "localhost";
     const DEMOS = {
       interior: {
-        after: "./interior/",
-        before: "./before/",
-        caption: "Kestrel & Stone: Pixel-aligned stripped-brick to finished-joinery renovation curtain + daylight material board."
+        url: "./interior/",
+        caption: "Kestrel & Stone: UK interior renovation studio with real before/after room curtain and daylight material board."
       },
       ai: {
-        after: "./ai-studio/",
-        before: "./before/ai-studio/",
-        caption: "Relay Foundry: Precision dark telemetry blueprint with interactive SVG node-graph webhook & DLQ simulator."
+        url: "./ai-studio/",
+        caption: "Relay Foundry: Precision AI automation showcase with interactive SVG node-graph simulator and cost bench."
       },
       realestate: {
-        after: isLocal ? "http://127.0.0.1:8082/" : "https://msnotfound.github.io/real-estate-demo/",
-        before: isLocal ? "http://127.0.0.1:8082/before/" : "https://msnotfound.github.io/real-estate-demo/before/",
-        caption: "Alder & Mere: Full-bleed architectural brokerage hero, interactive SVG floorplan dossier drawer, UK stamp duty desk."
+        url: isLocal ? "http://127.0.0.1:8082/" : "https://msnotfound.github.io/real-estate-demo/",
+        caption: "Alder & Mere: Contemporary architectural brokerage with full-bleed switcher, per-home floorplan drawer, and UK stamp duty desk."
       },
       bakery: {
-        after: "./bakery/",
-        before: "./before/bakery/",
-        caption: "Fournil Bakehouse: Unbleached broadsheet with live hearth oven schedule and visual 6-slot kraft box builder."
+        url: "./bakery/",
+        caption: "Fournil Bakehouse: Unbleached broadsheet with live hearth oven schedule and visual 6-slot pastry box builder."
       },
       wedding: {
-        after: "./wedding/",
-        before: "./before/wedding/",
-        caption: "Camille & Julien: Fine-art Provencal linen stationery with dress-code swatch folio and wax-seal RSVP."
+        url: "./wedding/",
+        caption: "Camille & Julien: Fine-art Provençal linen stationery with dress-code swatch folio, calendar export, and wax-seal RSVP."
       }
     };
 
-    document.getElementById("reAfterLink").href = DEMOS.realestate.after;
-    document.getElementById("reBeforeLink").href = DEMOS.realestate.before;
+    document.getElementById("reLiveLink").href = DEMOS.realestate.url;
 
-    let currentDemo = "interior";
-    let currentVersion = "after";
-
-    function renderStage() {
-      const d = DEMOS[currentDemo];
-      const url = d[currentVersion];
-      document.getElementById("demoFrame").src = url;
-      document.getElementById("openFull").href = url;
+    function selectDemo(key) {
+      const d = DEMOS[key];
+      document.getElementById("demoFrame").src = d.url;
+      document.getElementById("openFull").href = d.url;
+      document.getElementById("openFullFoot").href = d.url;
       document.getElementById("demoCaption").textContent = d.caption;
-      document.getElementById("demoUrl").textContent = url;
     }
 
     document.querySelectorAll(".demo-tab").forEach((b) => {
       b.addEventListener("click", () => {
         document.querySelectorAll(".demo-tab").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
-        currentDemo = b.dataset.key;
-        renderStage();
+        selectDemo(b.dataset.key);
       });
-    });
-
-    document.getElementById("btnAfter").addEventListener("click", () => {
-      currentVersion = "after";
-      document.getElementById("btnAfter").setAttribute("aria-pressed", "true");
-      document.getElementById("btnBefore").setAttribute("aria-pressed", "false");
-      renderStage();
-    });
-
-    document.getElementById("btnBefore").addEventListener("click", () => {
-      currentVersion = "before";
-      document.getElementById("btnBefore").setAttribute("aria-pressed", "true");
-      document.getElementById("btnAfter").setAttribute("aria-pressed", "false");
-      renderStage();
     });
 
     const stageBox = document.getElementById("viewportStage");
@@ -682,29 +792,79 @@
       document.getElementById("vpDesktop").setAttribute("aria-pressed", "false");
     });
 
-    // Estimator
-    let basePrice = 350, baseDays = 3, baseName = "Editorial Landing Page";
-    function updateQuote() {
-      let extraP = 0, extraD = 0;
-      document.querySelectorAll(".addon-chip[aria-pressed='true']").forEach((c) => {
-        extraP += Number(c.dataset.add);
-        extraD += Number(c.dataset.days);
-      });
-      const total = basePrice + extraP;
-      const days = baseDays + extraD;
-      const half = Math.round(total / 2);
-      const inr = Math.round(total * 84.5).toLocaleString("en-IN");
-      document.getElementById("qPrice").textContent = "$" + total;
-      document.getElementById("qMeta").textContent = `${baseName} | ${days}-day turnaround | ~INR ${inr}`;
-      document.getElementById("qHalf1").textContent = "$" + half;
-      document.getElementById("qHalf2").textContent = "$" + (total - half);
-      document.getElementById("qCta").href = `mailto:108mayanksahu@gmail.com?subject=${encodeURIComponent(`Project Brief (${baseName} - $${total})`)}`;
+    // Multi-currency Fixed Scope Estimator
+    const RATES = {
+      USD: { sym: "$", rate: 1, locale: "en-US" },
+      GBP: { sym: "£", rate: 0.79, locale: "en-GB" },
+      EUR: { sym: "€", rate: 0.92, locale: "de-DE" },
+      INR: { sym: "₹", rate: 84.5, locale: "en-IN" }
+    };
+
+    let currency = "USD";
+    let baseUsd = 350, baseDays = 3, baseName = "Editorial Landing Page";
+
+    function fmtMoney(usd) {
+      const c = RATES[currency];
+      const val = currency === "INR" ? Math.round((usd * c.rate) / 500) * 500 : Math.round(usd * c.rate);
+      return c.sym + val.toLocaleString(c.locale);
     }
+
+    function refreshCardPrices() {
+      document.querySelectorAll(".scope-card").forEach((card) => {
+        card.querySelector(".scope-price").textContent = `${fmtMoney(Number(card.dataset.price))} | ${card.dataset.days} days`;
+      });
+      document.querySelectorAll(".addon-chip").forEach((chip) => {
+        chip.textContent = `+ ${chip.dataset.label} (${fmtMoney(Number(chip.dataset.add))})`;
+      });
+    }
+
+    function updateQuote() {
+      refreshCardPrices();
+      let extraUsd = 0, extraDays = 0;
+      const addons = [];
+      document.querySelectorAll(".addon-chip[aria-pressed='true']").forEach((c) => {
+        extraUsd += Number(c.dataset.add);
+        extraDays += Number(c.dataset.days);
+        addons.push(c.dataset.label);
+      });
+      const totalUsd = baseUsd + extraUsd;
+      const days = baseDays + extraDays;
+      const halfUsd = totalUsd / 2;
+
+      const totalStr = fmtMoney(totalUsd);
+      const halfStr = fmtMoney(halfUsd);
+
+      document.getElementById("qPrice").textContent = totalStr;
+      document.getElementById("qMeta").textContent = `${baseName} | ${days}-day turnaround`;
+      document.getElementById("qHalf1").textContent = halfStr;
+      document.getElementById("qHalf2").textContent = halfStr;
+
+      const briefText = [
+        `Hi Mayank, I would like to scope a project:`,
+        `Base Scope: ${baseName}`,
+        `Add-ons: ${addons.length ? addons.join(", ") : "None"}`,
+        `Estimated Fee: ${totalStr} (50% upfront: ${halfStr}, 50% on launch)`,
+        `Target Turnaround: ${days} days`,
+        `Project Details: `
+      ].join("\n");
+
+      document.getElementById("qWa").href = `https://wa.me/919302493307?text=${encodeURIComponent(briefText)}`;
+      document.getElementById("qMail").href = `mailto:108mayanksahu@gmail.com?subject=${encodeURIComponent(`Project Brief: ${baseName} (${totalStr})`)}&body=${encodeURIComponent(briefText)}`;
+      document.getElementById("qCopy").dataset.brief = briefText;
+    }
+
+    document.querySelectorAll(".curr-btn").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll(".curr-btn").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        currency = b.dataset.curr;
+        updateQuote();
+      });
+    });
 
     document.querySelectorAll(".scope-card").forEach((c) => {
       c.addEventListener("click", () => {
         document.querySelectorAll(".scope-card").forEach((x) => x.setAttribute("aria-pressed", String(x === c)));
-        basePrice = Number(c.dataset.price);
+        baseUsd = Number(c.dataset.price);
         baseDays = Number(c.dataset.days);
         baseName = c.dataset.name;
         updateQuote();
@@ -717,6 +877,18 @@
         updateQuote();
       });
     });
+
+    document.getElementById("qCopy").addEventListener("click", async (e) => {
+      const text = e.currentTarget.dataset.brief || "";
+      try {
+        await navigator.clipboard.writeText(text);
+        document.getElementById("copyStatus").textContent = "Brief summary copied to clipboard.";
+      } catch {
+        document.getElementById("copyStatus").textContent = "Use WhatsApp or Email above to send directly.";
+      }
+    });
+
+    updateQuote();
   </script>
 </body>
 </html>

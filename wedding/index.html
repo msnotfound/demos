@@ -64,7 +64,6 @@
 
     .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
-    /* Fine-Art Framed Stationery Sheet */
     .folio {
       max-width: 1240px;
       margin: 0 auto;
@@ -100,18 +99,12 @@
       color: var(--olive);
     }
 
-    .header-right {
-      display: flex;
-      justify-content: flex-end;
-      gap: 22px;
-    }
-
+    .header-right { display: flex; justify-content: flex-end; gap: 22px; }
     .header-right a { text-underline-offset: 0.25em; }
     @media (hover: hover) {
       .header-right a:hover { color: var(--ink); text-decoration: underline; }
     }
 
-    /* Editorial Invitation Spread */
     .invite-hero {
       display: grid;
       grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1.05fr);
@@ -134,11 +127,11 @@
     }
 
     .invite-copy {
-      padding: clamp(36px, 5.5vh, 64px) 40px;
+      padding: clamp(36px, 5.5vh, 60px) 40px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 28px;
+      gap: 26px;
       border-right: 1px solid var(--line);
     }
 
@@ -157,16 +150,12 @@
       font-weight: 400;
       line-height: 0.96;
       letter-spacing: -0.015em;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     h1 em { font-style: italic; color: var(--olive); }
 
-    .invite-lead {
-      font-size: 1rem;
-      color: var(--ink-muted);
-      max-width: 40ch;
-    }
+    .invite-lead { font-size: 1rem; color: var(--ink-muted); max-width: 40ch; }
 
     .countdown-strip {
       display: grid;
@@ -175,53 +164,28 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .cd-box {
-      padding: 14px 8px;
-      text-align: center;
-      border-right: 1px solid var(--line);
-    }
-
+    .cd-box { padding: 14px 8px; text-align: center; border-right: 1px solid var(--line); }
     .cd-box:last-child { border-right: none; }
+    .cd-num { font-family: var(--font-serif); font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); }
+    .cd-lbl { font-family: var(--font-mono); font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-muted); margin-top: 4px; }
 
-    .cd-num {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      line-height: 1;
-      font-variant-numeric: tabular-nums;
-      color: var(--ink);
-    }
-
-    .cd-lbl {
-      font-family: var(--font-mono);
-      font-size: 0.64rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--ink-muted);
-      margin-top: 4px;
-    }
-
-    .hero-btns {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+    .hero-btns { display: flex; flex-wrap: wrap; gap: 10px; }
 
     .btn-olive {
-      padding: 13px 24px;
+      padding: 13px 22px;
       background: var(--olive);
       color: var(--olive-ink);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 500;
       letter-spacing: 0.02em;
     }
 
     .btn-outline {
-      padding: 13px 22px;
+      padding: 13px 20px;
       border: 1px solid var(--line);
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
 
-    /* Double-Frame Botanical Photography Composition */
     .invite-art {
       padding: 36px;
       background: var(--stone);
@@ -230,16 +194,13 @@
       gap: 16px;
     }
 
-    .photo-mat {
-      background: var(--card);
-      padding: 14px;
-      border: 1px solid var(--line);
-    }
+    .photo-mat { background: var(--card); padding: 14px; border: 1px solid var(--line); }
 
     .photo-mat img {
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 2;
       object-fit: cover;
+      object-position: center 42%;
     }
 
     .photo-mat-foot {
@@ -252,11 +213,7 @@
       color: var(--ink-muted);
     }
 
-    /* SIGNATURE MOMENT: Interactive 3-Day Itinerary + Dress Code Swatches */
-    .weekend-sec {
-      padding: 64px 48px;
-      border-bottom: 1px solid var(--line);
-    }
+    .weekend-sec { padding: 64px 48px; border-bottom: 1px solid var(--line); }
 
     .sec-top {
       display: flex;
@@ -267,18 +224,8 @@
       margin-bottom: 32px;
     }
 
-    h2 {
-      font-family: var(--font-serif);
-      font-size: clamp(2.1rem, 3.6vw, 3rem);
-      font-weight: 400;
-      line-height: 1.05;
-    }
-
-    .day-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    h2 { font-family: var(--font-serif); font-size: clamp(2.1rem, 3.6vw, 3rem); font-weight: 400; line-height: 1.05; }
+    .day-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
 
     .day-btn {
       padding: 9px 18px;
@@ -290,44 +237,13 @@
       color: var(--ink-muted);
     }
 
-    .day-btn[aria-pressed="true"] {
-      background: var(--olive);
-      color: var(--olive-ink);
-      border-color: var(--olive);
-    }
+    .day-btn[aria-pressed="true"] { background: var(--olive); color: var(--olive-ink); border-color: var(--olive); }
 
-    .day-folio {
-      display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-      border: 1px solid var(--line);
-    }
-
-    .day-details {
-      padding: 32px;
-      border-right: 1px solid var(--line);
-      display: grid;
-      gap: 18px;
-    }
-
-    .day-title {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      font-weight: 400;
-    }
-
-    .timeline {
-      display: grid;
-      gap: 14px;
-      padding-top: 10px;
-      border-top: 1px solid var(--line);
-    }
-
-    .tl-row {
-      display: grid;
-      grid-template-columns: 78px minmax(0, 1fr);
-      gap: 16px;
-      align-items: baseline;
-    }
+    .day-folio { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); border: 1px solid var(--line); }
+    .day-details { padding: 32px; border-right: 1px solid var(--line); display: grid; gap: 18px; }
+    .day-title { font-family: var(--font-serif); font-size: 2rem; font-weight: 400; }
+    .timeline { display: grid; gap: 14px; padding-top: 10px; border-top: 1px solid var(--line); }
+    .tl-row { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 16px; align-items: baseline; }
 
     .dress-panel {
       padding: 32px;
@@ -338,27 +254,10 @@
       gap: 20px;
     }
 
-    .swatches {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
+    .swatches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .swatch-dot { aspect-ratio: 1 / 1; border: 1px solid oklch(0.25 0.02 50 / 0.16); }
+    .swatch-lbl { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-muted); margin-top: 6px; text-align: center; }
 
-    .swatch-dot {
-      aspect-ratio: 1 / 1;
-      border: 1px solid oklch(0.25 0.02 50 / 0.16);
-    }
-
-    .swatch-lbl {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--ink-muted);
-      margin-top: 6px;
-      text-align: center;
-    }
-
-    /* RSVP Stationery Card with Wax Seal */
     .rsvp-sec {
       padding: 64px 48px;
       display: grid;
@@ -386,6 +285,16 @@
       margin-bottom: 2px;
     }
 
+    .map-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--olive);
+      text-decoration: underline;
+      text-underline-offset: 0.25em;
+    }
+
     .rsvp-envelope {
       position: relative;
       background: var(--linen);
@@ -394,6 +303,7 @@
     }
 
     .rsvp-form { display: grid; gap: 15px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
     label {
       display: grid;
@@ -427,9 +337,7 @@
       gap: 18px;
     }
 
-    .wax-seal-receipt.is-visible {
-      display: flex;
-    }
+    .wax-seal-receipt.is-visible { display: flex; }
 
     .wax-seal {
       width: 56px;
@@ -469,7 +377,7 @@
       .invite-copy { border-right: none; border-bottom: 1px solid var(--line); padding: 28px 22px; }
       .invite-art { padding: 22px; }
       .weekend-sec, .rsvp-sec { padding: 40px 22px; }
-      .day-folio, .rsvp-sec { grid-template-columns: minmax(0, 1fr); }
+      .day-folio, .rsvp-sec, .two-col { grid-template-columns: minmax(0, 1fr); }
       .day-details { border-right: none; border-bottom: 1px solid var(--line); }
     }
   </style>
@@ -481,8 +389,7 @@
       <span class="monogram">C&amp;J</span>
       <nav class="header-right" aria-label="Primary">
         <a href="#weekend">Itinerary</a>
-        <a href="#rsvp">RSVP</a>
-        <a href="../">Studio</a>
+        <a href="#rsvp">Travel &amp; RSVP</a>
       </nav>
     </header>
 
@@ -493,7 +400,7 @@
           <p class="invite-kicker">Together with their families</p>
           <h1>Camille <em>&amp;</em> Julien</h1>
           <p class="invite-lead">
-            Request the honour of your presence for three late-summer days among the olive groves of Provence, from Friday evening aperitifs through Sunday lunch beneath the plane trees.
+            Request the honour of your presence for three late-summer days among the olive groves of Provence, from Friday evening apéritifs through Sunday lunch beneath the plane trees.
           </p>
         </div>
 
@@ -506,15 +413,15 @@
 
         <div class="hero-btns">
           <a href="#rsvp" class="btn-olive">Confirm attendance</a>
-          <a href="#weekend" class="btn-outline">Explore the three days</a>
+          <button type="button" class="btn-outline" id="add-cal">Add to calendar (.ics)</button>
         </div>
       </div>
 
       <div class="invite-art">
         <figure class="photo-mat">
-          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85" alt="Camille and Julien sunlit portrait in Provence" />
+          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85" alt="Golden-hour floral bouquet detail in late summer Provence sunlight" />
           <figcaption class="photo-mat-foot">
-            <span>Domaine de la Bastide, Route de Vauvenargues</span>
+            <span>Florals &amp; golden hour at Domaine de la Bastide</span>
             <span>43.53° N, 5.45° E</span>
           </figcaption>
         </figure>
@@ -550,7 +457,7 @@
             <p style="font-size: 0.9rem; color: var(--ink-muted);" id="dress-desc">Floor-length silhouettes, summer dinner jackets, and block heels suited for limestone gravel paths.</p>
             <div class="swatches" id="dress-swatches"></div>
           </div>
-          <p class="mono" style="font-size: 0.72rem; color: var(--ink-muted);" id="day-shuttle">SHUTTLES DEPART HOTEL LE PIGONNET AT 15:15</p>
+          <p class="mono" style="font-size: 0.72rem; color: var(--ink-muted);" id="day-shuttle">SHUTTLES DEPART HÔTEL LE PIGONNET AT 15:15</p>
         </div>
       </div>
     </section>
@@ -563,10 +470,12 @@
           <div>
             <strong>Marseille Airport &amp; Aix TGV</strong>
             Marseille Provence (MRS) is 35 minutes by private car; Aix-en-Provence TGV is 22 minutes from the estate gates.
+            <br />
+            <a class="map-link" href="https://maps.google.com/?q=43.5297,5.4474" target="_blank" rel="noopener">Open estate coordinates in Google Maps</a>
           </div>
           <div>
             <strong>Preferred Room Blocks</strong>
-            Mention "Camille &amp; Julien" at Hotel Le Pigonnet or Villa Saint-Ange before July 1, 2027.
+            Mention "Camille &amp; Julien" at Hôtel Le Pigonnet or Villa Saint-Ange before July 1, 2027.
           </div>
           <div>
             <strong>Estate Shuttles</strong>
@@ -577,18 +486,35 @@
 
       <div class="rsvp-envelope">
         <form class="rsvp-form" id="rsvp-form">
-          <label>
-            Guest name(s)
-            <input type="text" id="rsvp-name" required placeholder="Elena &amp; Marco Rossi" />
-          </label>
-          <label>
-            Attendance
-            <select id="rsvp-choice">
-              <option value="all three days">Joyfully attending all three days</option>
-              <option value="Saturday ceremony and dinner">Attending Saturday ceremony &amp; dinner</option>
-              <option value="unable to attend">Regretfully unable to attend</option>
-            </select>
-          </label>
+          <div class="two-col">
+            <label>
+              Guest name(s)
+              <input type="text" id="rsvp-name" required placeholder="Elena &amp; Marco Rossi" />
+            </label>
+            <label>
+              Email for itinerary updates
+              <input type="email" id="rsvp-email" required placeholder="elena.rossi@example.com" />
+            </label>
+          </div>
+          <div class="two-col">
+            <label>
+              Attendance
+              <select id="rsvp-choice">
+                <option value="all three days">Joyfully attending all three days</option>
+                <option value="Saturday ceremony and dinner">Attending Saturday ceremony &amp; dinner</option>
+                <option value="unable to attend">Regretfully unable to attend</option>
+              </select>
+            </label>
+            <label>
+              Party size
+              <select id="rsvp-guests">
+                <option value="1 guest">1 guest</option>
+                <option value="2 guests" selected>2 guests</option>
+                <option value="3 guests">3 guests</option>
+                <option value="4 guests">4 guests</option>
+              </select>
+            </label>
+          </div>
           <label>
             Dietary notes
             <input type="text" placeholder="Vegetarian, allergies, or none" />
@@ -611,8 +537,8 @@
     </section>
 
     <footer class="folio-footer">
-      <span>Camille &amp; Julien bespoke invitation demo built by Mayank Sahu</span>
-      <span><a href="../">Back to studio</a> | <a href="../before/wedding/">Compare original v0 snapshot</a></span>
+      <span>Concept showcase engineered by Mayank Sahu</span>
+      <span><a href="https://msnotfound.github.io/#quote" target="_top">Build an invitation site like this</a></span>
     </footer>
   </div>
 
@@ -620,9 +546,9 @@
     const DAYS = {
       fri: {
         date: "FRIDAY, SEPTEMBER 17, 2027",
-        title: "Lower Terrace Aperitifs",
+        title: "Lower Terrace Apéritifs",
         shuttle: "VALET PARKING AT THE SOUTH CYPRESS GATE",
-        dressTitle: "Provencal Linen & Tailoring",
+        dressTitle: "Provençal Linen & Tailoring",
         dressDesc: "Relaxed evening wear in breathable linen, cotton suiting, and warm earth tones.",
         swatches: [
           { hex: "#d9cbb8", name: "Linen" },
@@ -631,15 +557,15 @@
           { hex: "#4a3f35", name: "Umber" }
         ],
         items: [
-          ["18:30", "Chilled Bandol rose & live acoustic guitar under the olive grove"],
-          ["19:45", "Wood-fired pissaladiere, heirloom tomato tartines, and local cheeses"],
+          ["18:30", "Chilled Bandol rosé & live acoustic guitar under the olive grove"],
+          ["19:45", "Wood-fired pissaladière, heirloom tomato tartines, and local cheeses"],
           ["22:00", "Early evening close ahead of Saturday celebrations"]
         ]
       },
       sat: {
         date: "SATURDAY, SEPTEMBER 18, 2027",
         title: "Ceremony & Orchard Supper",
-        shuttle: "SHUTTLES DEPART HOTEL LE PIGONNET AT 15:15",
+        shuttle: "SHUTTLES DEPART HÔTEL LE PIGONNET AT 15:15",
         dressTitle: "Black Tie Optional",
         dressDesc: "Floor-length silhouettes, summer dinner jackets, and block heels suited for limestone gravel paths.",
         swatches: [
@@ -714,12 +640,33 @@
     tick();
     setInterval(tick, 1000);
 
+    document.getElementById("add-cal").addEventListener("click", () => {
+      const ics = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "BEGIN:VEVENT",
+        "DTSTART:20270918T140000Z",
+        "DTEND:20270918T220000Z",
+        "SUMMARY:Camille & Julien Wedding Ceremony & Dinner",
+        "LOCATION:Domaine de la Bastide, Aix-en-Provence, France",
+        "END:VEVENT",
+        "END:VCALENDAR"
+      ].join("\r\n");
+      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "camille-and-julien-provence-2027.ics";
+      a.click();
+    });
+
     document.getElementById("rsvp-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const name = document.getElementById("rsvp-name").value.trim() || "Dear Guest";
+      const email = document.getElementById("rsvp-email").value.trim();
       const choice = document.getElementById("rsvp-choice").value;
-      document.getElementById("receipt-head").textContent = `Sealed for ${name}`;
-      document.getElementById("receipt-body").textContent = `Recorded as "${choice}" for September 18, 2027 at Domaine de la Bastide.`;
+      const guests = document.getElementById("rsvp-guests").value;
+      document.getElementById("receipt-head").textContent = `Sealed for ${name} (${guests})`;
+      document.getElementById("receipt-body").textContent = `Recorded as "${choice}" for September 18, 2027. Weekend shuttle notes will be sent to ${email}.`;
       document.getElementById("wax-receipt").classList.add("is-visible");
     });
 

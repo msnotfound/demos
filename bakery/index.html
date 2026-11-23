@@ -80,8 +80,6 @@
       border-bottom: 1px solid var(--line);
     }
 
-    .mast-meta a { text-decoration: underline; text-underline-offset: 0.2em; }
-
     .mast-title-row {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -90,12 +88,7 @@
       padding-top: 18px;
     }
 
-    .mast-side {
-      font-size: 0.86rem;
-      color: var(--ink-muted);
-      padding-bottom: 10px;
-    }
-
+    .mast-side { font-size: 0.86rem; color: var(--ink-muted); padding-bottom: 10px; }
     .mast-side.right { text-align: right; }
 
     .mast-wordmark {
@@ -107,7 +100,7 @@
       text-align: center;
     }
 
-    /* Panoramic Bakehouse Hero Spread */
+    /* Hero Spread */
     .spread {
       display: grid;
       grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
@@ -121,11 +114,7 @@
       min-height: 430px;
     }
 
-    .spread-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .spread-photo img { width: 100%; height: 100%; object-fit: cover; }
 
     .spread-caption {
       position: absolute;
@@ -142,7 +131,6 @@
       font-size: 0.86rem;
     }
 
-    /* Interactive Oven Deck Dial */
     .oven-panel {
       padding: 28px;
       display: flex;
@@ -193,16 +181,9 @@
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
       padding: 16px 0;
-      display: grid;
-      gap: 10px;
     }
 
-    .oven-stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
+    .oven-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
     .stat-k { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-muted); text-transform: uppercase; }
     .stat-v { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 500; color: var(--crust); }
 
@@ -222,11 +203,8 @@
       .cta-crust:hover { filter: brightness(1.08); }
     }
 
-    /* SIGNATURE MOMENT: Visual 6-Slot Kraft Box Builder */
-    .builder-sec {
-      padding: 64px 0 76px;
-      border-bottom: 1px solid var(--line);
-    }
+    /* Visual 6-Slot Pastry Box + Paper-Wrapped Loaves Builder */
+    .builder-sec { padding: 64px 0 76px; border-bottom: 1px solid var(--line); }
 
     .sec-head {
       display: flex;
@@ -251,9 +229,7 @@
       align-items: start;
     }
 
-    .bake-sheet {
-      border-top: 2px solid var(--ink);
-    }
+    .bake-sheet { border-top: 2px solid var(--ink); }
 
     .bake-row {
       display: grid;
@@ -268,35 +244,11 @@
     .bake-meta { font-size: 0.86rem; color: var(--ink-muted); margin-top: 3px; }
     .bake-price { font-family: var(--font-mono); font-size: 0.94rem; font-weight: 500; }
 
-    .stepper {
-      display: inline-flex;
-      border: 1px solid var(--ink);
-      background: var(--paper-card);
-    }
+    .stepper { display: inline-flex; border: 1px solid var(--ink); background: var(--paper-card); }
+    .step-btn { width: 34px; height: 34px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 1rem; }
+    @media (hover: hover) { .step-btn:hover { background: var(--kraft); } }
+    .step-val { min-width: 30px; display: grid; place-items: center; font-family: var(--font-mono); font-size: 0.86rem; border-inline: 1px solid var(--line); }
 
-    .step-btn {
-      width: 34px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      font-family: var(--font-mono);
-      font-size: 1rem;
-    }
-
-    @media (hover: hover) {
-      .step-btn:hover { background: var(--kraft); }
-    }
-
-    .step-val {
-      min-width: 30px;
-      display: grid;
-      place-items: center;
-      font-family: var(--font-mono);
-      font-size: 0.86rem;
-      border-inline: 1px solid var(--line);
-    }
-
-    /* Visual Kraft Bakery Box Tray */
     .kraft-tray-card {
       position: sticky;
       top: 24px;
@@ -304,7 +256,7 @@
       border: 1px solid var(--ink);
       padding: 24px;
       display: grid;
-      gap: 18px;
+      gap: 16px;
     }
 
     .tray-head {
@@ -336,7 +288,6 @@
       font-size: 0.72rem;
       color: oklch(0.5 0.025 60);
       background: oklch(0.935 0.02 76 / 0.55);
-      transition: background-color 180ms ease, transform 180ms var(--ease-out);
     }
 
     .tray-slot.is-filled {
@@ -344,15 +295,16 @@
       border-color: var(--crust);
       background: var(--paper-card);
       color: var(--ink);
-      transform: scale(1);
     }
 
-    .slot-code {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: var(--crust);
-      font-weight: 600;
-      margin-bottom: 2px;
+    .slot-code { font-family: var(--font-mono); font-size: 0.68rem; color: var(--crust); font-weight: 600; margin-bottom: 2px; }
+
+    .loaf-bag-strip {
+      padding: 10px 12px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      font-size: 0.84rem;
+      color: var(--ink-muted);
     }
 
     .discount-banner {
@@ -382,13 +334,9 @@
       font-weight: 600;
     }
 
-    .total-num {
-      font-family: var(--font-mono);
-      font-size: 1.5rem;
-      color: var(--crust);
-    }
+    .total-num { font-family: var(--font-mono); font-size: 1.5rem; color: var(--crust); }
 
-    select, input[type="text"] {
+    select, input[type="text"], input[type="email"] {
       width: 100%;
       padding: 11px 13px;
       border: 1px solid var(--line);
@@ -398,6 +346,15 @@
       font-size: 16px;
     }
 
+    .err-msg {
+      display: none;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: oklch(0.45 0.16 25);
+    }
+
+    .err-msg.is-visible { display: block; }
+
     .ticket-stub {
       display: none;
       padding: 14px;
@@ -406,23 +363,22 @@
       font-family: var(--font-mono);
       font-size: 0.76rem;
       line-height: 1.55;
+      gap: 10px;
     }
 
-    .ticket-stub.is-visible { display: block; }
+    .ticket-stub.is-visible { display: grid; }
 
-    footer {
-      padding: 28px 0 44px;
-      font-size: 0.84rem;
-      color: var(--ink-muted);
+    .print-btn {
+      padding: 8px 12px;
+      border: 1px solid var(--ink);
+      background: var(--paper-card);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      justify-self: start;
     }
 
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
+    footer { padding: 28px 0 44px; font-size: 0.84rem; color: var(--ink-muted); }
+    .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
     .footer-inner a { text-decoration: underline; text-underline-offset: 0.25em; }
 
     @media (max-width: 920px) {
@@ -439,10 +395,10 @@
       <div class="mast-meta">
         <span>42 CHURCH STREET, STOKE NEWINGTON N16</span>
         <span>DECK OVEN: 248°C | SHIPTON MILL ORGANIC FLOUR</span>
-        <span><a href="../">STUDIO INDEX</a></span>
+        <span>WED TO SUN | 07:00 UNTIL SOLD OUT</span>
       </div>
       <div class="mast-title-row">
-        <div class="mast-side">Wed to Sun, 07:00 until sold out</div>
+        <div class="mast-side">Hearth sourdough &amp; cultured butter viennoiserie</div>
         <h1 class="mast-wordmark">Fournil</h1>
         <div class="mast-side right">Pre-order morning boxes before 18:00</div>
       </div>
@@ -462,24 +418,24 @@
       <div class="oven-panel">
         <div>
           <div class="oven-k">Live hearth schedule</div>
-          <h2 class="oven-headline" id="oven-title">First Pastry Tray</h2>
+          <h2 class="oven-headline" id="oven-title">Country Sourdough</h2>
           <p style="font-size: 0.92rem; color: var(--ink-muted);" id="oven-desc">
-            Isigny cultured-butter croissants, cardamom knots, and pain au chocolat pulled golden as the doors open.
+            82% hydration stone-milled country miche and seeded wholemeal rye loaves straight off the hearth stone.
           </p>
         </div>
 
         <div class="oven-slots" role="group" aria-label="Select bake hour">
-          <button type="button" class="slot-btn" data-slot="0700" aria-pressed="true">07:00</button>
-          <button type="button" class="slot-btn" data-slot="0830" aria-pressed="false">08:30</button>
+          <button type="button" class="slot-btn" data-slot="0700" aria-pressed="false">07:00</button>
+          <button type="button" class="slot-btn" data-slot="0830" aria-pressed="true">08:30</button>
           <button type="button" class="slot-btn" data-slot="1000" aria-pressed="false">10:00</button>
           <button type="button" class="slot-btn" data-slot="1130" aria-pressed="false">11:30</button>
         </div>
 
         <div class="oven-readout">
           <div class="oven-stats">
-            <div><div class="stat-k">Deck temp</div><div class="stat-v" id="oven-temp">210°C</div></div>
-            <div><div class="stat-k">Ferment</div><div class="stat-v" id="oven-ferm">72 hrs</div></div>
-            <div><div class="stat-k">Flour</div><div class="stat-v" id="oven-flour">T45 / AOP</div></div>
+            <div><div class="stat-k">Deck temp</div><div class="stat-v" id="oven-temp">248°C</div></div>
+            <div><div class="stat-k">Ferment</div><div class="stat-v" id="oven-ferm">36 hrs</div></div>
+            <div><div class="stat-k">Flour</div><div class="stat-v" id="oven-flour">T65 + Rye</div></div>
           </div>
         </div>
 
@@ -492,10 +448,10 @@
         <div class="sec-head">
           <div>
             <p class="oven-k" style="margin-bottom: 6px;">Counter Pre-Order</p>
-            <h2>Fill your six-slot morning box</h2>
+            <h2>Fill your six-slot pastry box &amp; loaf bag</h2>
           </div>
           <p style="max-width: 44ch; font-size: 0.94rem; color: var(--ink-muted);">
-            Add loaves and viennoiserie below. Filling six pastry slots unlocks an automatic £2.50 baker discount and generates your counter ticket.
+            Pastries pack into our six-slot kraft box (unlocking a £2.50 baker discount at six pastries). Hearth loaves and focaccia are packed separately in breathable paper bags.
           </p>
         </div>
 
@@ -504,31 +460,40 @@
 
           <aside class="kraft-tray-card" aria-label="Visual pastry box tray">
             <div class="tray-head">
-              <strong style="font-family: var(--font-serif); font-size: 1.35rem;">Your Kraft Box</strong>
-              <span class="mono" style="font-size: 0.78rem;" id="tray-weight">0g | 0 items</span>
+              <strong style="font-family: var(--font-serif); font-size: 1.35rem;">Six-Slot Pastry Box</strong>
+              <span class="mono" style="font-size: 0.78rem;" id="tray-weight">1200g | 4 items</span>
             </div>
 
             <div class="kraft-box-visual" id="kraft-box" aria-label="Six pastry box slots"></div>
 
+            <div class="loaf-bag-strip" id="loaf-bag">
+              Paper-wrapped hearth bag: 1 x Country Sourdough Miche
+            </div>
+
             <div class="discount-banner" id="discount-banner">
-              Add 4 more pastries to unlock the £2.50 six-box ribbon
+              Add 3 more pastries to unlock the £2.50 six-box discount
             </div>
 
             <div class="ticket-lines" id="ticket-lines"></div>
 
             <div class="ticket-total">
               <span>Counter total</span>
-              <span class="total-num" id="box-total">£0.00</span>
+              <span class="total-num" id="box-total">£16.10</span>
             </div>
 
             <form id="ticket-form" style="display: grid; gap: 10px;">
               <select id="pickup-time" aria-label="Pickup window">
-                <option>Saturday 08:00 to 09:00</option>
+                <option>Wednesday 08:00 to 09:30</option>
+                <option>Thursday 08:00 to 09:30</option>
+                <option>Friday 08:30 to 10:00</option>
+                <option selected>Saturday 08:00 to 09:00</option>
                 <option>Saturday 09:30 to 10:30</option>
                 <option>Sunday 08:30 to 09:30</option>
               </select>
               <input type="text" id="cust-name" required placeholder="Name for counter bag" aria-label="Customer name" />
-              <button type="submit" class="cta-crust">Print counter pickup ticket</button>
+              <input type="email" id="cust-email" required placeholder="Email for pickup confirmation" aria-label="Customer email" />
+              <div class="err-msg" id="err-msg" role="alert">Please add at least one loaf or pastry before reserving a pickup ticket.</div>
+              <button type="submit" class="cta-crust">Reserve counter pickup ticket</button>
               <div class="ticket-stub" id="ticket-stub" role="status"></div>
             </form>
           </aside>
@@ -539,8 +504,8 @@
 
   <footer>
     <div class="container footer-inner">
-      <span>Fournil Bakehouse flagship demo built by Mayank Sahu</span>
-      <span><a href="../">Back to studio</a> | <a href="../before/bakery/">Compare original v0 snapshot</a></span>
+      <span>Concept showcase engineered by Mayank Sahu</span>
+      <span><a href="https://msnotfound.github.io/#quote" target="_top">Build a bakery store like this</a></span>
     </div>
   </footer>
 
@@ -565,15 +530,16 @@
     });
 
     const ITEMS = [
-      { id: "miche", code: "SRD", short: "Country Miche", name: "Country Sourdough Miche", meta: "82% hydration, 20% wholegrain rye, 900g loaf", price: 5.50, grams: 900, pastry: false },
-      { id: "crois", code: "CRS", short: "Butter Croissant", name: "Cultured Butter Croissant", meta: "Isigny AOP butter, 3-day lamination, 95g", price: 3.40, grams: 95, pastry: true },
-      { id: "kard", code: "CRD", short: "Cardamom Knot", name: "Brown Butter Cardamom Knot", meta: "Freshly cracked green cardamom, pearl sugar, 110g", price: 3.80, grams: 110, pastry: true },
-      { id: "choc", code: "PAC", short: "Pain au Choc", name: "Pain au Chocolat", meta: "Double Valrhona 70% dark batons, 105g", price: 3.70, grams: 105, pastry: true },
-      { id: "can", code: "CNL", short: "Cannelé", name: "Bordeaux Cannelé", meta: "Beeswax tin, Madagascar vanilla, rum, 75g", price: 3.50, grams: 75, pastry: true },
+      { id: "miche", code: "SRD", short: "Country Miche", name: "Country Sourdough Miche", meta: "82% hydration, 20% wholegrain rye, 900g hearth loaf", price: 5.50, grams: 900, pastry: false },
+      { id: "crois", code: "CRS", short: "Butter Croissant", name: "Cultured Butter Croissant", meta: "Isigny AOP butter, 3-day lamination, 95g pastry", price: 3.40, grams: 95, pastry: true },
+      { id: "kard", code: "CRD", short: "Cardamom Knot", name: "Brown Butter Cardamom Knot", meta: "Freshly cracked green cardamom, pearl sugar, 110g pastry", price: 3.80, grams: 110, pastry: true },
+      { id: "choc", code: "PAC", short: "Pain au Choc", name: "Pain au Chocolat", meta: "Double Valrhona 70% dark batons, 105g pastry", price: 3.70, grams: 105, pastry: true },
+      { id: "can", code: "CNL", short: "Cannelé", name: "Bordeaux Cannelé", meta: "Beeswax tin, Madagascar vanilla, rum, 75g pastry", price: 3.50, grams: 75, pastry: true },
       { id: "foc", code: "FOC", short: "Rosemary Slab", name: "Rosemary & Maldon Focaccia", meta: "Cold-pressed olive oil, half hearth slab, 420g", price: 4.90, grams: 420, pastry: false }
     ];
 
     const cart = { miche: 1, crois: 2, kard: 1 };
+    let lastTotalItems = 0;
 
     function renderAll() {
       const sheet = document.getElementById("bake-sheet");
@@ -596,12 +562,13 @@
         b.addEventListener("click", () => {
           const cur = cart[b.dataset.id] || 0;
           cart[b.dataset.id] = b.dataset.op === "inc" ? cur + 1 : Math.max(0, cur - 1);
+          document.getElementById("err-msg").classList.remove("is-visible");
           renderAll();
         });
       });
 
-      // Fill visual 6-slot tray
-      const tokens = [];
+      const pastryTokens = [];
+      const loafLabels = [];
       let totalItems = 0, totalGrams = 0, pastryCount = 0, subtotal = 0;
       const lines = [];
 
@@ -610,22 +577,35 @@
         if (q > 0) {
           totalItems += q;
           totalGrams += q * it.grams;
-          if (it.pastry) pastryCount += q;
           subtotal += q * it.price;
           lines.push(`<div class="ticket-row"><span>${q} x ${it.name}</span><span class="mono">£${(q * it.price).toFixed(2)}</span></div>`);
-          for (let i = 0; i < q; i++) tokens.push({ code: it.code, short: it.short });
+          if (it.pastry) {
+            pastryCount += q;
+            for (let i = 0; i < q; i++) pastryTokens.push({ code: it.code, short: it.short });
+          } else {
+            loafLabels.push(`${q} x ${it.short}`);
+          }
         }
       });
 
+      lastTotalItems = totalItems;
+
       const slotsHtml = [];
       for (let i = 0; i < 6; i++) {
-        if (tokens[i]) {
-          slotsHtml.push(`<div class="tray-slot is-filled"><span class="slot-code">${tokens[i].code}</span><span>${tokens[i].short}</span></div>`);
+        if (pastryTokens[i]) {
+          slotsHtml.push(`<div class="tray-slot is-filled"><span class="slot-code">${pastryTokens[i].code}</span><span>${pastryTokens[i].short}</span></div>`);
         } else {
-          slotsHtml.push(`<div class="tray-slot"><span>Slot 0${i + 1}</span></div>`);
+          slotsHtml.push(`<div class="tray-slot"><span>Pastry 0${i + 1}</span></div>`);
         }
       }
       document.getElementById("kraft-box").innerHTML = slotsHtml.join("");
+
+      const overflowCount = Math.max(0, pastryCount - 6);
+      const loafEl = document.getElementById("loaf-bag");
+      const bagParts = [];
+      if (loafLabels.length) bagParts.push(`Paper-wrapped hearth bag: ${loafLabels.join(", ")}`);
+      if (overflowCount > 0) bagParts.push(`Extra pastry box: +${overflowCount} ${overflowCount === 1 ? "pastry" : "pastries"}`);
+      loafEl.textContent = bagParts.length ? bagParts.join(" | ") : "Paper-wrapped hearth bag: No sourdough loaves selected";
 
       const discount = pastryCount >= 6 ? 2.5 : 0;
       const banner = document.getElementById("discount-banner");
@@ -640,18 +620,28 @@
       }
 
       document.getElementById("tray-weight").textContent = `${totalGrams}g | ${totalItems} ${totalItems === 1 ? "item" : "items"}`;
-      document.getElementById("ticket-lines").innerHTML = lines.join("") || `<p style="color: var(--ink-muted);">Your kraft box is empty.</p>`;
+      document.getElementById("ticket-lines").innerHTML = lines.join("") || `<p style="color: var(--ink-muted);">Your order is currently empty.</p>`;
       document.getElementById("box-total").textContent = `£${Math.max(0, subtotal - discount).toFixed(2)}`;
     }
 
     document.getElementById("ticket-form").addEventListener("submit", (e) => {
       e.preventDefault();
+      if (lastTotalItems === 0) {
+        document.getElementById("err-msg").classList.add("is-visible");
+        return;
+      }
       const name = document.getElementById("cust-name").value.trim() || "Guest";
+      const email = document.getElementById("cust-email").value.trim();
       const slot = document.getElementById("pickup-time").value;
       const total = document.getElementById("box-total").textContent;
+      const code = "FRN-" + String(Math.floor(100 + Math.random() * 900));
       const stub = document.getElementById("ticket-stub");
-      stub.innerHTML = `TICKET #FRN-408 | HELD FOR ${name.toUpperCase()}<br>WINDOW: ${slot}<br>TOTAL DUE AT COUNTER: ${total}`;
+      stub.innerHTML = `
+        <div>TICKET #${code} | HELD FOR ${name.toUpperCase()}<br>WINDOW: ${slot}<br>CONFIRMATION: ${email}<br>TOTAL DUE AT COUNTER: ${total}</div>
+        <button type="button" class="print-btn" id="do-print">Print ticket</button>
+      `;
       stub.classList.add("is-visible");
+      document.getElementById("do-print").addEventListener("click", () => window.print());
     });
 
     renderAll();

@@ -64,7 +64,7 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: color-mix(in oklch, var(--bg) 92%, transparent);
+      background: color-mix(in oklch, var(--bg) 93%, transparent);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--line);
     }
@@ -108,9 +108,21 @@
       .nav-cta:hover { filter: brightness(1.08); }
     }
 
+    .mobile-subnav {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 8px 24px;
+      gap: 18px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
     /* Editorial Monograph Header + Hero Transformation Stage */
     .hero-head {
-      padding: clamp(28px, 4vh, 44px) 0 26px;
+      padding: clamp(26px, 4vh, 42px) 0 24px;
       display: grid;
       grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
       gap: 32px;
@@ -151,17 +163,18 @@
 
     .hero-controls-row {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 8px;
     }
 
     .preset-btn {
-      padding: 7px 13px;
+      padding: 8px 16px;
       border: 1px solid var(--line);
       background: var(--surface);
       font-family: var(--font-mono);
       font-size: 0.74rem;
       color: var(--ink-muted);
+      white-space: nowrap;
     }
 
     .preset-btn[aria-pressed="true"] {
@@ -170,7 +183,7 @@
       border-color: var(--ink);
     }
 
-    /* SIGNATURE MOMENT: Pixel-Aligned Real Before/After Curtain */
+    /* Pixel-Aligned Real Before/After Curtain */
     .stage-wrap {
       padding-bottom: 56px;
       border-bottom: 1px solid var(--line);
@@ -204,7 +217,7 @@
     }
 
     .before-clip {
-      clip-path: inset(0 48% 0 0);
+      clip-path: inset(0 50% 0 0);
       will-change: clip-path;
     }
 
@@ -226,12 +239,11 @@
     .stage-tag.left { left: 18px; }
     .stage-tag.right { right: 18px; }
 
-    /* Draggable Architectural Hairline Handle */
     .curtain-line {
       position: absolute;
       top: 0;
       bottom: 0;
-      left: 52%;
+      left: 50%;
       width: 2px;
       background: oklch(0.99 0.004 82);
       z-index: 10;
@@ -261,7 +273,6 @@
       font-weight: 600;
     }
 
-    /* Interactive Architectural Spec Strip below Curtain */
     .stage-meta-bar {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -341,9 +352,7 @@
       background: var(--surface);
     }
 
-    .mat-list {
-      border-right: 1px solid var(--line);
-    }
+    .mat-list { border-right: 1px solid var(--line); }
 
     .mat-item {
       width: 100%;
@@ -379,11 +388,7 @@
       transition: background-color 280ms ease;
     }
 
-    .light-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .light-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
 
     .light-btn {
       padding: 7px 12px;
@@ -400,17 +405,41 @@
     }
 
     .mat-slab {
-      height: 170px;
+      height: 176px;
       border: 1px solid oklch(0.2 0.01 50 / 0.14);
       position: relative;
       display: flex;
       align-items: flex-end;
       padding: 16px;
+      overflow: hidden;
       transition: filter 280ms ease, background 280ms ease;
     }
 
+    .mat-slab::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.18;
+      background-image: repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.06) 0px,
+        rgba(255, 255, 255, 0.06) 1px,
+        transparent 1px,
+        transparent 5px
+      ), repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.05) 0px,
+        rgba(0, 0, 0, 0.05) 1px,
+        transparent 1px,
+        transparent 7px
+      );
+      pointer-events: none;
+    }
+
     .mat-slab-stamp {
-      background: oklch(0.99 0.004 82 / 0.9);
+      position: relative;
+      z-index: 2;
+      background: oklch(0.99 0.004 82 / 0.92);
       padding: 6px 10px;
       font-family: var(--font-mono);
       font-size: 0.72rem;
@@ -432,12 +461,7 @@
       gap: 28px;
     }
 
-    .proj {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
+    .proj { display: flex; flex-direction: column; gap: 12px; }
     .proj.w-7 { grid-column: span 7; }
     .proj.w-5 { grid-column: span 5; }
     .proj.w-6 { grid-column: span 6; }
@@ -483,6 +507,26 @@
       grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
       gap: 44px;
       align-items: start;
+    }
+
+    .studio-details {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 14px;
+      font-size: 0.92rem;
+      color: var(--ink-muted);
+    }
+
+    .studio-details strong {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--terracotta);
+      margin-bottom: 2px;
     }
 
     .book-card {
@@ -555,12 +599,14 @@
       .stage-meta-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .proj.w-7, .proj.w-5, .proj.w-6 { grid-column: span 12; }
       .nav-links { display: none; }
+      .mobile-subnav { display: flex; }
     }
 
     @media (max-width: 560px) {
       .stage-meta-bar, .mat-spec-grid { grid-template-columns: minmax(0, 1fr); }
       .stage-meta-cell { border-right: none; border-bottom: 1px solid var(--line); }
       .stage-meta-cell:last-child { border-bottom: none; }
+      .container { width: calc(100% - 32px); }
     }
   </style>
 </head>
@@ -572,10 +618,16 @@
         <a href="#renovation">Transformation</a>
         <a href="#materials">Material Board</a>
         <a href="#commissions">Commissions</a>
-        <a href="../">Back to studio</a>
+        <a href="#walkthrough">Practice</a>
       </nav>
       <a href="#walkthrough" class="nav-cta">Book a site visit</a>
     </div>
+    <nav class="mobile-subnav" aria-label="Quick navigation">
+      <a href="#renovation">Transformation</a>
+      <a href="#materials">Materials</a>
+      <a href="#commissions">Commissions</a>
+      <a href="#walkthrough">Book Visit</a>
+    </nav>
   </header>
 
   <main id="top">
@@ -587,24 +639,22 @@
         </div>
         <div class="hero-side">
           <p class="hero-lead">
-            Drag the curtain across Arundel Terrace (Notting Hill, W11) to compare the stripped pre-renovation shell against our completed joinery, honed limestone hearth, and limewash interior.
+            Drag the curtain across Arundel Terrace (Notting Hill, W11) to compare the stripped pre-renovation shell against our completed joinery, carved Bath limestone hearth, and limewash interior.
           </p>
-          <div class="hero-controls-row" role="group" aria-label="Quick before and after positions">
-            <button type="button" class="preset-btn" data-pos="84" aria-pressed="false">Raw shell (84%)</button>
-            <button type="button" class="preset-btn" data-pos="50" aria-pressed="true">50 / 50 split</button>
-            <button type="button" class="preset-btn" data-pos="14" aria-pressed="false">Completed room (14%)</button>
+          <div class="hero-controls-row" role="group" aria-label="Quick before and after views">
+            <button type="button" class="preset-btn" data-pos="88" aria-pressed="false">Before</button>
+            <button type="button" class="preset-btn" data-pos="50" aria-pressed="true">50 / 50</button>
+            <button type="button" class="preset-btn" data-pos="12" aria-pressed="false">After</button>
           </div>
         </div>
       </div>
 
       <div class="stage-wrap">
         <div class="compare-stage" id="compare-stage" role="slider" tabindex="0" aria-label="Drag to compare pre-renovation shell and finished room" aria-valuemin="4" aria-valuemax="96" aria-valuenow="50">
-          <!-- AFTER (Completed renovation underneath, full width) -->
           <div class="compare-layer">
-            <img src="./assets/renovation-after.jpg" alt="Completed Notting Hill Victorian living room with fumed oak shelves, limestone hearth, and linen sofa" />
+            <img src="./assets/renovation-after.jpg" alt="Completed Notting Hill Victorian living room with fumed oak shelves, carved limestone hearth, and linen sofa" />
           </div>
 
-          <!-- BEFORE (Real stripped Victorian brick & plaster shell clipped on left) -->
           <div class="compare-layer before-clip" id="before-clip">
             <img src="./assets/renovation-before.jpg" alt="Pre-renovation stripped Victorian room showing bare London stock brick chimney, peeling plaster, and bare floorboards" />
           </div>
@@ -620,7 +670,7 @@
         <div class="stage-meta-bar" role="group" aria-label="Inspect renovation craft packages">
           <button type="button" class="stage-meta-cell" data-spec="hearth" aria-pressed="true">
             <div class="sm-k">Masonry &amp; Hearth</div>
-            <div class="sm-v">Honed Bath Limestone</div>
+            <div class="sm-v">Carved Bath Limestone</div>
           </button>
           <button type="button" class="stage-meta-cell" data-spec="joinery" aria-pressed="false">
             <div class="sm-k">Alcove Cabinetry</div>
@@ -637,7 +687,7 @@
         </div>
 
         <div class="spec-callout" id="spec-callout">
-          <span><strong>Honed Bath Limestone:</strong> Exposed London stock brick chimney breast was re-pointed, lined with insulated fireboard, and dressed in bespoke 45mm Bath limestone slips cut to match the restored cornice line.</span>
+          <span><strong>Carved Bath Limestone:</strong> The exposed London stock brick chimney breast was re-pointed, lime-plastered up to the restored Victorian cornice, and anchored at the hearth with a custom honed Bath limestone mantel surround.</span>
           <span class="mono" style="color: var(--terracotta);">W11 | 168 SQM | 18 WEEKS</span>
         </div>
       </div>
@@ -727,15 +777,15 @@
         <div class="monograph-grid">
           <article class="proj w-7">
             <div class="proj-img">
-              <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85" alt="Arundel Terrace living room with bespoke timber table" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85" alt="Ladbroke Grove living room with bespoke timber table and clerestory window" loading="lazy" />
             </div>
-            <div class="proj-top"><span>Notting Hill, W11</span><span>168 sqm | Full Gut Renovation</span></div>
-            <h3 class="proj-title">Arundel Terrace Townhouse</h3>
+            <div class="proj-top"><span>Ladbroke Grove, W11</span><span>194 sqm | Full Interior Architecture</span></div>
+            <h3 class="proj-title">Ladbroke Grove Garden Villa</h3>
           </article>
 
           <article class="proj w-5">
             <div class="proj-img">
-              <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85" alt="Circus Mews kitchen and dining joinery" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85" alt="Circus Mews living and bespoke joinery" loading="lazy" />
             </div>
             <div class="proj-top"><span>Bath, BA1</span><span>142 sqm | Joinery &amp; Lighting</span></div>
             <h3 class="proj-title">Circus Mews Georgian Flat</h3>
@@ -743,7 +793,7 @@
 
           <article class="proj w-6">
             <div class="proj-img">
-              <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85" alt="Highbury Barn rear extension living space" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85" alt="Highbury Fields rear extension living space" loading="lazy" />
             </div>
             <div class="proj-top"><span>Islington, N5</span><span>215 sqm | Rear Glazed Extension</span></div>
             <h3 class="proj-title">Highbury Fields Family Home</h3>
@@ -768,13 +818,28 @@
           <p style="margin-top: 14px; color: var(--ink-muted); max-width: 44ch;">
             Share your postcode, property era, and target scope. Our principal architect visits on site within ten days to review structural layout, natural light, and realistic build budget.
           </p>
+
+          <div class="studio-details">
+            <div>
+              <strong>London Studio</strong>
+              14 Sekforde Street, Clerkenwell, London EC1R 0HD
+            </div>
+            <div>
+              <strong>Practice &amp; Accreditation</strong>
+              RIBA Chartered Practice &amp; BIID Registered Interior Architects
+            </div>
+            <div>
+              <strong>Direct Studio Desk</strong>
+              studio@kestrelandstone.co.uk | +44 (0)20 7946 0821
+            </div>
+          </div>
         </div>
 
         <div class="book-card">
           <form class="book-form" id="book-form">
             <label>
               Your name
-              <input type="text" required placeholder="Hannah Whitfield" />
+              <input type="text" id="client-name" required placeholder="Hannah Whitfield" />
             </label>
             <label>
               Property postcode &amp; type
@@ -793,9 +858,7 @@
               <textarea required placeholder="Structural knock-through, bespoke kitchen, full interior architecture, or joinery package"></textarea>
             </label>
             <button type="submit" class="submit-btn">Request site walkthrough</button>
-            <div class="confirm-box" id="book-confirm" role="status">
-              Walkthrough request logged for studio review. We confirm site visit dates and fee structure within 24 hours.
-            </div>
+            <div class="confirm-box" id="book-confirm" role="status"></div>
           </form>
         </div>
       </div>
@@ -804,13 +867,12 @@
 
   <footer>
     <div class="container footer-inner">
-      <span>Kestrel &amp; Stone flagship UK interior architecture demo built by Mayank Sahu</span>
-      <span><a href="../">Back to studio</a></span>
+      <span>Concept showcase engineered by Mayank Sahu</span>
+      <span><a href="https://msnotfound.github.io/#quote" target="_top">Build a site like this</a></span>
     </div>
   </footer>
 
   <script>
-    // Direct-manipulation pixel-aligned Before/After curtain
     const stage = document.getElementById("compare-stage");
     const beforeClip = document.getElementById("before-clip");
     const line = document.getElementById("curtain-line");
@@ -825,14 +887,13 @@
       line.style.left = pct + "%";
       stage.setAttribute("aria-valuenow", String(Math.round(pct)));
       presetBtns.forEach((b) => {
-        b.setAttribute("aria-pressed", String(Math.abs(Number(b.dataset.pos) - pct) < 3));
+        b.setAttribute("aria-pressed", String(Math.abs(Number(b.dataset.pos) - pct) < 4));
       });
     }
 
     function updateFromClientX(clientX) {
       const rect = stage.getBoundingClientRect();
-      const raw = ((clientX - rect.left) / rect.width) * 100;
-      setCurtain(raw);
+      setCurtain(((clientX - rect.left) / rect.width) * 100);
     }
 
     stage.addEventListener("pointerdown", (e) => {
@@ -840,12 +901,7 @@
       stage.setPointerCapture(e.pointerId);
       updateFromClientX(e.clientX);
     });
-
-    stage.addEventListener("pointermove", (e) => {
-      if (!dragging) return;
-      updateFromClientX(e.clientX);
-    });
-
+    stage.addEventListener("pointermove", (e) => { if (dragging) updateFromClientX(e.clientX); });
     stage.addEventListener("pointerup", () => { dragging = false; });
     stage.addEventListener("pointercancel", () => { dragging = false; });
 
@@ -858,10 +914,9 @@
       b.addEventListener("click", () => setCurtain(Number(b.dataset.pos)));
     });
 
-    // Spec strip details
     const SPECS = {
-      hearth: "<strong>Honed Bath Limestone:</strong> Exposed London stock brick chimney breast was re-pointed, lined with insulated fireboard, and dressed in bespoke 45mm Bath limestone slips cut to match the restored cornice line.",
-      joinery: "<strong>Fumed English Oak:</strong> Flanking bare alcoves were scribed directly to out-of-plumb Victorian plaster walls with floor-to-ceiling fumed oak cabinetry, concealed LED wash strips, and touch-latch lower cupboards.",
+      hearth: "<strong>Carved Bath Limestone:</strong> The exposed London stock brick chimney breast was re-pointed, lime-plastered up to the restored Victorian cornice, and anchored at the hearth with a custom honed Bath limestone mantel surround.",
+      joinery: "<strong>Fumed English Oak:</strong> Flanking bare alcoves were scribed directly to out-of-plumb Victorian plaster walls with floor-to-ceiling fumed oak cabinetry, concealed wash lighting, and touch-latch lower cupboards.",
       walls: "<strong>Mineral Limewash Plaster:</strong> Peeling 1990s magnolia paint was stripped back to sound lime substrate, chase-wired cleanly, skim-plastered, and finished in three hand-brushed mineral limewash coats.",
       floor: "<strong>240mm Oiled Oak Plank:</strong> Uneven timber subfloors were acoustically battened, insulated between joists, and overlaid with wide-plank European oak finished in matte natural hardwax oil."
     };
@@ -873,7 +928,6 @@
       });
     });
 
-    // Material Board & Daylight Study
     const MATERIALS = {
       oak: {
         code: "KS-01", title: "Fumed English Oak",
@@ -907,12 +961,10 @@
       evening: { label: "EVENING 2700K", filter: "brightness(0.88) sepia(0.18) contrast(1.04)", bg: "oklch(0.94 0.016 72)" }
     };
 
-    let curMat = "oak";
-    let curLight = "afternoon";
+    let curMat = "oak", curLight = "afternoon";
 
     function renderMat() {
-      const m = MATERIALS[curMat];
-      const l = LIGHTS[curLight];
+      const m = MATERIALS[curMat], l = LIGHTS[curLight];
       document.getElementById("mat-title").textContent = m.title;
       document.getElementById("mat-desc").textContent = m.desc;
       document.getElementById("mat-origin").textContent = m.origin;
@@ -943,10 +995,12 @@
 
     document.getElementById("book-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      document.getElementById("book-confirm").classList.add("is-visible");
+      const who = document.getElementById("client-name").value.trim() || "Client";
+      const box = document.getElementById("book-confirm");
+      box.textContent = `Thank you, ${who}. Your walkthrough inquiry has been received by our Clerkenwell desk; we will confirm available site-visit dates within one business day.`;
+      box.classList.add("is-visible");
     });
 
-    setCurtain(50);
     renderMat();
   </script>
 </body>

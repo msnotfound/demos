@@ -28,11 +28,7 @@
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html {
       scroll-behavior: smooth;
@@ -71,17 +67,13 @@
       outline-offset: 2px;
     }
 
-    .mono {
-      font-family: var(--font-mono);
-      font-variant-numeric: tabular-nums;
-    }
+    .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 
-    /* Architectural full-bleed top rail */
     .rail-header {
       position: sticky;
       top: 0;
       z-index: 50;
-      background: color-mix(in oklch, var(--bg) 90%, transparent);
+      background: color-mix(in oklch, var(--bg) 92%, transparent);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
     }
@@ -89,7 +81,7 @@
     .rail-inner {
       max-width: 1360px;
       margin: 0 auto;
-      height: 60px;
+      height: 58px;
       padding: 0 28px;
       display: grid;
       grid-template-columns: auto 1fr auto;
@@ -122,7 +114,7 @@
       justify-content: center;
       gap: 32px;
       font-family: var(--font-mono);
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--ink-muted);
@@ -145,14 +137,26 @@
       .rail-cta:hover { background: var(--amber); color: var(--amber-ink); }
     }
 
-    /* Monumental Blueprint Hero */
+    .mobile-subnav {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 8px 20px;
+      gap: 18px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
     .shell {
       max-width: 1360px;
       margin: 0 auto;
       border-inline: 1px solid var(--line);
-      background: color-mix(in oklch, var(--bg) 92%, transparent);
+      background: color-mix(in oklch, var(--bg) 93%, transparent);
     }
 
+    /* Compacted hero so full topology graph sits cleanly in viewport */
     .hero-band {
       display: grid;
       grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
@@ -160,36 +164,36 @@
     }
 
     .hero-left {
-      padding: clamp(44px, 6.5vh, 80px) 36px 44px;
+      padding: 34px 36px 30px;
       border-right: 1px solid var(--line);
     }
 
     .spec-line {
       font-family: var(--font-mono);
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       color: var(--amber);
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       display: flex;
       gap: 18px;
       flex-wrap: wrap;
     }
 
     h1 {
-      font-size: clamp(2.6rem, 5.1vw, 4.65rem);
+      font-size: clamp(2.3rem, 4.3vw, 3.85rem);
       font-weight: 600;
-      line-height: 0.98;
+      line-height: 0.99;
       letter-spacing: -0.04em;
-      max-width: 14ch;
+      max-width: 15ch;
       text-wrap: balance;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
 
     .hero-sub {
-      font-size: 1.06rem;
+      font-size: 1rem;
       color: var(--ink-muted);
-      max-width: 52ch;
+      max-width: 54ch;
       text-wrap: pretty;
     }
 
@@ -199,33 +203,29 @@
     }
 
     .hero-specs {
-      padding: 32px 28px;
+      padding: 24px 28px;
       display: grid;
-      gap: 20px;
+      gap: 14px;
       align-content: start;
     }
 
     .kv {
       border-bottom: 1px solid var(--line);
-      padding-bottom: 14px;
+      padding-bottom: 11px;
     }
 
     .kv:last-child { border-bottom: none; padding-bottom: 0; }
 
     .kv-k {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--ink-dim);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
-    .kv-v {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--ink);
-    }
+    .kv-v { font-size: 0.92rem; font-weight: 500; color: var(--ink); }
 
     .hero-cta-row {
       display: grid;
@@ -234,8 +234,8 @@
     }
 
     .cta-cell {
-      padding: 18px 20px;
-      font-size: 0.9rem;
+      padding: 15px 18px;
+      font-size: 0.88rem;
       font-weight: 600;
       text-align: center;
       display: flex;
@@ -243,54 +243,37 @@
       justify-content: center;
     }
 
-    .cta-cell.primary {
-      background: var(--amber);
-      color: var(--amber-ink);
-    }
+    .cta-cell.primary { background: var(--amber); color: var(--amber-ink); }
+    .cta-cell.secondary { background: var(--surface); color: var(--ink); border-left: 1px solid var(--line); }
 
-    .cta-cell.secondary {
-      background: var(--surface);
-      color: var(--ink);
-      border-left: 1px solid var(--line);
-    }
-
-    @media (hover: hover) {
-      .cta-cell.primary:hover { filter: brightness(1.07); }
-      .cta-cell.secondary:hover { background: var(--surface-2); }
-    }
-
-    /* SIGNATURE MOMENT: Live Interactive Topology Simulator */
+    /* Live Topology Simulator */
     .bench-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
-      padding: 16px 28px;
+      gap: 14px;
+      padding: 14px 28px;
       border-bottom: 1px solid var(--line);
       background: var(--surface);
     }
 
     .bench-label {
       font-family: var(--font-mono);
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--ink);
     }
 
-    .trigger-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .trigger-group { display: flex; flex-wrap: wrap; gap: 8px; }
 
     .trigger-btn {
-      padding: 8px 14px;
+      padding: 7px 13px;
       border: 1px solid var(--line-strong);
       background: var(--bg);
       font-family: var(--font-mono);
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--ink);
     }
 
@@ -308,27 +291,18 @@
     }
 
     .topology-stage {
-      padding: 28px;
+      padding: 22px 26px;
       border-right: 1px solid var(--line);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 20px;
+      gap: 16px;
       min-width: 0;
       background: oklch(0.115 0.005 260);
     }
 
-    .svg-wrap {
-      width: 100%;
-      overflow-x: auto;
-    }
-
-    .topo-svg {
-      width: 100%;
-      min-width: 640px;
-      height: auto;
-      display: block;
-    }
+    .svg-wrap { width: 100%; overflow-x: auto; }
+    .topo-svg { width: 100%; min-width: 640px; height: auto; display: block; }
 
     .wire {
       fill: none;
@@ -337,24 +311,10 @@
       transition: stroke 220ms ease;
     }
 
-    .wire.is-lit {
-      stroke: var(--amber);
-      stroke-width: 2.5;
-    }
+    .wire.is-ok { stroke: var(--ok); stroke-width: 2.5; }
+    .wire.is-err { stroke: var(--err); stroke-width: 2.5; }
 
-    .wire.is-ok {
-      stroke: var(--ok);
-      stroke-width: 2.5;
-    }
-
-    .wire.is-err {
-      stroke: var(--err);
-      stroke-width: 2.5;
-    }
-
-    .node-group {
-      cursor: pointer;
-    }
+    .node-group { cursor: pointer; }
 
     .node-box {
       fill: oklch(0.165 0.006 260);
@@ -363,51 +323,15 @@
       transition: fill 180ms ease, stroke 180ms ease;
     }
 
-    .node-group:hover .node-box {
-      fill: oklch(0.2 0.008 260);
-      stroke: oklch(0.55 0.01 260);
-    }
+    .node-group:hover .node-box { fill: oklch(0.2 0.008 260); stroke: oklch(0.55 0.01 260); }
+    .node-group.is-selected .node-box { stroke: var(--ink); stroke-width: 1.8; }
+    .node-group.state-active .node-box { fill: oklch(0.22 0.03 70); stroke: var(--amber); stroke-width: 2; }
+    .node-group.state-ok .node-box { stroke: var(--ok); stroke-width: 1.8; }
+    .node-group.state-err .node-box { fill: oklch(0.21 0.035 26); stroke: var(--err); stroke-width: 2; }
 
-    .node-group.is-selected .node-box {
-      stroke: var(--ink);
-      stroke-width: 1.8;
-    }
-
-    .node-group.state-active .node-box {
-      fill: oklch(0.22 0.03 70);
-      stroke: var(--amber);
-      stroke-width: 2;
-    }
-
-    .node-group.state-ok .node-box {
-      stroke: var(--ok);
-      stroke-width: 1.8;
-    }
-
-    .node-group.state-err .node-box {
-      fill: oklch(0.21 0.035 26);
-      stroke: var(--err);
-      stroke-width: 2;
-    }
-
-    .node-title {
-      fill: oklch(0.95 0.005 85);
-      font-family: "Switzer", sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .node-sub {
-      fill: oklch(0.65 0.008 260);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 10.5px;
-    }
-
-    .node-ms {
-      fill: var(--amber);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 10.5px;
-    }
+    .node-title { fill: oklch(0.95 0.005 85); font-family: "Switzer", sans-serif; font-size: 13px; font-weight: 600; }
+    .node-sub { fill: oklch(0.65 0.008 260); font-family: "IBM Plex Mono", monospace; font-size: 10.5px; }
+    .node-ms { fill: var(--amber); font-family: "IBM Plex Mono", monospace; font-size: 10.5px; }
 
     .stage-telemetry {
       display: grid;
@@ -416,40 +340,15 @@
       background: var(--surface);
     }
 
-    .tel-cell {
-      padding: 12px 14px;
-      border-right: 1px solid var(--line);
-    }
-
+    .tel-cell { padding: 11px 14px; border-right: 1px solid var(--line); }
     .tel-cell:last-child { border-right: none; }
+    .tel-k { font-family: var(--font-mono); font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-dim); margin-bottom: 2px; }
+    .tel-v { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--ink); }
 
-    .tel-k {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--ink-dim);
-      margin-bottom: 3px;
-    }
-
-    .tel-v {
-      font-family: var(--font-mono);
-      font-size: 0.92rem;
-      font-weight: 500;
-      font-variant-numeric: tabular-nums;
-      color: var(--ink);
-    }
-
-    /* Live Inspector Drawer */
-    .inspector {
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      background: var(--surface);
-    }
+    .inspector { display: flex; flex-direction: column; min-width: 0; background: var(--surface); }
 
     .inspector-bar {
-      padding: 13px 18px;
+      padding: 12px 18px;
       border-bottom: 1px solid var(--line);
       display: flex;
       justify-content: space-between;
@@ -459,27 +358,23 @@
       font-size: 0.74rem;
     }
 
-    .inspector-badge {
-      padding: 3px 8px;
-      border: 1px solid var(--line-strong);
-      color: var(--amber);
-    }
+    .inspector-badge { padding: 3px 8px; border: 1px solid var(--line-strong); color: var(--amber); }
 
     .inspector-code {
       flex: 1;
-      padding: 18px;
+      padding: 16px 18px;
       font-family: var(--font-mono);
       font-size: 0.78rem;
-      line-height: 1.62;
+      line-height: 1.6;
       color: oklch(0.9 0.008 85);
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       background: oklch(0.11 0.004 260);
-      min-height: 290px;
+      min-height: 255px;
     }
 
     .inspector-foot {
-      padding: 14px 18px;
+      padding: 13px 18px;
       border-top: 1px solid var(--line);
       font-size: 0.84rem;
       color: var(--ink-muted);
@@ -496,7 +391,7 @@
       padding: 44px 36px;
       border-right: 1px solid var(--line);
       display: grid;
-      gap: 24px;
+      gap: 22px;
       align-content: start;
     }
 
@@ -516,18 +411,8 @@
       background: var(--surface);
     }
 
-    .slider-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-size: 0.9rem;
-    }
-
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--amber);
-      cursor: pointer;
-    }
+    .slider-top { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.9rem; }
+    input[type="range"] { width: 100%; accent-color: var(--amber); cursor: pointer; }
 
     .calc-right {
       padding: 44px 36px;
@@ -537,34 +422,11 @@
       background: var(--surface);
     }
 
-    .bar-compare {
-      display: grid;
-      gap: 16px;
-    }
-
-    .bar-row {
-      display: grid;
-      gap: 7px;
-    }
-
-    .bar-head {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.88rem;
-    }
-
-    .bar-track {
-      height: 12px;
-      background: var(--bg);
-      border: 1px solid var(--line);
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      transition: width 260ms var(--ease-out);
-    }
-
+    .bar-compare { display: grid; gap: 16px; }
+    .bar-row { display: grid; gap: 7px; }
+    .bar-head { display: flex; justify-content: space-between; font-size: 0.88rem; }
+    .bar-track { height: 12px; background: var(--bg); border: 1px solid var(--line); overflow: hidden; }
+    .bar-fill { height: 100%; transition: width 260ms var(--ease-out); }
     .bar-fill.zap { background: oklch(0.45 0.02 260); }
     .bar-fill.rf { background: var(--amber); }
 
@@ -587,7 +449,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* Systems matrix */
     .matrix-band {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -604,27 +465,9 @@
     }
 
     .matrix-cell:last-child { border-right: none; }
-
-    .matrix-k {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--amber);
-      margin-bottom: 12px;
-    }
-
-    .matrix-cell h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      margin-bottom: 10px;
-    }
-
-    .matrix-cell p {
-      font-size: 0.93rem;
-      color: var(--ink-muted);
-    }
+    .matrix-k { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); margin-bottom: 12px; }
+    .matrix-cell h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 10px; }
+    .matrix-cell p { font-size: 0.93rem; color: var(--ink-muted); }
 
     .matrix-foot {
       padding-top: 16px;
@@ -637,32 +480,12 @@
       gap: 8px;
     }
 
-    /* Direct Intake */
-    .intake-band {
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    }
-
-    .intake-copy {
-      padding: 48px 36px;
-      border-right: 1px solid var(--line);
-    }
-
-    .intake-form-wrap {
-      padding: 48px 36px;
-      background: var(--surface);
-    }
-
-    .intake-form {
-      display: grid;
-      gap: 16px;
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
+    /* Live Lead Intake */
+    .intake-band { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
+    .intake-copy { padding: 48px 36px; border-right: 1px solid var(--line); }
+    .intake-form-wrap { padding: 48px 36px; background: var(--surface); }
+    .intake-form { display: grid; gap: 16px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
     label {
       display: grid;
@@ -694,16 +517,34 @@
       font-size: 0.94rem;
     }
 
-    .confirm-bar {
+    .dispatch-panel {
       display: none;
-      padding: 14px 16px;
+      padding: 18px;
       border: 1px solid var(--ok);
-      background: color-mix(in oklch, var(--ok) 12%, var(--bg));
-      font-size: 0.88rem;
-      color: var(--ink);
+      background: color-mix(in oklch, var(--ok) 10%, var(--bg));
+      gap: 12px;
     }
 
-    .confirm-bar.is-visible { display: block; }
+    .dispatch-panel.is-visible { display: grid; }
+
+    .dispatch-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .dispatch-btn {
+      padding: 10px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dispatch-btn.wa { background: var(--ok); color: oklch(0.14 0.015 152); }
+    .dispatch-btn.mail { background: var(--amber); color: var(--amber-ink); }
 
     footer {
       max-width: 1360px;
@@ -722,28 +563,17 @@
     footer a { text-decoration: underline; text-underline-offset: 0.25em; }
 
     @media (max-width: 1020px) {
-      .hero-band, .bench-grid, .calc-band, .matrix-band, .intake-band {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      .hero-left, .topology-stage, .calc-left, .matrix-cell, .intake-copy {
-        border-right: none;
-        border-bottom: 1px solid var(--line);
-      }
+      .hero-band, .bench-grid, .calc-band, .matrix-band, .intake-band { grid-template-columns: minmax(0, 1fr); }
+      .hero-left, .topology-stage, .calc-left, .matrix-cell, .intake-copy { border-right: none; border-bottom: 1px solid var(--line); }
       .nav-mid { display: none; }
+      .mobile-subnav { display: flex; }
     }
 
     @media (max-width: 640px) {
-      .stage-telemetry, .two-col {
-        grid-template-columns: minmax(0, 1fr);
-      }
-      .tel-cell {
-        border-right: none;
-        border-bottom: 1px solid var(--line);
-      }
+      .stage-telemetry, .two-col { grid-template-columns: minmax(0, 1fr); }
+      .tel-cell { border-right: none; border-bottom: 1px solid var(--line); }
       .tel-cell:last-child { border-bottom: none; }
-      .hero-left, .calc-left, .calc-right, .intake-copy, .intake-form-wrap {
-        padding: 32px 20px;
-      }
+      .hero-left, .calc-left, .calc-right, .intake-copy, .intake-form-wrap { padding: 28px 20px; }
     }
   </style>
 </head>
@@ -758,10 +588,16 @@
         <a href="#topology">Pipeline bench</a>
         <a href="#cost">Cost bench</a>
         <a href="#systems">Architectures</a>
-        <a href="../">Studio index</a>
+        <a href="#intake">Direct scope</a>
       </nav>
       <a href="#intake" class="rail-cta">Scope a pipeline</a>
     </div>
+    <nav class="mobile-subnav" aria-label="Quick navigation">
+      <a href="#topology">Simulator</a>
+      <a href="#cost">Cost Bench</a>
+      <a href="#systems">Systems</a>
+      <a href="#intake">Scope</a>
+    </nav>
   </header>
 
   <main class="shell" id="top">
@@ -811,79 +647,57 @@
       <div class="bench-grid">
         <div class="topology-stage">
           <div class="svg-wrap">
-            <svg class="topo-svg" viewBox="0 0 760 280" role="img" aria-label="Interactive webhook to LLM to CRM topology diagram">
-              <!-- Wires -->
-              <path id="w-0-1" class="wire" d="M 150 92 L 208 92" />
-              <path id="w-1-2" class="wire" d="M 358 92 L 416 92" />
-              <path id="w-2-3" class="wire" d="M 566 92 C 590 92, 590 66, 614 66" />
-              <path id="w-2-4" class="wire" d="M 566 106 C 594 106, 588 206, 614 206" />
+            <svg class="topo-svg" viewBox="0 0 760 270" role="img" aria-label="Interactive webhook to LLM to CRM topology diagram">
+              <path id="w-0-1" class="wire" d="M 150 86 L 208 86" />
+              <path id="w-1-2" class="wire" d="M 358 86 L 416 86" />
+              <path id="w-2-3" class="wire" d="M 566 86 C 590 86, 590 60, 614 60" />
+              <path id="w-2-4" class="wire" d="M 566 100 C 594 100, 588 198, 614 198" />
 
-              <!-- Animated pulse packet -->
-              <circle id="packet" r="5" cx="75" cy="92" fill="oklch(0.77 0.148 70)" opacity="0" />
-
-              <!-- Node 0: Ingest -->
-              <g class="node-group is-selected" data-node="ingest" transform="translate(12, 54)">
+              <g class="node-group is-selected" data-node="ingest" transform="translate(12, 48)">
                 <rect class="node-box" width="138" height="76" rx="4" />
                 <text class="node-title" x="12" y="26">1. Webhook Ingest</text>
                 <text class="node-sub" x="12" y="45">HMAC + Dedup Key</text>
                 <text class="node-ms" id="ms-ingest" x="12" y="64">14 ms</text>
               </g>
 
-              <!-- Node 1: LLM Triage -->
-              <g class="node-group" data-node="triage" transform="translate(208, 54)">
+              <g class="node-group" data-node="triage" transform="translate(208, 48)">
                 <rect class="node-box" width="150" height="76" rx="4" />
                 <text class="node-title" x="12" y="26">2. LLM Triage</text>
                 <text class="node-sub" x="12" y="45">Strict JSON Schema</text>
                 <text class="node-ms" id="ms-triage" x="12" y="64">640 ms</text>
               </g>
 
-              <!-- Node 2: Guardrail Gate -->
-              <g class="node-group" data-node="gate" transform="translate(416, 54)">
+              <g class="node-group" data-node="gate" transform="translate(416, 48)">
                 <rect class="node-box" width="150" height="76" rx="4" />
                 <text class="node-title" x="12" y="26">3. Policy Gate</text>
                 <text class="node-sub" x="12" y="45">Math &amp; Risk Check</text>
                 <text class="node-ms" id="ms-gate" x="12" y="64">9 ms</text>
               </g>
 
-              <!-- Node 3: CRM Upsert (Top branch) -->
-              <g class="node-group" data-node="crm" transform="translate(614, 28)">
+              <g class="node-group" data-node="crm" transform="translate(614, 22)">
                 <rect class="node-box" width="134" height="76" rx="4" />
-                <text class="node-title" x="12" y="26">4A. CRM Upsert</text>
-                <text class="node-sub" x="12" y="45">Postgres + Reply</text>
+                <text class="node-title" id="n4a-title" x="12" y="26">4A. CRM Upsert</text>
+                <text class="node-sub" id="n4a-sub" x="12" y="45">Postgres + Reply</text>
                 <text class="node-ms" id="ms-crm" x="12" y="64">88 ms</text>
               </g>
 
-              <!-- Node 4: Human Hold / DLQ (Bottom branch) -->
-              <g class="node-group" data-node="dlq" transform="translate(614, 168)">
+              <g class="node-group" data-node="dlq" transform="translate(614, 160)">
                 <rect class="node-box" width="134" height="76" rx="4" />
                 <text class="node-title" x="12" y="26">4B. Hold Queue</text>
                 <text class="node-sub" x="12" y="45">Slack + Replay</text>
                 <text class="node-ms" id="ms-dlq" x="12" y="64">idle</text>
               </g>
 
-              <!-- Labels on branch paths -->
-              <text x="572" y="54" fill="oklch(0.62 0.008 260)" font-family="IBM Plex Mono" font-size="9.5">PASS</text>
-              <text x="568" y="182" fill="oklch(0.62 0.008 260)" font-family="IBM Plex Mono" font-size="9.5">HOLD</text>
+              <text x="572" y="48" fill="oklch(0.62 0.008 260)" font-family="IBM Plex Mono" font-size="9.5">PASS</text>
+              <text x="568" y="176" fill="oklch(0.62 0.008 260)" font-family="IBM Plex Mono" font-size="9.5">HOLD</text>
             </svg>
           </div>
 
           <div class="stage-telemetry">
-            <div class="tel-cell">
-              <div class="tel-k">Run status</div>
-              <div class="tel-v" id="tel-status">COMMITTED</div>
-            </div>
-            <div class="tel-cell">
-              <div class="tel-k">End-to-end</div>
-              <div class="tel-v" id="tel-latency">751 ms</div>
-            </div>
-            <div class="tel-cell">
-              <div class="tel-k">Token cost</div>
-              <div class="tel-v" id="tel-cost">$0.0018</div>
-            </div>
-            <div class="tel-cell">
-              <div class="tel-k">Retries used</div>
-              <div class="tel-v" id="tel-retries">0 / 3</div>
-            </div>
+            <div class="tel-cell"><div class="tel-k">Run status</div><div class="tel-v" id="tel-status">COMMITTED</div></div>
+            <div class="tel-cell"><div class="tel-k">End-to-end</div><div class="tel-v" id="tel-latency">751 ms</div></div>
+            <div class="tel-cell"><div class="tel-k">Token cost</div><div class="tel-v" id="tel-cost">$0.0018</div></div>
+            <div class="tel-cell"><div class="tel-k">Retries used</div><div class="tel-v" id="tel-retries">0 / 3</div></div>
           </div>
         </div>
 
@@ -999,16 +813,16 @@
           <div class="two-col">
             <label>
               Name
-              <input type="text" required placeholder="Dicky Satrya" />
+              <input type="text" id="in-name" required placeholder="Alex Rivera" />
             </label>
             <label>
               Email
-              <input type="email" required placeholder="founder@company.com" />
+              <input type="email" id="in-email" required placeholder="founder@company.com" />
             </label>
           </div>
           <label>
             Workflow type
-            <select>
+            <select id="in-type">
               <option>WhatsApp / Inbound Lead Triage to CRM</option>
               <option>Invoice / PDF Extraction + Exception Queue</option>
               <option>Grounded Support Draft Assistant</option>
@@ -1017,11 +831,18 @@
           </label>
           <label>
             Brief &amp; current stack
-            <textarea required placeholder="Tools involved, current pain point, and where clean records should land."></textarea>
+            <textarea id="in-brief" required placeholder="Tools involved, current pain point, and where clean records should land."></textarea>
           </label>
-          <button type="submit" class="submit-btn">Generate technical scope request</button>
-          <div class="confirm-bar" id="confirm-bar" role="status">
-            Technical brief logged for demo verification. In production this dispatches directly to the FastAPI intake endpoint with an instant JSON receipt.
+          <button type="submit" class="submit-btn">Prepare scope brief</button>
+
+          <div class="dispatch-panel" id="dispatch-panel" role="status">
+            <div style="font-size: 0.9rem; color: var(--ink);">
+              Your technical brief is packaged and ready. Send it directly via WhatsApp or Email for a 24-hour architecture plan and fixed quote:
+            </div>
+            <div class="dispatch-actions">
+              <a id="send-wa" href="#" target="_blank" rel="noopener" class="dispatch-btn wa">Send via WhatsApp</a>
+              <a id="send-mail" href="#" class="dispatch-btn mail">Send via Email</a>
+            </div>
           </div>
         </form>
       </div>
@@ -1029,14 +850,16 @@
   </main>
 
   <footer>
-    <span>Relay Foundry flagship demo built by Mayank Sahu</span>
-    <span><a href="../">Back to studio</a> | <a href="../before/ai-studio/">Compare original v0 snapshot</a></span>
+    <span>Concept showcase engineered by Mayank Sahu</span>
+    <span><a href="https://msnotfound.github.io/#quote" target="_top">Build a pipeline like this</a></span>
   </footer>
 
   <script>
     const RUNS = {
       healthy: {
         branch: "crm",
+        n4aTitle: "4A. CRM Upsert",
+        n4aSub: "Postgres + Reply",
         status: "COMMITTED",
         latency: "751 ms",
         cost: "$0.0018",
@@ -1050,8 +873,8 @@
             payload: {
               event_id: "wa_evt_98412",
               signature: "sha256=verified",
-              from: "+62-812-****-4410",
-              text: "We manage 14 villas in Canggu and need WhatsApp guest booking triage linked to Notion.",
+              from: "+1-415-555-0142",
+              text: "We manage 14 boutique properties and need WhatsApp guest booking triage linked to Notion.",
               dedup_cache: "MISS (new event)"
             }
           },
@@ -1062,10 +885,10 @@
             payload: {
               model: "claude-sonnet-4",
               intent: "automation_project_lead",
-              company_size_units: 14,
+              property_units: 14,
               systems_requested: ["whatsapp_cloud", "notion_crm"],
               confidence: 0.96,
-              reply_draft: "We build WhatsApp-to-Notion triage pipelines. Roughly how many guest messages do your 14 villas receive weekly?"
+              reply_draft: "We build WhatsApp-to-Notion triage pipelines. Roughly how many guest messages do your 14 properties receive weekly?"
             }
           },
           gate: {
@@ -1100,6 +923,8 @@
       },
       mismatch: {
         branch: "dlq",
+        n4aTitle: "4A. Xero Post",
+        n4aSub: "Accounting API",
         status: "HELD FOR REVIEW",
         latency: "912 ms",
         cost: "$0.0029",
@@ -1112,8 +937,8 @@
             note: "Inbound supplier invoice hashed via SHA-256 before vision extraction.",
             payload: {
               event_id: "inv_409_ctj",
-              source: "ap@kestrelstone.co.uk",
-              attachment: "cotswold_joinery_409.pdf",
+              source: "ap@northwood-supply.co.uk",
+              attachment: "timber_joinery_409.pdf",
               pages: 2,
               sha256_prefix: "9e4a1f02c881"
             }
@@ -1143,7 +968,7 @@
             }
           },
           crm: {
-            title: "4A. CRM / XERO POST",
+            title: "4A. XERO POST",
             badge: "BLOCKED",
             note: "Protected from posting an erroneous accounting ledger entry.",
             payload: { status: "skipped_by_policy_gate" }
@@ -1163,6 +988,8 @@
       },
       retry: {
         branch: "crm",
+        n4aTitle: "4A. Helpdesk Draft",
+        n4aSub: "Help Scout API",
         status: "RECOVERED (200)",
         latency: "1,840 ms",
         cost: "$0.0019",
@@ -1221,7 +1048,6 @@
     };
 
     let activeRun = "healthy";
-    let activeNode = "ingest";
     let animTimers = [];
 
     const nodesEls = Array.from(document.querySelectorAll(".node-group"));
@@ -1236,11 +1062,10 @@
       animTimers.forEach(clearTimeout);
       animTimers = [];
       nodesEls.forEach((n) => n.classList.remove("state-active", "state-ok", "state-err"));
-      Object.values(wires).forEach((w) => w.classList.remove("is-lit", "is-ok", "is-err"));
+      Object.values(wires).forEach((w) => w.classList.remove("is-ok", "is-err"));
     }
 
     function inspectNode(nodeKey) {
-      activeNode = nodeKey;
       nodesEls.forEach((n) => n.classList.toggle("is-selected", n.dataset.node === nodeKey));
       const info = RUNS[activeRun].nodes[nodeKey];
       document.getElementById("insp-title").textContent = "NODE: " + info.title;
@@ -1254,6 +1079,8 @@
       clearVisuals();
       const run = RUNS[runKey];
 
+      document.getElementById("n4a-title").textContent = run.n4aTitle;
+      document.getElementById("n4a-sub").textContent = run.n4aSub;
       document.getElementById("tel-status").textContent = "RUNNING...";
       document.getElementById("tel-latency").textContent = run.latency;
       document.getElementById("tel-cost").textContent = run.cost;
@@ -1268,35 +1095,18 @@
       const finalClass = run.branch === "crm" ? "state-ok" : "state-err";
       const wireClass = run.branch === "crm" ? "is-ok" : "is-err";
 
-      const steps = [
-        [0, () => {
-          byKey("ingest").classList.add("state-active");
-          inspectNode("ingest");
-        }],
-        [320, () => {
-          byKey("ingest").classList.replace("state-active", "state-ok");
-          wires.w01.classList.add("is-ok");
-          byKey("triage").classList.add("state-active");
-          inspectNode("triage");
-        }],
-        [720, () => {
-          byKey("triage").classList.replace("state-active", "state-ok");
-          wires.w12.classList.add("is-ok");
-          byKey("gate").classList.add("state-active");
-          inspectNode("gate");
-        }],
-        [1080, () => {
+      [
+        [0, () => { byKey("ingest").classList.add("state-active"); inspectNode("ingest"); }],
+        [300, () => { byKey("ingest").classList.replace("state-active", "state-ok"); wires.w01.classList.add("is-ok"); byKey("triage").classList.add("state-active"); inspectNode("triage"); }],
+        [680, () => { byKey("triage").classList.replace("state-active", "state-ok"); wires.w12.classList.add("is-ok"); byKey("gate").classList.add("state-active"); inspectNode("gate"); }],
+        [1020, () => {
           byKey("gate").classList.replace("state-active", finalClass);
           finalWire.classList.add(wireClass);
           byKey(finalNode).classList.add(finalClass);
           inspectNode(finalNode);
           document.getElementById("tel-status").textContent = run.status;
         }]
-      ];
-
-      steps.forEach(([delay, fn]) => {
-        animTimers.push(setTimeout(fn, delay));
-      });
+      ].forEach(([delay, fn]) => animTimers.push(setTimeout(fn, delay)));
     }
 
     document.querySelectorAll(".trigger-btn").forEach((btn) => {
@@ -1306,11 +1116,8 @@
       });
     });
 
-    nodesEls.forEach((n) => {
-      n.addEventListener("click", () => inspectNode(n.dataset.node));
-    });
+    nodesEls.forEach((n) => n.addEventListener("click", () => inspectNode(n.dataset.node)));
 
-    // Cost calculator
     const volSlider = document.getElementById("vol-slider");
     function updateCost() {
       const daily = Number(volSlider.value);
@@ -1331,7 +1138,14 @@
 
     document.getElementById("intake-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      document.getElementById("confirm-bar").classList.add("is-visible");
+      const name = document.getElementById("in-name").value.trim();
+      const email = document.getElementById("in-email").value.trim();
+      const type = document.getElementById("in-type").value;
+      const brief = document.getElementById("in-brief").value.trim();
+      const msg = `Hi Mayank, AI Pipeline Scope Request:\nName: ${name}\nEmail: ${email}\nWorkflow: ${type}\nBrief: ${brief}`;
+      document.getElementById("send-wa").href = `https://wa.me/919302493307?text=${encodeURIComponent(msg)}`;
+      document.getElementById("send-mail").href = `mailto:108mayanksahu@gmail.com?subject=${encodeURIComponent(`AI Pipeline Scope: ${type}`)}&body=${encodeURIComponent(msg)}`;
+      document.getElementById("dispatch-panel").classList.add("is-visible");
     });
 
     executeRun("healthy");
