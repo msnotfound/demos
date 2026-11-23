@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kestrel &amp; Stone | Residential Interior Architecture, London &amp; Bath</title>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: oklch(0.985 0.004 82);
+      --surface: oklch(0.952 0.007 80);
+      --ink: oklch(0.18 0.01 65);
+      --ink-secondary: oklch(0.42 0.01 65);
+      --ink-muted: oklch(0.56 0.01 65);
+      --accent: oklch(0.49 0.13 38);
+      --accent-hover: oklch(0.43 0.13 38);
+      --border: rgb(28 24 20 / 0.11);
+      --radius-outer: 12px;
+      --radius-inner: 6px;
+      --font-sans: "Switzer", system-ui, -apple-system, sans-serif;
+      --font-serif: "EB Garamond", Georgia, serif;
+      --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      interpolate-size: allow-keywords;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100dvh;
+      overflow-x: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.2em;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      touch-action: manipulation;
+      border: none;
+      background: none;
+      color: inherit;
+      transition: transform 150ms ease-out, background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+      font-family: var(--font-mono);
+    }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: oklch(0.985 0.004 82 / 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 0.92rem;
+      color: var(--ink-secondary);
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      transition: color 160ms ease;
+    }
+
+    @media (hover: hover) {
+      .nav-links a:hover {
+        color: var(--ink);
+      }
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent);
+      color: oklch(0.99 0.003 80);
+      padding: 11px 20px;
+      border-radius: var(--radius-inner);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 150ms ease-out, background-color 160ms ease;
+    }
+
+    @media (hover: hover) {
+      .btn-primary:hover {
+        background: var(--accent-hover);
+      }
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 18px;
+      border-radius: var(--radius-inner);
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink);
+      text-decoration: none;
+      transition: transform 150ms ease-out, background-color 160ms ease;
+    }
+
+    @media (hover: hover) {
+      .btn-ghost:hover {
+        background: var(--surface);
+      }
+    }
+
+    /* Hero - Asymmetric editorial split */
+    .hero {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 32px 32px 64px;
+      display: grid;
+      grid-template-columns: minmax(320px, 0.85fr) 1.35fr;
+      gap: 40px;
+      align-items: stretch;
+      min-height: calc(100dvh - 76px);
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 0 8px;
+      gap: 32px;
+    }
+
+    .hero-copy h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 1.8rem + 2.8vw, 4.1rem);
+      font-weight: 400;
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      max-width: 13ch;
+    }
+
+    .hero-desc {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: var(--ink-secondary);
+      max-width: 38ch;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .hero-meta {
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      font-size: 0.85rem;
+    }
+
+    .hero-meta dt {
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+
+    .hero-meta dd {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .hero-media {
+      position: relative;
+      border-radius: var(--radius-outer);
+      overflow: hidden;
+      background: var(--surface);
+      min-height: 500px;
+    }
+
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 280ms ease;
+    }
+
+    .hero-caption {
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      padding: 14px 18px;
+      background: oklch(0.985 0.004 82 / 0.92);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius-inner);
+      font-size: 0.85rem;
+    }
+
+    .hero-caption strong {
+      font-weight: 500;
+      display: block;
+    }
+
+    .hero-caption span {
+      color: var(--ink-secondary);
+      font-size: 0.8rem;
+    }
+
+    /* Section scaffold */
+    .section {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 72px 32px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.9rem, 1.4rem + 1.5vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+    }
+
+    .section-head p {
+      color: var(--ink-secondary);
+      max-width: 44ch;
+      font-size: 0.95rem;
+    }
+
+    /* Signature Moment 1: Renovation Curtain */
+    .curtain-section {
+      background: var(--surface);
+    }
+
+    .curtain-wrap {
+      position: relative;
+      border-radius: var(--radius-outer);
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      max-height: 620px;
+      width: 100%;
+      user-select: none;
+      touch-action: pan-y;
+      cursor: ew-resize;
+      background: oklch(0.2 0.01 65);
+    }
+
+    .curtain-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .curtain-before-layer {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      clip-path: inset(0 50% 0 0);
+    }
+
+    .curtain-before-layer img {
+      filter: grayscale(100%) contrast(0.92) brightness(0.86);
+    }
+
+    .curtain-handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: oklch(0.99 0 0);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .curtain-knob {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: oklch(0.99 0 0);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 16px rgb(0 0 0 / 0.22);
+    }
+
+    .curtain-label {
+      position: absolute;
+      top: 16px;
+      padding: 6px 12px;
+      border-radius: var(--radius-inner);
+      background: oklch(0.16 0.01 65 / 0.78);
+      color: oklch(0.98 0 0);
+      font-size: 0.78rem;
+      font-weight: 500;
+      pointer-events: none;
+    }
+
+    .curtain-label.left { left: 16px; }
+    .curtain-label.right { right: 16px; }
+
+    .curtain-notes {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      font-size: 0.9rem;
+    }
+
+    .curtain-notes dt {
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    /* Signature Moment 2: Material Board + Selected Commissions */
+    .material-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .mat-tab {
+      display: inline-grid;
+      place-items: center;
+      padding: 9px 16px;
+      border-radius: var(--radius-inner);
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+      color: var(--ink-secondary);
+      background: transparent;
+    }
+
+    .mat-tab::after {
+      content: attr(data-text);
+      font-weight: 600;
+      visibility: hidden;
+      height: 0;
+      overflow: hidden;
+      grid-area: 1 / 1;
+    }
+
+    .mat-tab span {
+      grid-area: 1 / 1;
+    }
+
+    .mat-tab[aria-selected="true"] {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+      font-weight: 500;
+    }
+
+    .material-panel {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 32px;
+      align-items: stretch;
+    }
+
+    .material-photo {
+      border-radius: var(--radius-outer);
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      background: var(--surface);
+    }
+
+    .material-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: opacity 220ms ease;
+    }
+
+    .material-spec {
+      background: var(--surface);
+      border-radius: var(--radius-outer);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .swatch-bar {
+      display: flex;
+      gap: 10px;
+    }
+
+    .swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-inner);
+      border: 1px solid var(--border);
+    }
+
+    .material-spec h3 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .material-spec p {
+      color: var(--ink-secondary);
+      font-size: 0.94rem;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+
+    .spec-grid dt {
+      color: var(--ink-muted);
+      margin-bottom: 2px;
+    }
+
+    /* Projects Gallery (Asymmetric 2-col, no 3-icon-card slop) */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+    }
+
+    .project-item figure {
+      border-radius: var(--radius-outer);
+      overflow: hidden;
+      background: var(--surface);
+      aspect-ratio: 4 / 3;
+      margin-bottom: 14px;
+    }
+
+    .project-item:nth-child(2) figure {
+      aspect-ratio: 4 / 4.2;
+    }
+
+    .project-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .project-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .project-meta h3 {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
+
+    .project-meta span {
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+    }
+
+    .project-item p {
+      margin-top: 6px;
+      color: var(--ink-secondary);
+      font-size: 0.92rem;
+      max-width: 52ch;
+    }
+
+    /* Consultation Form */
+    .consult-box {
+      background: var(--surface);
+      border-radius: var(--radius-outer);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .consult-box h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 1.3rem + 1.4vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .consult-box > div p {
+      color: var(--ink-secondary);
+      font-size: 0.95rem;
+      max-width: 36ch;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-size: 0.84rem;
+      color: var(--ink-secondary);
+    }
+
+    .field input, .field select, .field textarea {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      padding: 11px 14px;
+      border-radius: var(--radius-inner);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 160ms ease;
+    }
+
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-status {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: var(--accent);
+      min-height: 22px;
+    }
+
+    footer {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 28px 32px 44px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 960px) {
+      .hero, .material-panel, .projects-grid, .consult-box {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        min-height: auto;
+        padding: 24px 20px 48px;
+      }
+      .hero-media {
+        min-height: 360px;
+      }
+      .section {
+        padding: 48px 20px;
+      }
+      .header-inner {
+        padding: 14px 20px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .curtain-notes, .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .consult-box {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#">Kestrel &amp; Stone</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#renovation">Renovation study</a>
+        <a href="#materials">Material palette</a>
+        <a href="#commissions">Commissions</a>
+        <a href="#consult">Book walkthrough</a>
+      </nav>
+      <a class="btn-primary" href="#consult">Book a site visit</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <div>
+          <h1>Residential interiors built around natural light and honest materials</h1>
+          <p class="hero-desc">
+            Architectural renovations, bespoke joinery, and full interior specification for Victorian townhouses and country homes across London and Bath.
+          </p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="#consult">Schedule a walkthrough</a>
+            <a class="btn-ghost" href="#renovation">Inspect a full renovation</a>
+          </div>
+        </div>
+        <dl class="hero-meta">
+          <div>
+            <dt>Studio practice</dt>
+            <dd>Clerkenwell &amp; Bath, UK</dd>
+          </div>
+          <div>
+            <dt>Typical commission</dt>
+            <dd class="tabular">14 to 26 weeks</dd>
+          </div>
+          <div>
+            <dt>Scope</dt>
+            <dd>Structural layout, joinery, lighting</dd>
+          </div>
+          <div>
+            <dt>Next site availability</dt>
+            <dd class="tabular">Q1 2027</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="hero-media">
+        <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85" alt="Sunlit living room finished in limewash plaster, honed limestone, and low oak seating">
+        <div class="hero-caption">
+          <div>
+            <strong>Arundel Terrace, Notting Hill</strong>
+            <span>Full ground-floor knock-through and bespoke oak joinery</span>
+          </div>
+          <span class="tabular">168 sqm</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="renovation" class="curtain-section">
+      <div class="section">
+        <div class="section-head">
+          <h2>From stripped structural shell to finished room</h2>
+          <p>Drag across the frame to compare the pre-renovation elevation against the completed plaster, lighting, and millwork installation.</p>
+        </div>
+
+        <div class="curtain-wrap" id="curtain" role="slider" aria-label="Before and after renovation slider" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" tabindex="0">
+          <img class="curtain-img" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85" alt="Completed open-plan interior after renovation">
+          <div class="curtain-before-layer" id="curtainBefore">
+            <img class="curtain-img" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85" alt="Pre-renovation architectural survey view">
+          </div>
+          <span class="curtain-label left">Survey baseline</span>
+          <span class="curtain-label right">Completed finish</span>
+          <div class="curtain-handle" id="curtainHandle">
+            <div class="curtain-knob" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l-6-6 6-6"/>
+                <path d="M15 6l6 6-6 6"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <dl class="curtain-notes">
+          <div>
+            <dt>Structural intervention</dt>
+            <dd>Removed two load-bearing partitions and introduced a flush steel lintel to pull morning light 9 metres into the kitchen.</dd>
+          </div>
+          <div>
+            <dt>Acoustic &amp; thermal layer</dt>
+            <dd>Underfloor hydronic heating beneath 22mm brushed European oak planks with recessed shadow-gap skirting.</dd>
+          </div>
+          <div>
+            <dt>Delivered budget</dt>
+            <dd class="tabular">GBP 142,000 (19 weeks on site)</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="materials" class="section">
+      <div class="section-head">
+        <h2>Material specifications that age gracefully</h2>
+        <p>Select a material family to inspect how we pair stone, timber, and metal across living, kitchen, and study spaces.</p>
+      </div>
+
+      <div class="material-tabs" role="tablist" aria-label="Material families">
+        <button class="mat-tab" role="tab" aria-selected="true" data-key="plaster" data-text="Limewash &amp; Oak"><span>Limewash &amp; Oak</span></button>
+        <button class="mat-tab" role="tab" aria-selected="false" data-key="stone" data-text="Honed Travertine"><span>Honed Travertine</span></button>
+        <button class="mat-tab" role="tab" aria-selected="false" data-key="walnut" data-text="Smoked Walnut"><span>Smoked Walnut</span></button>
+      </div>
+
+      <div class="material-panel">
+        <div class="material-photo">
+          <img id="matImg" src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85" alt="Interior room showcasing limewash and oak">
+        </div>
+        <div class="material-spec">
+          <div>
+            <div class="swatch-bar" id="matSwatches">
+              <span class="swatch" style="background:#EAE4D8"></span>
+              <span class="swatch" style="background:#C2A582"></span>
+              <span class="swatch" style="background:#5C4B3B"></span>
+            </div>
+            <h3 id="matTitle" style="margin-top:20px">Mineral limewash and brushed white oak</h3>
+            <p id="matBody">Three hand-trowelled coats of breathable slaked lime soften southern glare while matte oiled oak grounds the seating zone without synthetic sheen.</p>
+          </div>
+          <dl class="spec-grid">
+            <div>
+              <dt>Wall finish</dt>
+              <dd id="matWall">Bauwerk Chalk 04</dd>
+            </div>
+            <div>
+              <dt>Joinery</dt>
+              <dd id="matJoinery">Quarter-sawn white oak</dd>
+            </div>
+            <div>
+              <dt>Hardware</dt>
+              <dd id="matHardware">Unlacquered brass</dd>
+            </div>
+            <div>
+              <dt>Lead time</dt>
+              <dd class="tabular" id="matLead">6 weeks</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="commissions" class="section" style="padding-top: 24px">
+      <div class="section-head">
+        <h2>Selected residential commissions</h2>
+        <p>Built spaces photographed six months after handover, once books, art, and daily life have settled in.</p>
+      </div>
+      <div class="projects-grid">
+        <article class="project-item">
+          <figure>
+            <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1400&q=85" alt="Minimal architectural kitchen with stone island and warm wood cabinetry">
+          </figure>
+          <div class="project-meta">
+            <h3>Lansdown Crescent Kitchen</h3>
+            <span class="tabular">Bath / 94 sqm</span>
+          </div>
+          <p>Monolithic honed limestone island paired with pocket-door larder cabinetry to hide daily appliances cleanly.</p>
+        </article>
+        <article class="project-item">
+          <figure>
+            <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1400&q=85" alt="Reading corner with sculptural armchair and warm plaster backdrop">
+          </figure>
+          <div class="project-meta">
+            <h3>Barnsbury Study &amp; Library</h3>
+            <span class="tabular">Islington / 42 sqm</span>
+          </div>
+          <p>Acoustic wool drapery, recessed bronze picture lights, and floor-to-ceiling shelving tuned to Georgian cornice heights.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="consult" class="section" style="padding-top: 24px">
+      <div class="consult-box">
+        <div>
+          <h2>Start with a 45-minute site walkthrough</h2>
+          <p>Share your floor plan, postcode, and rough target window. We respond within two working days with honest scope, fee structure, and trade lead times.</p>
+        </div>
+        <form id="consultForm" class="form-grid" novalidate>
+          <div class="field">
+            <label for="cName">Your name</label>
+            <input id="cName" type="text" required placeholder="Hannah Bennett">
+          </div>
+          <div class="field">
+            <label for="cEmail">Email address</label>
+            <input id="cEmail" type="email" required placeholder="hannah@example.co.uk">
+          </div>
+          <div class="field">
+            <label for="cScope">Project type</label>
+            <select id="cScope">
+              <option>Full house renovation</option>
+              <option>Kitchen &amp; ground-floor layout</option>
+              <option>Single room &amp; bespoke joinery</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cArea">Approximate floor area (sqm)</label>
+            <input id="cArea" type="text" inputmode="numeric" placeholder="140">
+          </div>
+          <div class="field full">
+            <label for="cNotes">Location and rough timeline</label>
+            <textarea id="cNotes" rows="3" placeholder="Victorian terrace in Chiswick, hoping to start structural works in spring."></textarea>
+          </div>
+          <div class="field full" style="flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+            <button type="submit" class="btn-primary">Request walkthrough</button>
+            <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Kestrel &amp; Stone Studio Ltd. Clerkenwell Green, London EC1R</span>
+    <span>Sample build by <a href="/">Mayank Sahu</a></span>
+  </footer>
+
+  <script>
+    // Before / After Renovation Curtain
+    const curtain = document.getElementById('curtain');
+    const beforeLayer = document.getElementById('curtainBefore');
+    const handle = document.getElementById('curtainHandle');
+    let dragging = false;
+
+    function setSplit(pct) {
+      const clamped = Math.max(5, Math.min(95, pct));
+      beforeLayer.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
+      handle.style.left = clamped + '%';
+      curtain.setAttribute('aria-valuenow', Math.round(clamped));
+    }
+
+    function updateFromClientX(clientX) {
+      const rect = curtain.getBoundingClientRect();
+      setSplit(((clientX - rect.left) / rect.width) * 100);
+    }
+
+    curtain.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      curtain.setPointerCapture(e.pointerId);
+      updateFromClientX(e.clientX);
+    });
+    curtain.addEventListener('pointermove', (e) => {
+      if (dragging) updateFromClientX(e.clientX);
+    });
+    curtain.addEventListener('pointerup', () => { dragging = false; });
+    curtain.addEventListener('keydown', (e) => {
+      const cur = Number(curtain.getAttribute('aria-valuenow') || 50);
+      if (e.key === 'ArrowLeft') setSplit(cur - 5);
+      if (e.key === 'ArrowRight') setSplit(cur + 5);
+    });
+
+    // Material Board Switcher
+    const MATERIALS = {
+      plaster: {
+        img: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85',
+        swatches: ['#EAE4D8', '#C2A582', '#5C4B3B'],
+        title: 'Mineral limewash and brushed white oak',
+        body: 'Three hand-trowelled coats of breathable slaked lime soften southern glare while matte oiled oak grounds the seating zone without synthetic sheen.',
+        wall: 'Bauwerk Chalk 04',
+        joinery: 'Quarter-sawn white oak',
+        hardware: 'Unlacquered brass',
+        lead: '6 weeks'
+      },
+      stone: {
+        img: 'https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1400&q=85',
+        swatches: ['#DDD7CE', '#B9AEA0', '#3A3632'],
+        title: 'Vein-cut Roman travertine and patinated bronze',
+        body: 'Open-pore travertine slabs cut across the quarry bed bring quiet horizontal rhythm to kitchens and bathing suites, sealed for daily culinary use.',
+        wall: 'Clayworks Warm Alabaster',
+        joinery: 'Fumed ash & honed stone',
+        hardware: 'Oil-rubbed bronze',
+        lead: '8 weeks'
+      },
+      walnut: {
+        img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1400&q=85',
+        swatches: ['#F0ECE4', '#7C5840', '#2E231D'],
+        title: 'Smoked walnut cabinetry and raw linen',
+        body: 'Deep timber shelving absorbs evening lamplight in studies and snug rooms, balanced by Belgian flax curtains that filter street noise.',
+        wall: 'Lime plaster in Putty',
+        joinery: 'American black walnut',
+        hardware: 'Brushed gunmetal',
+        lead: '7 weeks'
+      }
+    };
+
+    document.querySelectorAll('.mat-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mat-tab').forEach(b => b.setAttribute('aria-selected', 'false'));
+        btn.setAttribute('aria-selected', 'true');
+        const m = MATERIALS[btn.dataset.key];
+        const img = document.getElementById('matImg');
+        img.style.opacity = '0.35';
+        setTimeout(() => {
+          img.src = m.img;
+          img.onload = () => { img.style.opacity = '1'; };
+          setTimeout(() => { img.style.opacity = '1'; }, 180);
+        }, 90);
+        document.getElementById('matTitle').textContent = m.title;
+        document.getElementById('matBody').textContent = m.body;
+        document.getElementById('matWall').textContent = m.wall;
+        document.getElementById('matJoinery').textContent = m.joinery;
+        document.getElementById('matHardware').textContent = m.hardware;
+        document.getElementById('matLead').textContent = m.lead;
+        const sw = document.getElementById('matSwatches');
+        sw.innerHTML = m.swatches.map(c => `<span class="swatch" style="background:${c}"></span>`).join('');
+      });
+    });
+
+    // Walkthrough form
+    document.getElementById('consultForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('cName').value.trim();
+      const email = document.getElementById('cEmail').value.trim();
+      const status = document.getElementById('formStatus');
+      if (!name || !email.includes('@')) {
+        status.textContent = 'Please add your name and a valid email address so we can reply.';
+        return;
+      }
+      status.textContent = `Walkthrough note logged for ${name}. We reply within two working days with available site slots.`;
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
