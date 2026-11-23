@@ -55,6 +55,7 @@
           </div>
 
           <div class="eq-curve-wrap">
+            <div class="eq-bars" id="eq-bars" aria-hidden="true"></div>
             <svg class="eq-svg" viewBox="0 0 460 128" role="img" aria-label="Live equalizer frequency response curve">
               <line class="eq-grid-line" x1="16" y1="24" x2="444" y2="24" />
               <line class="eq-grid-line" x1="16" y1="64" x2="444" y2="64" />
@@ -106,7 +107,7 @@
     </section>
 
     <section class="band-lavender" id="numbers">
-      <div class="wrap">
+      <div class="wrap reveal">
         <div class="lav-head">
           <h2>built for the pocket, not the ad network</h2>
           <p>
@@ -141,7 +142,7 @@
     </section>
 
     <section class="section-night" id="screens">
-      <div class="wrap">
+      <div class="wrap reveal">
         <div class="sec-top">
           <h2>four real screens, nothing in the way</h2>
           <p>
@@ -289,6 +290,55 @@
   </footer>
 
   <script>
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced) document.documentElement.classList.add("js-ready");
+
+    // Silky smooth anchor scrolling for nav clicks (immune to CSS scroll-behavior conflict)
+    let scrollRaf = null;
+    function smoothScrollTo(targetY, duration = 720) {
+      cancelAnimationFrame(scrollRaf);
+      if (reduced) { window.scrollTo({ top: targetY, behavior: "instant" }); return; }
+      const startY = window.scrollY;
+      const dist = targetY - startY;
+      let start = null;
+      const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+      function step(ts) {
+        if (!start) start = ts;
+        const p = Math.min(1, (ts - start) / duration);
+        window.scrollTo({ top: startY + dist * easeOutExpo(p), behavior: "instant" });
+        if (p < 1) scrollRaf = requestAnimationFrame(step);
+      }
+      scrollRaf = requestAnimationFrame(step);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const id = link.getAttribute("href");
+        if (!id || id === "#") return;
+        const el = document.querySelector(id);
+        if (!el) return;
+        e.preventDefault();
+        const offset = id === "#top" ? 0 : el.getBoundingClientRect().top + window.scrollY - 82;
+        smoothScrollTo(Math.max(0, offset));
+      });
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); }
+      });
+    }, { threshold: 0.14 });
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+    // Live 24-bar spectrum meter behind EQ curve
+    const barsWrap = document.getElementById("eq-bars");
+    const barEls = Array.from({ length: 24 }, () => {
+      const d = document.createElement("span");
+      d.className = "eq-bar";
+      barsWrap.appendChild(d);
+      return d;
+    });
+
     const PRESETS = {
       flat: [0, 0, 0, 0, 0],
       bass: [6, 3, 0, 2, 4],
@@ -305,7 +355,10 @@
 
     let audioCtx = null;
     let filters = [];
+    let analyser = null;
+    let freqData = null;
     let loopTimer = null;
+    let rafId = null;
     let playing = false;
 
     function dbToY(db) {
@@ -329,6 +382,20 @@
       });
     }
 
+    function animateMeter() {
+      if (!playing || !analyser) {
+        barEls.forEach((b) => { b.style.transform = "scaleY(0.08)"; });
+        return;
+      }
+      analyser.getByteFrequencyData(freqData);
+      for (let i = 0; i < barEls.length; i++) {
+        const bin = Math.min(freqData.length - 1, i * 2 + 1);
+        const norm = Math.max(0.08, freqData[bin] / 255);
+        barEls[i].style.transform = `scaleY(${norm.toFixed(2)})`;
+      }
+      rafId = requestAnimationFrame(animateMeter);
+    }
+
     sliders.forEach((s) => {
       s.addEventListener("input", () => {
         gains[Number(s.dataset.band)] = Number(s.value);
@@ -346,14 +413,12 @@
       });
     });
 
-    // Real Web Audio 5-Band Biquad Test Loop
     function playChordStep(step) {
       if (!audioCtx || !filters.length) return;
       const now = audioCtx.currentTime;
       const notes = [110, 130.81, 164.81, 196.0, 220, 164.81, 146.83, 196.0];
       const freq = notes[step % notes.length];
 
-      // Sub + harmonic synth voice routed through the 5 real biquad EQ bands
       const osc1 = audioCtx.createOscillator();
       const osc2 = audioCtx.createOscillator();
       const env = audioCtx.createGain();
@@ -392,25 +457,31 @@
             biq.gain.value = gains[i];
             return biq;
           });
+          analyser = audioCtx.createAnalyser();
+          analyser.fftSize = 128;
+          freqData = new Uint8Array(analyser.frequencyBinCount);
           for (let i = 0; i < filters.length - 1; i++) filters[i].connect(filters[i + 1]);
-          filters[filters.length - 1].connect(audioCtx.destination);
+          filters[filters.length - 1].connect(analyser);
+          analyser.connect(audioCtx.destination);
         }
         if (audioCtx.state === "suspended") audioCtx.resume();
         playing = true;
         let step = 0;
         playChordStep(step++);
         loopTimer = setInterval(() => playChordStep(step++), 420);
+        if (!reduced) animateMeter();
         audioBtn.textContent = "stop live dsp test";
         statusEl.textContent = "playing live through 5 biquad filters";
       } else {
         playing = false;
         clearInterval(loopTimer);
+        cancelAnimationFrame(rafId);
+        barEls.forEach((b) => { b.style.transform = "scaleY(0.08)"; });
         audioBtn.textContent = "play live dsp test";
         statusEl.textContent = "live web audio biquad filter";
       }
     });
 
-    // Real Android screen switcher
     const SCREENS = {
       player: { src: "./assets/player.png", alt: "SoundPlus Android now playing screen" },
       home: { src: "./assets/home.png", alt: "SoundPlus Android discovery home feed" },
@@ -423,8 +494,12 @@
         document.querySelectorAll(".screen-row").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
         const s = SCREENS[btn.dataset.screen];
         const img = document.getElementById("screen-img");
-        img.src = s.src;
-        img.alt = s.alt;
+        img.classList.add("is-swapping");
+        setTimeout(() => {
+          img.src = s.src;
+          img.alt = s.alt;
+          img.classList.remove("is-swapping");
+        }, 160);
       });
     });
 

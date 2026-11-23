@@ -1,21 +1,34 @@
 :root {
   color-scheme: light;
-  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 144px;
-  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.25rem; --text-xl: 1.5625rem; --text-2xl: 1.953rem; --text-3xl: 2.441rem;
-  --text-display-s: clamp(2.25rem, 4vw + 0.5rem, 3.75rem); --text-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
-  --text-section: clamp(2rem, 2.5vw + 1rem, 3.5rem); --text-title: clamp(1.25rem, 0.75vw + 0.875rem, 1.625rem); --text-lead: clamp(1.125rem, 0.35vw + 1rem, 1.375rem);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); --ease-in: cubic-bezier(0.7, 0, 0.84, 0); --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --dur-micro: 120ms; --dur-short: 220ms; --dur-long: 420ms;
-  --color-error: oklch(52% 0.19 27); --color-success: oklch(50% 0.12 150);
-  --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
-  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
-  --color-paper: oklch(95.5% 0.014 85); --color-paper-2: oklch(92% 0.022 84); --color-paper-3: oklch(85% 0.032 80);
-  --color-ink: oklch(21% 0.012 60); --color-ink-2: oklch(31% 0.012 60); --color-muted: oklch(46% 0.014 62);
-  --color-rule: oklch(83% 0.022 84); --color-rule-ink: oklch(21% 0.012 60);
-  --color-accent: oklch(34% 0.115 267); --color-accent-2: oklch(43% 0.125 267); --color-accent-ink: oklch(95.5% 0.014 85); --color-focus: oklch(43% 0.15 267);
-  --font-display: "Libre Caslon Display", "Libre Caslon Text", ui-serif, Georgia, serif; --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-outlier: "DM Mono", ui-monospace, monospace;
-  --radius-card: 0; --radius-pill: 0; --rule-hair: 1px; --rule-ink: 2px;
-  --shadow-card: none;
-  --tracking-display: -0.01em; --display-weight: 400;
+  --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px; --space-4xl: 136px;
+  --text-xs: 0.8125rem; --text-sm: 0.875rem; --text-md: 1rem; --text-lg: 1.2rem; --text-xl: 1.55rem; --text-2xl: 2.1rem;
+  --text-display: clamp(3rem, 5.6vw + 0.6rem, 5.6rem);
+  --text-section: clamp(2.15rem, 3vw + 0.7rem, 3.65rem);
+  --text-lead: clamp(1.0625rem, 0.35vw + 0.95rem, 1.28rem);
+
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-micro: 160ms; --dur-short: 340ms; --dur-long: 780ms; --dur-cinema: 1100ms;
+
+  --container: 1400px; --gutter: clamp(20px, 4vw, 64px); --gap-columns: 32px;
+  --z-base: 1; --z-raised: 10; --z-sticky-nav: 300;
+
+  /* Architectural Limestone, Warm Taupe & Espresso Palette (Reference-informed, 100% original) */
+  --color-paper: oklch(97% 0.006 78);
+  --color-paper-2: oklch(93.5% 0.011 76);
+  --color-taupe: oklch(76.5% 0.011 66);
+  --color-taupe-ink: oklch(98.5% 0.004 78);
+  --color-espresso: oklch(18% 0.01 52);
+  --color-espresso-2: oklch(24% 0.011 52);
+  --color-ink: oklch(18% 0.01 52);
+  --color-ink-2: oklch(34% 0.01 54);
+  --color-muted: oklch(48% 0.01 58);
+  --color-rule: oklch(86% 0.01 74);
+  --color-rule-dark: oklch(30% 0.012 52);
+  --color-bronze: oklch(54% 0.075 62);
+  --color-focus: oklch(36% 0.03 55);
+
+  --font-display: "Cormorant Garamond", "Libre Caslon Display", Georgia, serif;
+  --font-body: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, monospace;
 }

@@ -3,61 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Kestrel &amp; Stone designs structural renovations, bespoke joinery, and quiet residential architecture across London and Bath." />
-  <title>Kestrel &amp; Stone, residential architecture and renovation in London and Bath</title>
+  <meta name="description" content="Kestrel &amp; Stone designs architectural renovations, bespoke joinery, and luminous residential interiors across London and Bath." />
+  <title>Kestrel &amp; Stone, residential architecture and interior design in London</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500&family=Libre+Caslon+Display&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=DM+Mono:wght@400;500&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./page.css" />
 </head>
 <body>
-  <header class="site-nav">
-    <div class="wrap nav-inner">
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header" id="site-header">
+    <div class="wrap header-inner">
       <a href="#top" class="wordmark">Kestrel &amp; Stone</a>
-      <div class="nav-right">
-        <nav class="nav-links" aria-label="Primary">
-          <a href="#arundel">Arundel Terrace</a>
-          <a href="#programme">Programme</a>
-          <a href="#commissions">Commissions</a>
-        </nav>
-        <a href="#visit" class="btn">Book a site visit</a>
-      </div>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#philosophy">Practice</a>
+        <a href="#transformation">Transformation</a>
+        <a href="#commissions">Commissions</a>
+        <a href="#programme">Programme</a>
+      </nav>
+      <a href="#visit" class="header-cta">Book a site visit</a>
     </div>
   </header>
 
   <main id="top">
-    <section class="poster-hero">
-      <img src="./assets/renovation-after.jpg" alt="Renovated Notting Hill Victorian reception room with honed limestone fireplace and fumed oak bookcases" class="poster-img" />
-      <div class="poster-scrim"></div>
-      <div class="wrap">
-        <div class="poster-content">
-          <h1>Victorian houses, rebuilt for light</h1>
-          <p>
-            Structural renovation, bespoke joinery, and interior architecture across London and Bath.
-          </p>
-          <div class="poster-actions">
-            <a href="#visit" class="btn">Book a site visit</a>
-            <a href="#arundel" class="link-rule">See Arundel Terrace</a>
+    <section class="cinema-hero" aria-label="Featured residential interiors">
+      <div class="hero-slides" id="hero-slides">
+        <div class="hero-slide is-active" data-title="Arundel Terrace" data-loc="Notting Hill, London">
+          <img src="./assets/renovation-after.jpg" alt="Renovated Notting Hill Victorian reception room with limestone hearth and fumed oak joinery" />
+        </div>
+        <div class="hero-slide" data-title="Ladbroke Grove Villa" data-loc="Kensington, London">
+          <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1600&q=85" alt="Ladbroke Grove living room with timber table and clerestory window" />
+        </div>
+        <div class="hero-slide" data-title="Circus Mews Flat" data-loc="Bath, Somerset">
+          <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1600&q=85" alt="Circus Mews drawing room with warm natural plaster and oak" />
+        </div>
+      </div>
+      <div class="hero-scrim"></div>
+
+      <div class="hero-stage">
+        <div class="wrap hero-bottom-grid">
+          <div>
+            <h1 class="hero-title">Victorian houses, rebuilt for light</h1>
+            <p class="hero-sub">
+              Architectural renovation, bespoke joinery, and quiet residential interiors across London and Bath.
+            </p>
+            <div class="hero-actions">
+              <a href="#transformation" class="btn-light">Explore Arundel Terrace</a>
+              <a href="#visit" class="hero-text-link">Arrange a site visit</a>
+            </div>
+          </div>
+
+          <div class="hero-controls">
+            <div class="slide-caption">
+              <strong id="slide-title">Arundel Terrace</strong>
+              <span id="slide-loc">Notting Hill, London</span>
+            </div>
+            <div class="slide-nav">
+              <button type="button" class="slide-btn" id="prev-slide" aria-label="Previous project">&lt;</button>
+              <div class="slide-progress-track"><div class="slide-progress-fill" id="slide-progress"></div></div>
+              <button type="button" class="slide-btn" id="next-slide" aria-label="Next project">&gt;</button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="arundel">
-      <div class="wrap">
-        <div class="sec-head">
-          <h2>Arundel Terrace, before and after</h2>
+    <section class="band-taupe" id="philosophy">
+      <div class="taupe-split">
+        <div class="taupe-copy reveal">
+          <h2>Spaces shaped by proportion, light, and honest craft</h2>
           <p>
-            Stripped to bare London stock brick in week one; handed over with fumed English oak joinery, limewash walls, and a carved Bath limestone surround in week eighteen.
+            We take on six full residential commissions each year, working from structural strip-out through bespoke joinery, stone masonry, and lighting specification.
+          </p>
+          <p>
+            Every room begins with daylight orientation and the original bones of the building, pairing breathable mineral limewash, Herefordshire oak, and honed limestone so a house settles calmly with age.
+          </p>
+          <div>
+            <a href="#commissions" class="hero-text-link">View selected commissions</a>
+          </div>
+        </div>
+        <div class="taupe-media">
+          <img id="parallax-img" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1500&q=85" alt="Sunlit architectural interior with natural stone and bespoke seating" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="transformation">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <h2>Arundel Terrace, stripped brick to handover</h2>
+          <p>
+            Drag across the room to compare week one strip-out against our completed fumed oak shelving, limewash walls, and carved Bath limestone surround.
           </p>
         </div>
 
-        <div class="curtain-bar">
+        <div class="curtain-toolbar">
           <span class="num" id="curtain-readout">50% stripped shell</span>
-          <div class="curtain-controls" role="group" aria-label="Compare stripped shell and finished room">
-            <button type="button" class="text-toggle" data-pos="90" aria-pressed="false">Before</button>
-            <button type="button" class="text-toggle" data-pos="50" aria-pressed="true">Split</button>
-            <button type="button" class="text-toggle" data-pos="10" aria-pressed="false">After</button>
+          <div class="curtain-tabs" role="group" aria-label="Jump to before, split, or after view">
+            <button type="button" class="curtain-tab" data-pos="90" aria-pressed="false">Before</button>
+            <button type="button" class="curtain-tab" data-pos="50" aria-pressed="true">Split</button>
+            <button type="button" class="curtain-tab" data-pos="10" aria-pressed="false">After</button>
           </div>
         </div>
 
@@ -69,34 +115,98 @@
             <img src="./assets/renovation-before.jpg" alt="Pre-renovation stripped room showing bare stock brick chimney, peeling paint, and scuffed timber subfloor" />
           </div>
           <div class="curtain-rule" id="curtain-rule">
-            <span class="curtain-handle" aria-hidden="true">&lt; &gt;</span>
+            <span class="curtain-knob" aria-hidden="true">&lt; &gt;</span>
           </div>
         </div>
 
-        <div class="spec-sheet">
-          <div class="spec-row">
-            <span class="spec-label">District</span>
-            <span class="spec-value">Notting Hill, London</span>
+        <div class="curtain-specs reveal">
+          <div class="spec-cell">
+            <span class="spec-k">District</span>
+            <span class="spec-v">Notting Hill</span>
           </div>
-          <div class="spec-row">
-            <span class="spec-label">Internal floor area</span>
-            <span class="spec-value num">168 sqm</span>
+          <div class="spec-cell">
+            <span class="spec-k">Internal area</span>
+            <span class="spec-v num">168 sqm</span>
           </div>
-          <div class="spec-row">
-            <span class="spec-label">Fireplace and walls</span>
-            <span class="spec-value">Carved Bath limestone mantel with three-coat mineral limewash</span>
+          <div class="spec-cell">
+            <span class="spec-k">Site programme</span>
+            <span class="spec-v num">18 weeks</span>
           </div>
-          <div class="spec-row">
-            <span class="spec-label">Joinery and timber</span>
-            <span class="spec-value">Ammonia-fumed Herefordshire oak bookcases over 240 mm oiled oak boards</span>
+          <div class="spec-cell">
+            <span class="spec-k">Materials</span>
+            <span class="spec-v">Limestone and oak</span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section section--sand" id="programme">
+    <section class="section section--stone" id="commissions">
       <div class="wrap">
-        <div class="sec-head">
+        <div class="sec-head reveal">
+          <h2>Selected commissions</h2>
+          <p>
+            Hover or select any house to inspect the finished rooms across London and Somerset.
+          </p>
+        </div>
+
+        <div class="lookbook-grid">
+          <div class="project-index" role="group" aria-label="Completed residential commissions">
+            <button type="button" class="project-row" data-plate="0" aria-pressed="true">
+              <span class="num">01</span>
+              <span>
+                <span class="project-name">Arundel Terrace</span>
+                <span class="project-sub">Notting Hill, full Victorian townhouse renovation</span>
+              </span>
+              <span class="num">168 sqm</span>
+            </button>
+            <button type="button" class="project-row" data-plate="1" aria-pressed="false">
+              <span class="num">02</span>
+              <span>
+                <span class="project-name">Ladbroke Grove Villa</span>
+                <span class="project-sub">Kensington, lateral ground-floor architecture</span>
+              </span>
+              <span class="num">194 sqm</span>
+            </button>
+            <button type="button" class="project-row" data-plate="2" aria-pressed="false">
+              <span class="num">03</span>
+              <span>
+                <span class="project-name">Circus Mews Flat</span>
+                <span class="project-sub">Bath, Georgian joinery and mineral plaster</span>
+              </span>
+              <span class="num">142 sqm</span>
+            </button>
+            <button type="button" class="project-row" data-plate="3" aria-pressed="false">
+              <span class="num">04</span>
+              <span>
+                <span class="project-name">Highbury Fields Terrace</span>
+                <span class="project-sub">Islington, rear glazed garden extension</span>
+              </span>
+              <span class="num">215 sqm</span>
+            </button>
+            <button type="button" class="project-row" data-plate="4" aria-pressed="false">
+              <span class="num">05</span>
+              <span>
+                <span class="project-name">St John Street Loft</span>
+                <span class="project-sub">Clerkenwell, warehouse oak kitchen and stone island</span>
+              </span>
+              <span class="num">128 sqm</span>
+            </button>
+          </div>
+
+          <div class="lookbook-plate" id="lookbook-plate">
+            <img class="is-active" src="./assets/renovation-after.jpg" alt="Arundel Terrace living room" />
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=85" alt="Ladbroke Grove Villa reception room" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85" alt="Circus Mews Flat drawing room" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85" alt="Highbury Fields Terrace rear extension" loading="lazy" />
+            <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1400&q=85" alt="St John Street Loft oak kitchen" loading="lazy" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="programme">
+      <div class="wrap">
+        <div class="sec-head reveal">
           <h2>Eighteen weeks, keys to handover</h2>
           <p>
             Counted from the Monday our site team takes possession of the house.
@@ -104,52 +214,51 @@
         </div>
 
         <div class="schedule-wrap">
-          <div class="schedule-table">
+          <div class="schedule-table" id="schedule-table">
             <div class="scale-head">
-              <span class="scale-title">Weeks on site</span>
+              <span style="font-size: var(--text-sm); color: var(--color-muted);">Weeks on site</span>
               <div class="scale-ticks">
                 <span>0</span><span>2</span><span>4</span><span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
               </div>
             </div>
 
             <div class="phase-row">
-              <span class="phase-name">Possession and strip-out</span>
+              <span>Possession and strip-out</span>
               <div class="phase-track">
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-bar phase-bar--start" style="left: 0%;"></div>
-                <div class="phase-bar" style="left: 0%; width: 22%;"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-bar" style="left: 0%; width: 22%; transition-delay: 80ms;"></div>
               </div>
             </div>
 
             <div class="phase-row">
-              <span class="phase-name">Steels, services and lime plaster</span>
+              <span>Steels, services and lime plaster</span>
               <div class="phase-track">
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-bar" style="left: 22%; width: 38%;"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-bar" style="left: 22%; width: 38%; transition-delay: 220ms;"></div>
               </div>
             </div>
 
             <div class="phase-row">
-              <span class="phase-name">Fumed oak joinery and limestone hearth</span>
+              <span>Fumed oak joinery and limestone hearth</span>
               <div class="phase-track">
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-bar" style="left: 58%; width: 30%;"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-bar" style="left: 58%; width: 30%; transition-delay: 360ms;"></div>
               </div>
             </div>
 
             <div class="phase-row">
-              <span class="phase-name">Commissioning and handover</span>
+              <span>Commissioning and handover</span>
               <div class="phase-track">
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-grid-cell"></div><div class="phase-grid-cell"></div><div class="phase-grid-cell"></div>
-                <div class="phase-bar phase-bar--handover" style="left: 88%; width: 12%;"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-cell"></div><div class="phase-cell"></div><div class="phase-cell"></div>
+                <div class="phase-bar phase-bar--final" style="left: 88%; width: 12%; transition-delay: 500ms;"></div>
               </div>
             </div>
           </div>
@@ -157,67 +266,14 @@
       </div>
     </section>
 
-    <section class="section" id="commissions">
-      <div class="wrap">
-        <div class="sec-head">
-          <h2>Completed houses</h2>
-          <p>
-            Four recent residential projects across London and Somerset.
-          </p>
-        </div>
-
-        <div class="commissions-grid">
-          <article class="commission">
-            <figure>
-              <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=85" alt="Ladbroke Grove Villa reception room with wide timber coffee table and clerestory window" loading="lazy" />
-              <figcaption>
-                <strong>Ladbroke Grove Villa, Notting Hill</strong>
-                <span class="num">194 sqm</span>
-              </figcaption>
-            </figure>
-          </article>
-
-          <article class="commission">
-            <figure>
-              <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85" alt="Circus Mews Georgian flat drawing room with natural oak cabinetry" loading="lazy" />
-              <figcaption>
-                <strong>Circus Mews Flat, Bath</strong>
-                <span class="num">142 sqm</span>
-              </figcaption>
-            </figure>
-          </article>
-
-          <article class="commission">
-            <figure>
-              <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=85" alt="Highbury Fields rear glazed extension opening onto garden" loading="lazy" />
-              <figcaption>
-                <strong>Highbury Fields Terrace, Islington</strong>
-                <span class="num">215 sqm</span>
-              </figcaption>
-            </figure>
-          </article>
-
-          <article class="commission">
-            <figure>
-              <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1400&q=85" alt="St John Street warehouse loft kitchen with timber joinery and stone island" loading="lazy" />
-              <figcaption>
-                <strong>St John Street Loft, Clerkenwell</strong>
-                <span class="num">128 sqm</span>
-              </figcaption>
-            </figure>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="band-indigo" id="visit">
-      <div class="wrap indigo-grid">
-        <div>
+    <section class="band-espresso" id="visit">
+      <div class="wrap visit-grid">
+        <div class="reveal">
           <h2>Arrange an on-site feasibility visit</h2>
-          <p class="indigo-copy">
-            Send the street, era of the house, and the work you are considering. Our principal architect visits within ten days to review structure, light, and build cost.
+          <p class="visit-copy">
+            Share the street, era of the house, and the works you are considering. Our principal architect visits within ten days to review layout, natural light, and realistic build budget.
           </p>
-          <div class="practice-facts">
+          <div class="studio-facts">
             <span>Sekforde Street, Clerkenwell</span>
             <span>RIBA Chartered Practice</span>
             <span>studio@kestrelandstone.example</span>
@@ -243,9 +299,9 @@
           </label>
           <label>
             Outline of works
-            <textarea required placeholder="Ground-floor knock-through, kitchen joinery, or full house renovation"></textarea>
+            <textarea required placeholder="Ground-floor knock-through, bespoke kitchen, or full house renovation"></textarea>
           </label>
-          <button type="submit" class="btn">Request site visit</button>
+          <button type="submit" class="btn-light" style="justify-self: start;">Request site visit</button>
           <div class="visit-confirm" id="visit-confirm" role="status"></div>
         </form>
       </div>
@@ -260,44 +316,162 @@
   </footer>
 
   <script>
-    const stage = document.getElementById("curtain-stage");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced) document.documentElement.classList.add("js-ready");
+
+    // 1. Silky Eased Smooth Anchor Scroll (Never abrupt jumps, immune to CSS scroll-behavior conflict)
+    let scrollRaf = null;
+    function smoothScrollTo(targetY, duration = 760) {
+      cancelAnimationFrame(scrollRaf);
+      if (reduced) { window.scrollTo({ top: targetY, behavior: "instant" }); return; }
+      const startY = window.scrollY;
+      const dist = targetY - startY;
+      let start = null;
+      const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+      function step(ts) {
+        if (!start) start = ts;
+        const p = Math.min(1, (ts - start) / duration);
+        window.scrollTo({ top: startY + dist * easeOutExpo(p), behavior: "instant" });
+        if (p < 1) scrollRaf = requestAnimationFrame(step);
+      }
+      scrollRaf = requestAnimationFrame(step);
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const id = link.getAttribute("href");
+        if (!id || id === "#") return;
+        const el = document.querySelector(id);
+        if (!el) return;
+        e.preventDefault();
+        const offset = id === "#top" ? 0 : el.getBoundingClientRect().top + window.scrollY - 74;
+        smoothScrollTo(Math.max(0, offset));
+      });
+    });
+
+    // 2. Header Morph + Scroll Progress + Taupe Photo Parallax
+    const header = document.getElementById("site-header");
+    const progBar = document.getElementById("scroll-progress");
+    const parallaxImg = document.getElementById("parallax-img");
+    const taupeBand = document.getElementById("philosophy");
+
+    function onScroll() {
+      const y = window.scrollY;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      progBar.style.transform = `scaleX(${Math.min(1, y / maxScroll)})`;
+      header.classList.toggle("is-solid", y > window.innerHeight * 0.72);
+
+      if (!reduced && taupeBand && parallaxImg) {
+        const rect = taupeBand.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+          const shift = (progress - 0.5) * -90;
+          parallaxImg.style.transform = `translate3d(0, ${shift.toFixed(1)}px, 0)`;
+        }
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    // 3. Cinematic Hero Slide Crossfade + Progress Bar
+    const slides = Array.from(document.querySelectorAll(".hero-slide"));
+    const slideTitle = document.getElementById("slide-title");
+    const slideLoc = document.getElementById("slide-loc");
+    const slideProg = document.getElementById("slide-progress");
+    let slideIdx = 0;
+    let slideTimer = null;
+
+    function goSlide(idx) {
+      slideIdx = (idx + slides.length) % slides.length;
+      slides.forEach((s, i) => s.classList.toggle("is-active", i === slideIdx));
+      slideTitle.textContent = slides[slideIdx].dataset.title;
+      slideLoc.textContent = slides[slideIdx].dataset.loc;
+      if (!reduced) {
+        slideProg.style.transition = "none";
+        slideProg.style.transform = "scaleX(0)";
+        requestAnimationFrame(() => {
+          slideProg.style.transition = "transform 5800ms linear";
+          slideProg.style.transform = "scaleX(1)";
+        });
+      }
+      clearTimeout(slideTimer);
+      if (!reduced) slideTimer = setTimeout(() => goSlide(slideIdx + 1), 5900);
+    }
+
+    document.getElementById("prev-slide").addEventListener("click", () => goSlide(slideIdx - 1));
+    document.getElementById("next-slide").addEventListener("click", () => goSlide(slideIdx + 1));
+    goSlide(0);
+
+    // 4. Scroll-Triggered Reveals + Programme Bars + Initial Curtain Sweep
+    const curtainStage = document.getElementById("curtain-stage");
     const beforeEl = document.getElementById("curtain-before");
     const ruleEl = document.getElementById("curtain-rule");
     const readout = document.getElementById("curtain-readout");
-    const toggles = Array.from(document.querySelectorAll(".text-toggle"));
-
+    const tabs = Array.from(document.querySelectorAll(".curtain-tab"));
     let pct = 50;
     let dragging = false;
+    let curtainSwept = false;
 
-    function setPos(next) {
+    function setPos(next, glide = false) {
       pct = Math.max(4, Math.min(96, next));
+      curtainStage.classList.toggle("is-gliding", glide && !reduced);
       beforeEl.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
       ruleEl.style.left = pct + "%";
-      stage.setAttribute("aria-valuenow", String(Math.round(pct)));
+      curtainStage.setAttribute("aria-valuenow", String(Math.round(pct)));
       readout.textContent = pct > 75 ? "Stripped shell, week 1" : pct < 25 ? "Completed handover, week 18" : `${Math.round(pct)}% stripped shell`;
-      toggles.forEach((b) => b.setAttribute("aria-pressed", String(Math.abs(Number(b.dataset.pos) - pct) < 5)));
+      tabs.forEach((b) => b.setAttribute("aria-pressed", String(Math.abs(Number(b.dataset.pos) - pct) < 5)));
     }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-in");
+        if (entry.target === curtainStage && !curtainSwept && !reduced) {
+          curtainSwept = true;
+          setPos(78, false);
+          setTimeout(() => setPos(46, true), 180);
+        }
+        io.unobserve(entry.target);
+      });
+    }, { threshold: 0.18 });
+
+    document.querySelectorAll(".reveal, #schedule-table, #curtain-stage").forEach((el) => io.observe(el));
 
     function moveClientX(clientX) {
-      const r = stage.getBoundingClientRect();
-      setPos(((clientX - r.left) / r.width) * 100);
+      const r = curtainStage.getBoundingClientRect();
+      setPos(((clientX - r.left) / r.width) * 100, false);
     }
 
-    stage.addEventListener("pointerdown", (e) => {
+    curtainStage.addEventListener("pointerdown", (e) => {
       dragging = true;
-      stage.setPointerCapture(e.pointerId);
+      curtainStage.setPointerCapture(e.pointerId);
       moveClientX(e.clientX);
     });
-    stage.addEventListener("pointermove", (e) => { if (dragging) moveClientX(e.clientX); });
-    stage.addEventListener("pointerup", () => { dragging = false; });
-    stage.addEventListener("pointercancel", () => { dragging = false; });
-    stage.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") { e.preventDefault(); setPos(pct - 4); }
-      if (e.key === "ArrowRight") { e.preventDefault(); setPos(pct + 4); }
+    curtainStage.addEventListener("pointermove", (e) => { if (dragging) moveClientX(e.clientX); });
+    curtainStage.addEventListener("pointerup", () => { dragging = false; });
+    curtainStage.addEventListener("pointercancel", () => { dragging = false; });
+    curtainStage.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { e.preventDefault(); setPos(pct - 5, true); }
+      if (e.key === "ArrowRight") { e.preventDefault(); setPos(pct + 5, true); }
+    });
+    tabs.forEach((b) => b.addEventListener("click", () => setPos(Number(b.dataset.pos), true)));
+
+    // 5. Interactive Lookbook Hover/Click Crossfade
+    const plateImgs = Array.from(document.querySelectorAll("#lookbook-plate img"));
+    const projRows = Array.from(document.querySelectorAll(".project-row"));
+
+    function selectPlate(i) {
+      projRows.forEach((r, idx) => r.setAttribute("aria-pressed", String(idx === i)));
+      plateImgs.forEach((im, idx) => im.classList.toggle("is-active", idx === i));
+    }
+
+    projRows.forEach((row) => {
+      const i = Number(row.dataset.plate);
+      row.addEventListener("mouseenter", () => selectPlate(i));
+      row.addEventListener("click", () => selectPlate(i));
     });
 
-    toggles.forEach((b) => b.addEventListener("click", () => setPos(Number(b.dataset.pos))));
-
+    // 6. Visit Form
     document.getElementById("visit-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const name = document.getElementById("v-name").value.trim() || "Client";
