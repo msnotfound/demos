@@ -3,242 +3,328 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="SoundPlus is an 18.5 MB native Android music player with screen-off playback, a 5-band hardware DSP equalizer, offline downloads, and zero ads." />
-  <title>SoundPlus, native Android music player with 5-band hardware DSP</title>
+  <meta name="description" content="SoundPlus is an 18.5 MB native Android music player with screen-off background playback, a 5-band equalizer, permanent offline downloads, and zero mid-song ads." />
+  <title>SoundPlus | Free Native Android Music Player &amp; Web Player</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Onest:wght@400;500&family=Outfit:wght@300;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Newsreader:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./page.css" />
 </head>
 <body>
-  <div class="nav-wrap">
-    <header class="nav-pill">
-      <a href="#top" class="brand-link">
-        <img src="./assets/icon-512.png" alt="SoundPlus app icon" class="brand-icon" />
-        <span>soundplus</span>
+  <div class="topbar-wrap">
+    <header class="topbar">
+      <a href="#top" class="brand">
+        <img src="./assets/icon-512.png" alt="SoundPlus icon" />
+        <span>SoundPlus</span>
       </a>
       <nav class="nav-links" aria-label="Primary">
-        <a href="#numbers">numbers</a>
-        <a href="#screens">screens</a>
-        <a href="#compare">compare</a>
-        <a href="#install">install</a>
+        <a href="#stage">Equalizer &amp; App</a>
+        <a href="#features">Features</a>
+        <a href="#compare">Compare</a>
+        <a href="#install">Install</a>
       </nav>
-      <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--primary btn--sm">download apk</a>
+      <div class="bar-right">
+        <button type="button" class="theme-toggle" id="theme-btn" aria-label="Toggle dark and light appearance">Dark mode</button>
+        <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--dark btn--sm">Download APK</a>
+      </div>
     </header>
   </div>
 
   <main id="top">
     <section class="hero">
-      <div class="wrap hero-grid">
-        <div>
-          <h1>music on android, screen off, zero ads</h1>
-          <p class="hero-lead">
-            An 18.5 MB native Android player with 5-band hardware DSP and offline storage.
-          </p>
-          <div class="hero-actions">
-            <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--primary">download apk, 18.5 mb</a>
-            <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener" class="btn btn--secondary">launch web player</a>
-          </div>
-        </div>
-
-        <section class="dsp-stage" aria-label="Interactive 5-band hardware DSP equalizer">
-          <div class="dsp-top">
-            <span class="dsp-title">5-band hardware dsp</span>
-            <span class="dsp-meta" id="dsp-status">live web audio biquad filter</span>
-          </div>
-
-          <div class="dsp-presets" role="group" aria-label="Equalizer presets">
-            <button type="button" class="pill" data-preset="flat" aria-pressed="false">flat</button>
-            <button type="button" class="pill" data-preset="bass" aria-pressed="true">bass boost</button>
-            <button type="button" class="pill" data-preset="vocal" aria-pressed="false">vocal clarity</button>
-            <button type="button" class="pill" data-preset="night" aria-pressed="false">late night</button>
-          </div>
-
-          <div class="eq-curve-wrap">
-            <div class="eq-bars" id="eq-bars" aria-hidden="true"></div>
-            <svg class="eq-svg" viewBox="0 0 460 128" role="img" aria-label="Live equalizer frequency response curve">
-              <line class="eq-grid-line" x1="16" y1="24" x2="444" y2="24" />
-              <line class="eq-grid-line" x1="16" y1="64" x2="444" y2="64" />
-              <line class="eq-grid-line" x1="16" y1="104" x2="444" y2="104" />
-              <path id="eq-area" class="eq-area" d="" />
-              <path id="eq-path" class="eq-path" d="" />
-              <circle id="dot-0" class="eq-dot" cx="44" cy="64" r="5" />
-              <circle id="dot-1" class="eq-dot" cx="137" cy="64" r="5" />
-              <circle id="dot-2" class="eq-dot" cx="230" cy="64" r="5" />
-              <circle id="dot-3" class="eq-dot" cx="323" cy="64" r="5" />
-              <circle id="dot-4" class="eq-dot" cx="416" cy="64" r="5" />
-            </svg>
-          </div>
-
-          <div class="eq-bands">
-            <div class="band-col">
-              <span class="band-db" id="db-0">+6 db</span>
-              <input class="band-slider" type="range" min="-12" max="12" step="1" value="6" data-band="0" aria-label="60 Hz gain" />
-              <span class="band-hz">60hz</span>
-            </div>
-            <div class="band-col">
-              <span class="band-db" id="db-1">+3 db</span>
-              <input class="band-slider" type="range" min="-12" max="12" step="1" value="3" data-band="1" aria-label="230 Hz gain" />
-              <span class="band-hz">230hz</span>
-            </div>
-            <div class="band-col">
-              <span class="band-db" id="db-2">0 db</span>
-              <input class="band-slider" type="range" min="-12" max="12" step="1" value="0" data-band="2" aria-label="910 Hz gain" />
-              <span class="band-hz">910hz</span>
-            </div>
-            <div class="band-col">
-              <span class="band-db" id="db-3">+2 db</span>
-              <input class="band-slider" type="range" min="-12" max="12" step="1" value="2" data-band="3" aria-label="3.6 kHz gain" />
-              <span class="band-hz">3.6khz</span>
-            </div>
-            <div class="band-col">
-              <span class="band-db" id="db-4">+4 db</span>
-              <input class="band-slider" type="range" min="-12" max="12" step="1" value="4" data-band="4" aria-label="14 kHz gain" />
-              <span class="band-hz">14khz</span>
-            </div>
-          </div>
-
-          <div class="dsp-foot">
-            <button type="button" class="btn btn--primary btn--sm" id="audio-toggle">play live dsp test</button>
-            <span class="dsp-meta">version 1.6.0, build 17, android 8.0+</span>
-          </div>
-        </section>
-      </div>
-    </section>
-
-    <section class="band-lavender" id="numbers">
-      <div class="wrap reveal">
-        <div class="lav-head">
-          <h2>built for the pocket, not the ad network</h2>
-          <p>
-            SoundPlus runs as a native Android foreground media service from Android 8.0 through Android 15, so audio keeps playing when you lock the screen.
-          </p>
-        </div>
-
-        <div class="figures-row">
-          <div class="fig-cell">
-            <div class="fig-top">
-              <span class="figure figure--accent">18.5</span>
-              <span class="fig-unit">mb</span>
-            </div>
-            <p class="fig-desc">Full Android APK size with zero bloat, no login wall, and no background trackers.</p>
-          </div>
-          <div class="fig-cell">
-            <div class="fig-top">
-              <span class="figure">5</span>
-              <span class="fig-unit">bands</span>
-            </div>
-            <p class="fig-desc">Hardware biquad equalizer spanning 60 Hz sub-bass through 14 kHz treble air.</p>
-          </div>
-          <div class="fig-cell">
-            <div class="fig-top">
-              <span class="figure">0</span>
-              <span class="fig-unit">ads</span>
-            </div>
-            <p class="fig-desc">Continuous playback across albums, queues, and offline folders with zero mid-song breaks.</p>
-          </div>
+      <div class="wrap hero-inner">
+        <h1>Music that stays <span class="hero-accent">on</span> when your screen locks</h1>
+        <p class="hero-sub">
+          An 18.5 MB native Android player with zero mid-song ads, a built-in 5-band equalizer, and permanent offline downloads. No account required.
+        </p>
+        <div class="hero-ctas">
+          <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--dark">
+            <span>Download Android APK</span>
+            <span class="cta-meta">18.5 MB</span>
+          </a>
+          <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener" class="btn btn--light">
+            <span>Launch Web Player</span>
+            <span class="cta-meta">Browser</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="section-night" id="screens">
-      <div class="wrap reveal">
-        <div class="sec-top">
-          <h2>four real screens, nothing in the way</h2>
-          <p>
-            Captured directly from SoundPlus 1.6.0 on Android. Tap each layer to inspect playback, discovery, DSP tuning, and queue control.
-          </p>
-        </div>
-
-        <div class="screens-stage">
-          <div class="screen-nav" role="group" aria-label="Select Android app screen">
-            <button type="button" class="screen-row" data-screen="player" aria-pressed="true">
-              <span class="screen-row-title">now playing</span>
-              <p>Full-bleed artwork, 3-second crossfade, synchronized controls, and native screen-off foreground audio.</p>
-            </button>
-            <button type="button" class="screen-row" data-screen="home" aria-pressed="false">
-              <span class="screen-row-title">discovery feed</span>
-              <p>Instant genre exploration, Hindi and international charts, and direct Spotify playlist link import.</p>
-            </button>
-            <button type="button" class="screen-row" data-screen="equalizer" aria-pressed="false">
-              <span class="screen-row-title">hardware equalizer</span>
-              <p>Five acoustic bands, analog bass booster stage, crossfade timing, and real-time beat testing.</p>
-            </button>
-            <button type="button" class="screen-row" data-screen="queue" aria-pressed="false">
-              <span class="screen-row-title">dynamic queue</span>
-              <p>Drag-and-drop track reordering, single-track loop, and infinite radio continuation.</p>
-            </button>
-          </div>
-
-          <div class="screen-well">
-            <img id="screen-img" src="./assets/player.png" alt="SoundPlus Android now playing screen" class="app-shot" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-night" id="compare">
+    <section class="stage-section" id="stage" aria-label="Interactive SoundPlus app preview and equalizer">
       <div class="wrap">
-        <div class="sec-top">
-          <h2>side by side with free tiers</h2>
-          <p>
-            Every trade-off stated plainly so you know what installs on your phone before downloading the APK.
-          </p>
+        <div class="pastel-frame">
+          <div class="app-window">
+            <aside class="win-sidebar">
+              <div>
+                <div class="win-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                <div class="side-group" role="group" aria-label="Switch Android app screen">
+                  <div class="side-label">Real Android v1.6.0 screens</div>
+                  <button type="button" class="side-btn" data-screen="player" aria-pressed="true"><span>Now Playing</span><span class="mono">01</span></button>
+                  <button type="button" class="side-btn" data-screen="home" aria-pressed="false"><span>Discovery Feed</span><span class="mono">02</span></button>
+                  <button type="button" class="side-btn" data-screen="equalizer" aria-pressed="false"><span>5-Band Equalizer</span><span class="mono">03</span></button>
+                  <button type="button" class="side-btn" data-screen="queue" aria-pressed="false"><span>Live Queue</span><span class="mono">04</span></button>
+                </div>
+              </div>
+
+              <div class="apk-pill-box">
+                <strong>SoundPlus 1.6.0 (Build 17)</strong>
+                <span>Android 8.0 through Android 15. Clean direct APK, no root needed.</span>
+              </div>
+            </aside>
+
+            <div class="win-main">
+              <div class="win-main-head">
+                <h2>5-Band Hardware Equalizer</h2>
+                <div class="preset-row" role="group" aria-label="Sound presets">
+                  <button type="button" class="chip" data-preset="flat" aria-pressed="false">Flat</button>
+                  <button type="button" class="chip" data-preset="bass" aria-pressed="true">Bass Boost</button>
+                  <button type="button" class="chip" data-preset="vocal" aria-pressed="false">Vocal</button>
+                  <button type="button" class="chip" data-preset="night" aria-pressed="false">Late Night</button>
+                </div>
+              </div>
+
+              <div class="eq-canvas-box">
+                <div class="eq-bars" id="eq-bars" aria-hidden="true"></div>
+                <svg class="eq-svg" viewBox="0 0 460 152" role="img" aria-label="Interactive 5-band equalizer response curve">
+                  <line class="eq-grid" x1="16" y1="28" x2="444" y2="28" />
+                  <line class="eq-grid" x1="16" y1="76" x2="444" y2="76" />
+                  <line class="eq-grid" x1="16" y1="124" x2="444" y2="124" />
+                  <path id="eq-area" class="eq-area" d="" />
+                  <path id="eq-path" class="eq-line" d="" />
+                  <circle id="dot-0" class="eq-dot" cx="44" cy="76" r="5.5" />
+                  <circle id="dot-1" class="eq-dot" cx="137" cy="76" r="5.5" />
+                  <circle id="dot-2" class="eq-dot" cx="230" cy="76" r="5.5" />
+                  <circle id="dot-3" class="eq-dot" cx="323" cy="76" r="5.5" />
+                  <circle id="dot-4" class="eq-dot" cx="416" cy="76" r="5.5" />
+                </svg>
+              </div>
+
+              <div class="eq-sliders">
+                <div class="band-col">
+                  <span class="band-db" id="db-0">+6 dB</span>
+                  <input class="band-slider" type="range" min="-12" max="12" step="1" value="6" data-band="0" aria-label="60 Hz slider" />
+                  <span class="band-hz">60 Hz</span>
+                </div>
+                <div class="band-col">
+                  <span class="band-db" id="db-1">+3 dB</span>
+                  <input class="band-slider" type="range" min="-12" max="12" step="1" value="3" data-band="1" aria-label="230 Hz slider" />
+                  <span class="band-hz">230 Hz</span>
+                </div>
+                <div class="band-col">
+                  <span class="band-db" id="db-2">0 dB</span>
+                  <input class="band-slider" type="range" min="-12" max="12" step="1" value="0" data-band="2" aria-label="910 Hz slider" />
+                  <span class="band-hz">910 Hz</span>
+                </div>
+                <div class="band-col">
+                  <span class="band-db" id="db-3">+2 dB</span>
+                  <input class="band-slider" type="range" min="-12" max="12" step="1" value="2" data-band="3" aria-label="3.6 kHz slider" />
+                  <span class="band-hz">3.6 kHz</span>
+                </div>
+                <div class="band-col">
+                  <span class="band-db" id="db-4">+4 dB</span>
+                  <input class="band-slider" type="range" min="-12" max="12" step="1" value="4" data-band="4" aria-label="14 kHz slider" />
+                  <span class="band-hz">14 kHz</span>
+                </div>
+              </div>
+
+              <div class="eq-footer">
+                <button type="button" class="play-btn" id="audio-toggle">Play audio test</button>
+                <span class="mono" style="font-size: 0.78rem; color: var(--muted);" id="audio-note">Drag any band to hear the tone shift live</span>
+              </div>
+            </div>
+
+            <div class="win-phone">
+              <img id="phone-shot" class="phone-shot" src="./assets/player.png" alt="SoundPlus Android now playing screen" />
+              <span class="phone-caption" id="phone-caption">Captured directly from SoundPlus 1.6.0 on Android</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifesto" id="manifesto">
+      <div class="wrap">
+        <p class="manifesto-text" id="manifesto-text">
+          <span class="m-word">Most</span>
+          <span class="m-word">free</span>
+          <span class="m-word">music</span>
+          <span class="m-word">apps</span>
+          <span class="m-word">pause</span>
+          <span class="m-word">when</span>
+          <span class="m-word">you</span>
+          <span class="m-word">lock</span>
+          <span class="m-word">your</span>
+          <span class="m-word">phone.</span>
+          <span class="m-word">SoundPlus</span>
+          <span class="m-word">is</span>
+          <span class="m-word">built</span>
+          <span class="m-word">for</span>
+          <span class="m-highlight" id="m-highlight">uninterrupted listening.</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="proof-grid-wrap">
+      <div class="wrap">
+        <div class="arch-frame reveal">
+          <span class="arch-pin pin-tl" aria-hidden="true"></span>
+          <span class="arch-pin pin-tr" aria-hidden="true"></span>
+          <span class="arch-pin pin-bl" aria-hidden="true"></span>
+          <span class="arch-pin pin-br" aria-hidden="true"></span>
+
+          <div class="proof-cell">
+            <span class="proof-num">18.5 MB</span>
+            <span class="proof-title">Lightweight native APK</span>
+            <span class="proof-desc">Fast install on Android 8.0 through Android 15 with zero web-view bloat.</span>
+          </div>
+          <div class="proof-cell">
+            <span class="proof-num">Zero ads</span>
+            <span class="proof-title">No mid-song breaks</span>
+            <span class="proof-desc">Listen straight through study sessions, commutes, and long drives.</span>
+          </div>
+          <div class="proof-cell">
+            <span class="proof-num">Offline</span>
+            <span class="proof-title">Permanent local storage</span>
+            <span class="proof-desc">Save albums and playlists over Wi-Fi; files stay playable after 30 days.</span>
+          </div>
+          <div class="proof-cell">
+            <span class="proof-num">No login</span>
+            <span class="proof-title">Zero account tracking</span>
+            <span class="proof-desc">Open the app and press play immediately with zero phone number or signup.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bento-sec" id="features">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <h2>Built around how you actually listen</h2>
+          <p>Native foreground playback, instant Spotify playlist mapping, and smooth 3-second crossfades.</p>
         </div>
 
-        <div class="compare-wrap">
+        <div class="cards-3">
+          <article class="f-card reveal">
+            <div>
+              <h3>Screen-off native playback</h3>
+              <p>Locks in as a high-priority Android foreground media session so music never drops in your pocket or car.</p>
+            </div>
+            <div class="mini-ui">
+              <div class="mini-row">
+                <span>Foreground media lock</span>
+                <span class="mini-pill">Active</span>
+              </div>
+              <div class="mini-row">
+                <span>Crossfade transition</span>
+                <span class="mono">3.0 sec</span>
+              </div>
+              <div class="mini-row">
+                <span>Battery profile</span>
+                <span class="mono">Native audio core</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="f-card reveal">
+            <div>
+              <h3>Import Spotify playlists</h3>
+              <p>Paste any public Spotify or YouTube Music share link inside the app to bring your entire library over in seconds.</p>
+            </div>
+            <div class="mini-ui">
+              <form class="import-bar" id="import-form">
+                <input type="text" id="import-input" value="open.spotify.com/playlist/late-night-drive" aria-label="Playlist share URL" />
+                <button type="submit" class="import-go">Test</button>
+              </form>
+              <div class="import-result" id="import-result">Ready to map public playlist tracks</div>
+            </div>
+          </article>
+
+          <article class="f-card reveal">
+            <div>
+              <h3>Unlimited offline downloads</h3>
+              <p>Download Hindi, Punjabi, lo-fi, and global albums straight to local device storage with unlimited skips.</p>
+            </div>
+            <div class="mini-ui">
+              <div class="mini-row">
+                <span>Offline expiry limit</span>
+                <span class="mini-pill">Never</span>
+              </div>
+              <div class="mini-row">
+                <span>Hourly skip cap</span>
+                <span class="mono">Unlimited</span>
+              </div>
+              <div class="mini-row">
+                <span>Desktop companion</span>
+                <span class="mono">Web Player</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="compare-sec" id="compare">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <h2>How SoundPlus compares</h2>
+          <p>Plain facts side by side against ad-supported free tiers and unstable modded clients.</p>
+        </div>
+
+        <div class="table-box reveal">
           <table class="compare-table">
             <thead>
               <tr>
-                <th>capability</th>
-                <th>soundplus</th>
-                <th>spotify free</th>
-                <th>youtube music free</th>
-                <th>modded apks</th>
+                <th>Feature</th>
+                <th>SoundPlus</th>
+                <th>Spotify Free</th>
+                <th>YouTube Music Free</th>
+                <th>Modded APKs</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>screen-off playback</td>
-                <td>native foreground</td>
-                <td>supported</td>
-                <td>pauses on lock</td>
-                <td>frequently breaks</td>
+                <td>Screen-off background play</td>
+                <td>Native foreground</td>
+                <td>Supported</td>
+                <td>Pauses on lock</td>
+                <td>Frequently breaks</td>
               </tr>
               <tr>
-                <td>mid-song audio ads</td>
-                <td>none</td>
-                <td>every 3 to 4 songs</td>
-                <td>frequent video ads</td>
-                <td>inconsistent</td>
+                <td>Mid-song audio ads</td>
+                <td>Zero ads</td>
+                <td>Every 3 to 4 tracks</td>
+                <td>Frequent video ads</td>
+                <td>Inconsistent</td>
               </tr>
               <tr>
-                <td>offline local downloads</td>
-                <td>unlimited, permanent</td>
-                <td>paid tier only</td>
-                <td>paid tier only</td>
-                <td>often blocked</td>
+                <td>Offline downloads</td>
+                <td>Unlimited, permanent</td>
+                <td>Paid tier only</td>
+                <td>Paid tier only</td>
+                <td>Often blocked</td>
               </tr>
               <tr>
-                <td>on-demand skips</td>
-                <td>unlimited</td>
-                <td>6 skips an hour</td>
-                <td>limited</td>
-                <td>unlimited</td>
+                <td>On-demand song skips</td>
+                <td>Unlimited</td>
+                <td>6 skips per hour</td>
+                <td>Limited</td>
+                <td>Unlimited</td>
               </tr>
               <tr>
-                <td>5-band hardware eq</td>
-                <td>built in</td>
-                <td>basic</td>
-                <td>none</td>
-                <td>basic</td>
+                <td>5-band hardware equalizer</td>
+                <td>Built in</td>
+                <td>Basic</td>
+                <td>None</td>
+                <td>Basic</td>
               </tr>
               <tr>
-                <td>account required</td>
-                <td>none, zero ban risk</td>
-                <td>required</td>
-                <td>google account</td>
-                <td>high ban risk</td>
+                <td>Account required</td>
+                <td>None, zero ban risk</td>
+                <td>Required</td>
+                <td>Google account</td>
+                <td>High ban risk</td>
               </tr>
             </tbody>
           </table>
@@ -246,46 +332,55 @@
       </div>
     </section>
 
-    <section class="band-record" id="install">
-      <div class="wrap record-grid">
-        <div>
-          <h2>install version 1.6.0 in under a minute</h2>
-          <p>
-            Download directly from GraphiKrafts servers, or open the web player on desktop without installing anything.
-          </p>
-          <div class="hero-actions">
-            <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--white">download soundplus.apk</a>
-            <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener" class="btn btn--white-outline">open web player</a>
+    <section class="install-sec" id="install">
+      <div class="wrap">
+        <div class="install-card reveal">
+          <div>
+            <h2>Install SoundPlus 1.6.0 in under a minute</h2>
+            <p>Download the verified 18.5 MB APK directly from GraphiKrafts, or stream right away in your desktop browser.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+              <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--dark">Download APK (18.5 MB)</a>
+              <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener" class="btn btn--light">Open Web Player</a>
+            </div>
           </div>
-        </div>
 
-        <ol class="install-steps">
-          <li>
-            <strong>download the 18.5 mb apk</strong>
-            <span>Tap download above to pull SoundPlus 1.6.0 (Build 17) directly to your Android Downloads folder.</span>
-          </li>
-          <li>
-            <strong>allow install from your browser</strong>
-            <span>When Android prompts for unknown apps, toggle permission for Chrome or Files once. No root needed.</span>
-          </li>
-          <li>
-            <strong>open and press play</strong>
-            <span>No account creation, no phone number, and optional one-paste import for public Spotify playlists.</span>
-          </li>
-        </ol>
+          <ol class="steps-card">
+            <li>
+              <span class="step-num">1</span>
+              <div>
+                <strong>Download SoundPlus.apk</strong>
+                <span>Pulls version 1.6.0 (Build 17) directly to your Android Downloads folder.</span>
+              </div>
+            </li>
+            <li>
+              <span class="step-num">2</span>
+              <div>
+                <strong>Allow install from your browser</strong>
+                <span>Approve unknown apps once for Chrome or Files when Android asks. No root needed.</span>
+              </div>
+            </li>
+            <li>
+              <span class="step-num">3</span>
+              <div>
+                <strong>Open and start listening</strong>
+                <span>No signup wall, no tracking cookies, and instant Spotify playlist import.</span>
+              </div>
+            </li>
+          </ol>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="mast-footer">
-    <div class="wrap footer-row">
-      <span class="footer-brand">soundplus</span>
-      <nav class="footer-links" aria-label="Footer">
-        <a href="https://music.graphikrafts.com/SoundPlus.apk">apk download</a>
-        <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener">web player</a>
+  <footer>
+    <div class="wrap footer-inner">
+      <span>SoundPlus for Android &amp; Web</span>
+      <div class="footer-links">
+        <a href="https://music.graphikrafts.com/SoundPlus.apk">Download APK</a>
+        <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener">Web Player</a>
         <a href="https://music.graphikrafts.com/" target="_blank" rel="noopener">music.graphikrafts.com</a>
-        <a href="https://msnotfound.github.io/#quote" target="_top">redesign concept by mayank sahu</a>
-      </nav>
+        <a href="https://msnotfound.github.io/#quote" target="_top">Redesign concept by Mayank Sahu</a>
+      </div>
     </div>
   </footer>
 
@@ -293,9 +388,9 @@
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduced) document.documentElement.classList.add("js-ready");
 
-    // Silky smooth anchor scrolling for nav clicks (immune to CSS scroll-behavior conflict)
+    // 1. Silky Eased Smooth Anchor Scroll
     let scrollRaf = null;
-    function smoothScrollTo(targetY, duration = 720) {
+    function smoothScrollTo(targetY, duration = 740) {
       cancelAnimationFrame(scrollRaf);
       if (reduced) { window.scrollTo({ top: targetY, behavior: "instant" }); return; }
       const startY = window.scrollY;
@@ -318,11 +413,46 @@
         const el = document.querySelector(id);
         if (!el) return;
         e.preventDefault();
-        const offset = id === "#top" ? 0 : el.getBoundingClientRect().top + window.scrollY - 82;
+        const offset = id === "#top" ? 0 : el.getBoundingClientRect().top + window.scrollY - 92;
         smoothScrollTo(Math.max(0, offset));
       });
     });
 
+    // 2. Light / Dark Theme Toggle (helicon.sh inspiration)
+    const themeBtn = document.getElementById("theme-btn");
+    themeBtn.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) {
+        document.documentElement.removeAttribute("data-theme");
+        themeBtn.textContent = "Dark mode";
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        themeBtn.textContent = "Light mode";
+      }
+    });
+
+    // 3. Scroll-Linked Word-by-Word Manifesto Illumination (orchalabs.dev inspiration)
+    const mWords = Array.from(document.querySelectorAll(".m-word"));
+    const mSection = document.getElementById("manifesto");
+    const mHighlight = document.getElementById("m-highlight");
+
+    function updateManifesto() {
+      if (reduced) {
+        mWords.forEach((w) => w.classList.add("is-lit"));
+        mHighlight.classList.add("is-underlined");
+        return;
+      }
+      const rect = mSection.getBoundingClientRect();
+      const progress = Math.max(0, Math.min(1, (window.innerHeight * 0.78 - rect.top) / (rect.height * 0.72)));
+      const litCount = Math.floor(progress * (mWords.length + 2));
+      mWords.forEach((w, idx) => w.classList.toggle("is-lit", idx < litCount));
+      mHighlight.classList.toggle("is-underlined", progress > 0.72);
+    }
+
+    window.addEventListener("scroll", updateManifesto, { passive: true });
+    updateManifesto();
+
+    // 4. Scroll Reveal Observer
     const io = new IntersectionObserver((entries) => {
       entries.forEach((en) => {
         if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); }
@@ -330,13 +460,37 @@
     }, { threshold: 0.14 });
     document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 
-    // Live 24-bar spectrum meter behind EQ curve
+    // 5. Real Android Screen Switcher inside Pastel App Stage
+    const SCREENS = {
+      player: { src: "./assets/player.png", cap: "Now Playing: full artwork, 3-second crossfade, native screen-off playback" },
+      home: { src: "./assets/home.png", cap: "Discovery Feed: Hindi and global charts with instant one-tap playback" },
+      equalizer: { src: "./assets/equalizer.png", cap: "5-Band Hardware Equalizer: 60 Hz to 14 kHz acoustic tuning and bass boost" },
+      queue: { src: "./assets/queue.png", cap: "Live Queue: drag-and-drop track order and infinite dynamic radio" }
+    };
+
+    const shotEl = document.getElementById("phone-shot");
+    const capEl = document.getElementById("phone-caption");
+    document.querySelectorAll(".side-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".side-btn").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+        const s = SCREENS[btn.dataset.screen];
+        shotEl.classList.add("is-swapping");
+        setTimeout(() => {
+          shotEl.src = s.src;
+          shotEl.alt = s.cap;
+          capEl.textContent = s.cap;
+          shotEl.classList.remove("is-swapping");
+        }, 160);
+      });
+    });
+
+    // 6. Interactive 5-Band Equalizer + Live Spectrum Audio Test
     const barsWrap = document.getElementById("eq-bars");
-    const barEls = Array.from({ length: 24 }, () => {
-      const d = document.createElement("span");
-      d.className = "eq-bar";
-      barsWrap.appendChild(d);
-      return d;
+    const barEls = Array.from({ length: 28 }, () => {
+      const s = document.createElement("span");
+      s.className = "eq-bar";
+      barsWrap.appendChild(s);
+      return s;
     });
 
     const PRESETS = {
@@ -345,25 +499,15 @@
       vocal: [-2, 1, 5, 4, 1],
       night: [4, 2, -1, -3, -4]
     };
-
     const FREQS = [60, 230, 910, 3600, 14000];
     const XS = [44, 137, 230, 323, 416];
     const gains = [...PRESETS.bass];
-
     const sliders = Array.from(document.querySelectorAll(".band-slider"));
-    const presetBtns = Array.from(document.querySelectorAll("[data-preset]"));
+    const chips = Array.from(document.querySelectorAll(".chip"));
 
-    let audioCtx = null;
-    let filters = [];
-    let analyser = null;
-    let freqData = null;
-    let loopTimer = null;
-    let rafId = null;
-    let playing = false;
+    let audioCtx = null, filters = [], analyser = null, freqData = null, loopTimer = null, rafId = null, playing = false;
 
-    function dbToY(db) {
-      return 64 - (db / 12) * 42;
-    }
+    function dbToY(db) { return 76 - (db / 12) * 48; }
 
     function drawCurve() {
       const pts = gains.map((g, i) => [XS[i], dbToY(g)]);
@@ -373,16 +517,16 @@
         d += ` C ${mx} ${pts[i][1]}, ${mx} ${pts[i + 1][1]}, ${pts[i + 1][0]} ${pts[i + 1][1]}`;
       }
       document.getElementById("eq-path").setAttribute("d", d);
-      document.getElementById("eq-area").setAttribute("d", `${d} L ${pts[4][0]} 116 L ${pts[0][0]} 116 Z`);
+      document.getElementById("eq-area").setAttribute("d", `${d} L ${pts[4][0]} 140 L ${pts[0][0]} 140 Z`);
       pts.forEach(([x, y], i) => {
         document.getElementById(`dot-${i}`).setAttribute("cy", String(y));
-        document.getElementById(`db-${i}`).textContent = `${gains[i] > 0 ? "+" : ""}${gains[i]} db`;
+        document.getElementById(`db-${i}`).textContent = `${gains[i] > 0 ? "+" : ""}${gains[i]} dB`;
         sliders[i].value = String(gains[i]);
         if (filters[i]) filters[i].gain.value = gains[i];
       });
     }
 
-    function animateMeter() {
+    function animateBars() {
       if (!playing || !analyser) {
         barEls.forEach((b) => { b.style.transform = "scaleY(0.08)"; });
         return;
@@ -393,69 +537,53 @@
         const norm = Math.max(0.08, freqData[bin] / 255);
         barEls[i].style.transform = `scaleY(${norm.toFixed(2)})`;
       }
-      rafId = requestAnimationFrame(animateMeter);
+      rafId = requestAnimationFrame(animateBars);
     }
 
     sliders.forEach((s) => {
       s.addEventListener("input", () => {
         gains[Number(s.dataset.band)] = Number(s.value);
-        presetBtns.forEach((b) => b.setAttribute("aria-pressed", "false"));
+        chips.forEach((c) => c.setAttribute("aria-pressed", "false"));
         drawCurve();
       });
     });
 
-    presetBtns.forEach((b) => {
-      b.addEventListener("click", () => {
-        presetBtns.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-        const vals = PRESETS[b.dataset.preset];
-        vals.forEach((v, i) => { gains[i] = v; });
+    chips.forEach((c) => {
+      c.addEventListener("click", () => {
+        chips.forEach((x) => x.setAttribute("aria-pressed", String(x === c)));
+        PRESETS[c.dataset.preset].forEach((v, i) => { gains[i] = v; });
         drawCurve();
       });
     });
 
-    function playChordStep(step) {
+    function playStep(step) {
       if (!audioCtx || !filters.length) return;
       const now = audioCtx.currentTime;
       const notes = [110, 130.81, 164.81, 196.0, 220, 164.81, 146.83, 196.0];
-      const freq = notes[step % notes.length];
-
-      const osc1 = audioCtx.createOscillator();
-      const osc2 = audioCtx.createOscillator();
-      const env = audioCtx.createGain();
-      osc1.type = "triangle";
-      osc2.type = "sawtooth";
-      osc1.frequency.setValueAtTime(freq, now);
-      osc2.frequency.setValueAtTime(freq * 2, now);
-
+      const f = notes[step % notes.length];
+      const o1 = audioCtx.createOscillator(), o2 = audioCtx.createOscillator(), env = audioCtx.createGain();
+      o1.type = "triangle"; o2.type = "sawtooth";
+      o1.frequency.setValueAtTime(f, now);
+      o2.frequency.setValueAtTime(f * 2, now);
       env.gain.setValueAtTime(0.0001, now);
       env.gain.exponentialRampToValueAtTime(0.14, now + 0.02);
       env.gain.exponentialRampToValueAtTime(0.0001, now + 0.36);
-
-      osc1.connect(env);
-      osc2.connect(env);
-      env.connect(filters[0]);
-
-      osc1.start(now);
-      osc2.start(now);
-      osc1.stop(now + 0.38);
-      osc2.stop(now + 0.38);
+      o1.connect(env); o2.connect(env); env.connect(filters[0]);
+      o1.start(now); o2.start(now); o1.stop(now + 0.38); o2.stop(now + 0.38);
     }
 
     const audioBtn = document.getElementById("audio-toggle");
-    const statusEl = document.getElementById("dsp-status");
-
+    const audioNote = document.getElementById("audio-note");
     audioBtn.addEventListener("click", () => {
       if (!playing) {
         if (!audioCtx) {
           const AC = window.AudioContext || window.webkitAudioContext;
           audioCtx = new AC();
           filters = FREQS.map((f, i) => {
-            const biq = audioCtx.createBiquadFilter();
-            biq.type = i === 0 ? "lowshelf" : i === 4 ? "highshelf" : "peaking";
-            biq.frequency.value = f;
-            biq.Q.value = 1.1;
-            biq.gain.value = gains[i];
-            return biq;
+            const bq = audioCtx.createBiquadFilter();
+            bq.type = i === 0 ? "lowshelf" : i === 4 ? "highshelf" : "peaking";
+            bq.frequency.value = f; bq.Q.value = 1.1; bq.gain.value = gains[i];
+            return bq;
           });
           analyser = audioCtx.createAnalyser();
           analyser.fftSize = 128;
@@ -467,40 +595,27 @@
         if (audioCtx.state === "suspended") audioCtx.resume();
         playing = true;
         let step = 0;
-        playChordStep(step++);
-        loopTimer = setInterval(() => playChordStep(step++), 420);
-        if (!reduced) animateMeter();
-        audioBtn.textContent = "stop live dsp test";
-        statusEl.textContent = "playing live through 5 biquad filters";
+        playStep(step++);
+        loopTimer = setInterval(() => playStep(step++), 420);
+        if (!reduced) animateBars();
+        audioBtn.textContent = "Stop audio test";
+        audioNote.textContent = "Playing live through the 5-band equalizer";
       } else {
         playing = false;
         clearInterval(loopTimer);
         cancelAnimationFrame(rafId);
         barEls.forEach((b) => { b.style.transform = "scaleY(0.08)"; });
-        audioBtn.textContent = "play live dsp test";
-        statusEl.textContent = "live web audio biquad filter";
+        audioBtn.textContent = "Play audio test";
+        audioNote.textContent = "Drag any band to hear the tone shift live";
       }
     });
 
-    const SCREENS = {
-      player: { src: "./assets/player.png", alt: "SoundPlus Android now playing screen" },
-      home: { src: "./assets/home.png", alt: "SoundPlus Android discovery home feed" },
-      equalizer: { src: "./assets/equalizer.png", alt: "SoundPlus Android 5-band equalizer screen" },
-      queue: { src: "./assets/queue.png", alt: "SoundPlus Android dynamic playback queue" }
-    };
-
-    document.querySelectorAll(".screen-row").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".screen-row").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
-        const s = SCREENS[btn.dataset.screen];
-        const img = document.getElementById("screen-img");
-        img.classList.add("is-swapping");
-        setTimeout(() => {
-          img.src = s.src;
-          img.alt = s.alt;
-          img.classList.remove("is-swapping");
-        }, 160);
-      });
+    // 7. Interactive Playlist Import Preview
+    document.getElementById("import-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const val = document.getElementById("import-input").value.trim();
+      const out = document.getElementById("import-result");
+      out.textContent = val ? "Mapped 42 public tracks ready for SoundPlus import" : "Paste any public Spotify or YouTube Music playlist URL";
     });
 
     drawCurve();
