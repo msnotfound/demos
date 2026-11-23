@@ -3,60 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fournil | Wood-Fired Sourdough &amp; Viennoiserie</title>
+  <title>Fournil | Stone-Milled Sourdough &amp; Morning Bakehouse</title>
   <link rel="preconnect" href="https://api.fontshare.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600&display=swap" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: oklch(0.972 0.011 82);
-      --surface: oklch(0.992 0.006 84);
-      --surface-warm: oklch(0.935 0.016 78);
-      --border: oklch(0.86 0.015 76);
-      --ink: oklch(0.21 0.018 52);
-      --ink-muted: oklch(0.45 0.018 55);
-      --accent: oklch(0.47 0.115 44);
-      --accent-ink: oklch(0.985 0.006 85);
+      --paper: oklch(0.962 0.014 80);
+      --paper-card: oklch(0.985 0.009 82);
+      --kraft: oklch(0.905 0.028 74);
+      --line: oklch(0.83 0.02 74);
+      --ink: oklch(0.19 0.02 48);
+      --ink-muted: oklch(0.44 0.02 52);
+      --crust: oklch(0.46 0.115 44);
+      --crust-ink: oklch(0.985 0.008 82);
       --font-sans: "Switzer", -apple-system, BlinkMacSystemFont, sans-serif;
       --font-serif: "EB Garamond", Georgia, serif;
       --font-mono: "IBM Plex Mono", ui-monospace, monospace;
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-      --radius-outer: 16px;
-      --radius-inner: 10px;
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html {
       scroll-behavior: smooth;
-      background: var(--bg);
+      background: var(--paper);
       color: var(--ink);
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-      min-height: 100dvh;
-      line-height: 1.55;
-      overflow-x: hidden;
-    }
-
-    img {
-      display: block;
-      max-width: 100%;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    body { min-height: 100dvh; line-height: 1.5; overflow-x: hidden; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
 
     button {
       font: inherit;
@@ -65,282 +47,234 @@
       border: none;
       cursor: pointer;
       touch-action: manipulation;
-      transition: transform 140ms var(--ease-out), background-color 180ms var(--ease-out), border-color 180ms var(--ease-out), color 180ms var(--ease-out);
+      transition: transform 130ms var(--ease-out), background-color 160ms ease, border-color 160ms ease, color 160ms ease;
     }
 
-    button:active {
-      transform: scale(0.97);
-    }
-
+    button:active { transform: scale(0.97); }
     button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
-      outline: 2px solid var(--accent);
+      outline: 2px solid var(--crust);
       outline-offset: 2px;
     }
 
-    .container {
-      width: min(1160px, 100% - 40px);
-      margin-inline: auto;
+    .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+    .container { width: min(1220px, 100% - 40px); margin: 0 auto; }
+
+    /* Broadsheet Masthead */
+    .masthead {
+      padding: 18px 0 24px;
+      border-bottom: 3px double var(--ink);
     }
 
-    /* Header */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      background: color-mix(in oklch, var(--bg) 92%, transparent);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .topbar-inner {
-      height: 68px;
+    .mast-meta {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 20px;
-    }
-
-    .brand {
-      font-family: var(--font-serif);
-      font-size: 1.55rem;
-      font-weight: 500;
-    }
-
-    .nav-links {
-      display: flex;
       align-items: center;
-      gap: 26px;
-      font-size: 0.92rem;
-      color: var(--ink-muted);
-    }
-
-    .nav-links a {
-      text-underline-offset: 0.2em;
-    }
-
-    @media (hover: hover) {
-      .nav-links a:hover {
-        color: var(--ink);
-        text-decoration: underline;
-      }
-    }
-
-    .nav-cta {
-      padding: 9px 17px;
-      border-radius: 9px;
-      background: var(--accent);
-      color: var(--accent-ink);
-      font-weight: 500;
-      font-size: 0.88rem;
-    }
-
-    /* Split Editorial Hero (Zero text over busy photo) */
-    .hero {
-      padding: clamp(40px, 6vh, 68px) 0 56px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 44px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--accent);
-      margin-bottom: 14px;
-    }
-
-    h1 {
-      font-family: var(--font-serif);
-      font-size: clamp(2.65rem, 4.9vw, 4.15rem);
-      line-height: 1.02;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      margin-bottom: 18px;
-      max-width: 13ch;
-    }
-
-    .hero-lead {
-      font-size: 1.04rem;
-      color: var(--ink-muted);
-      max-width: 44ch;
-      margin-bottom: 26px;
-    }
-
-    .hero-actions {
-      display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 13px 22px;
-      border-radius: 10px;
-      background: var(--accent);
-      color: var(--accent-ink);
-      font-weight: 500;
-      font-size: 0.94rem;
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 13px 22px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--ink);
-      font-weight: 500;
-      font-size: 0.94rem;
-    }
-
-    .hours-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      padding-top: 22px;
-      border-top: 1px solid var(--border);
-    }
-
-    .strip-label {
       font-family: var(--font-mono);
       font-size: 0.72rem;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
       color: var(--ink-muted);
-      margin-bottom: 3px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
     }
 
-    .strip-val {
-      font-size: 0.9rem;
-      font-weight: 500;
+    .mast-meta a { text-decoration: underline; text-underline-offset: 0.2em; }
+
+    .mast-title-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: 20px;
+      padding-top: 18px;
     }
 
-    .hero-photo-frame {
-      border-radius: var(--radius-outer);
+    .mast-side {
+      font-size: 0.86rem;
+      color: var(--ink-muted);
+      padding-bottom: 10px;
+    }
+
+    .mast-side.right { text-align: right; }
+
+    .mast-wordmark {
+      font-family: var(--font-serif);
+      font-size: clamp(3.4rem, 7.2vw, 6.2rem);
+      font-weight: 400;
+      line-height: 0.86;
+      letter-spacing: -0.025em;
+      text-align: center;
+    }
+
+    /* Panoramic Bakehouse Hero Spread */
+    .spread {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .spread-photo {
+      position: relative;
+      border-right: 1px solid var(--line);
       overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--surface);
+      min-height: 430px;
     }
 
-    .hero-photo-frame img {
+    .spread-photo img {
       width: 100%;
-      aspect-ratio: 4 / 3;
+      height: 100%;
       object-fit: cover;
     }
 
-    .hero-photo-caption {
-      padding: 13px 16px;
+    .spread-caption {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: color-mix(in oklch, var(--paper) 94%, transparent);
+      border: 1px solid var(--line);
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
       font-size: 0.86rem;
-      border-top: 1px solid var(--border);
     }
 
-    .mono {
+    /* Interactive Oven Deck Dial */
+    .oven-panel {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      background: var(--paper-card);
+    }
+
+    .oven-k {
       font-family: var(--font-mono);
-      font-variant-numeric: tabular-nums;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--crust);
     }
 
-    /* Morning Box Builder */
-    .section {
-      padding: 68px 0;
-      border-bottom: 1px solid var(--border);
+    .oven-headline {
+      font-family: var(--font-serif);
+      font-size: 2.1rem;
+      line-height: 1.05;
+      font-weight: 500;
+      margin: 6px 0 8px;
     }
 
-    .section-head {
+    .oven-slots {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .slot-btn {
+      padding: 9px 6px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    .slot-btn[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .oven-readout {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .oven-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat-k { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-muted); text-transform: uppercase; }
+    .stat-v { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 500; color: var(--crust); }
+
+    .cta-crust {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 13px 20px;
+      background: var(--crust);
+      color: var(--crust-ink);
+      font-weight: 500;
+      font-size: 0.94rem;
+      width: 100%;
+    }
+
+    @media (hover: hover) {
+      .cta-crust:hover { filter: brightness(1.08); }
+    }
+
+    /* SIGNATURE MOMENT: Visual 6-Slot Kraft Box Builder */
+    .builder-sec {
+      padding: 64px 0 76px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .sec-head {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
-      gap: 20px;
-      margin-bottom: 28px;
       flex-wrap: wrap;
+      gap: 18px;
+      margin-bottom: 32px;
     }
 
     h2 {
       font-family: var(--font-serif);
-      font-size: clamp(2rem, 3.4vw, 2.7rem);
-      font-weight: 500;
-      line-height: 1.08;
-    }
-
-    .section-sub {
-      color: var(--ink-muted);
-      max-width: 44ch;
-      font-size: 0.96rem;
+      font-size: clamp(2.1rem, 3.6vw, 3rem);
+      font-weight: 400;
+      line-height: 1.05;
     }
 
     .builder-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
-      gap: 28px;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: 32px;
       align-items: start;
     }
 
-    .menu-list {
+    .bake-sheet {
+      border-top: 2px solid var(--ink);
+    }
+
+    .bake-row {
       display: grid;
-      gap: 12px;
-    }
-
-    .menu-row {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-outer);
-      padding: 16px 18px;
-      display: flex;
-      justify-content: space-between;
+      grid-template-columns: minmax(0, 1fr) auto auto;
       align-items: center;
-      gap: 16px;
+      gap: 18px;
+      padding: 16px 4px;
+      border-bottom: 1px solid var(--line);
     }
 
-    .menu-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
+    .bake-name { font-family: var(--font-serif); font-size: 1.42rem; font-weight: 500; line-height: 1.1; }
+    .bake-meta { font-size: 0.86rem; color: var(--ink-muted); margin-top: 3px; }
+    .bake-price { font-family: var(--font-mono); font-size: 0.94rem; font-weight: 500; }
 
-    .menu-desc {
-      font-size: 0.88rem;
-      color: var(--ink-muted);
-    }
-
-    .menu-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-shrink: 0;
-    }
-
-    .menu-price {
-      font-family: var(--font-mono);
-      font-size: 0.92rem;
-      font-weight: 500;
-      font-variant-numeric: tabular-nums;
-      min-width: 52px;
-      text-align: right;
-    }
-
-    .qty-control {
+    .stepper {
       display: inline-flex;
-      align-items: center;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-inner);
-      background: var(--bg);
-      overflow: hidden;
+      border: 1px solid var(--ink);
+      background: var(--paper-card);
     }
 
-    .qty-btn {
+    .step-btn {
       width: 34px;
       height: 34px;
       display: grid;
@@ -350,299 +284,254 @@
     }
 
     @media (hover: hover) {
-      .qty-btn:hover {
-        background: var(--surface-warm);
-      }
+      .step-btn:hover { background: var(--kraft); }
     }
 
-    .qty-num {
-      min-width: 28px;
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 0.88rem;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .box-card {
-      position: sticky;
-      top: 88px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-outer);
-      padding: 22px;
+    .step-val {
+      min-width: 30px;
       display: grid;
-      gap: 16px;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      border-inline: 1px solid var(--line);
     }
 
-    .box-header {
+    /* Visual Kraft Bakery Box Tray */
+    .kraft-tray-card {
+      position: sticky;
+      top: 24px;
+      background: var(--paper-card);
+      border: 1px solid var(--ink);
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .tray-head {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
+      border-bottom: 1px dashed var(--ink);
       padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
     }
 
-    .box-items {
+    .kraft-box-visual {
+      background: var(--kraft);
+      border: 2px solid oklch(0.68 0.045 68);
+      padding: 12px;
       display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
-      min-height: 76px;
-      font-size: 0.9rem;
     }
 
-    .box-line {
+    .tray-slot {
+      aspect-ratio: 1.15 / 1;
+      border: 1px dashed oklch(0.62 0.035 64);
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6px;
+      font-size: 0.72rem;
+      color: oklch(0.5 0.025 60);
+      background: oklch(0.935 0.02 76 / 0.55);
+      transition: background-color 180ms ease, transform 180ms var(--ease-out);
     }
 
-    .box-empty {
+    .tray-slot.is-filled {
+      border-style: solid;
+      border-color: var(--crust);
+      background: var(--paper-card);
+      color: var(--ink);
+      transform: scale(1);
+    }
+
+    .slot-code {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--crust);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .discount-banner {
+      padding: 9px 12px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
       color: var(--ink-muted);
-      font-size: 0.9rem;
     }
 
-    .box-total-row {
+    .discount-banner.is-unlocked {
+      border-color: var(--crust);
+      color: var(--crust);
+      font-weight: 500;
+    }
+
+    .ticket-lines { display: grid; gap: 6px; font-size: 0.88rem; }
+    .ticket-row { display: flex; justify-content: space-between; gap: 10px; }
+
+    .ticket-total {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       padding-top: 12px;
-      border-top: 1px solid var(--border);
+      border-top: 1px dashed var(--ink);
       font-weight: 600;
     }
 
-    .box-total {
+    .total-num {
       font-family: var(--font-mono);
-      font-size: 1.35rem;
-      color: var(--accent);
-      font-variant-numeric: tabular-nums;
+      font-size: 1.5rem;
+      color: var(--crust);
     }
 
-    .pickup-form {
-      display: grid;
-      gap: 12px;
-    }
-
-    select, input {
+    select, input[type="text"] {
       width: 100%;
       padding: 11px 13px;
-      border-radius: var(--radius-inner);
-      border: 1px solid var(--border);
-      background: var(--bg);
+      border: 1px solid var(--line);
+      background: var(--paper);
       color: var(--ink);
       font-family: var(--font-sans);
       font-size: 16px;
     }
 
-    .form-confirm {
+    .ticket-stub {
       display: none;
-      padding: 12px 13px;
-      border-radius: var(--radius-inner);
-      background: var(--surface-warm);
-      border: 1px solid var(--accent);
-      font-size: 0.88rem;
-    }
-
-    .form-confirm.is-visible {
-      display: block;
-    }
-
-    /* Schedule strip */
-    .bake-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .bake-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-outer);
-      padding: 22px;
-    }
-
-    .bake-time {
+      padding: 14px;
+      background: var(--paper);
+      border: 1px solid var(--ink);
       font-family: var(--font-mono);
-      font-size: 0.82rem;
-      color: var(--accent);
-      margin-bottom: 8px;
-      font-variant-numeric: tabular-nums;
+      font-size: 0.76rem;
+      line-height: 1.55;
     }
 
-    .bake-card h3 {
-      font-family: var(--font-serif);
-      font-size: 1.45rem;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-
-    .bake-card p {
-      font-size: 0.92rem;
-      color: var(--ink-muted);
-    }
+    .ticket-stub.is-visible { display: block; }
 
     footer {
-      padding: 32px 0 48px;
-      font-size: 0.86rem;
+      padding: 28px 0 44px;
+      font-size: 0.84rem;
       color: var(--ink-muted);
     }
 
     .footer-inner {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 16px;
       flex-wrap: wrap;
+      gap: 14px;
     }
 
-    .footer-inner a {
-      text-underline-offset: 0.2em;
-      text-decoration: underline;
-    }
+    .footer-inner a { text-decoration: underline; text-underline-offset: 0.25em; }
 
-    @media (max-width: 900px) {
-      .hero-grid, .builder-grid, .bake-grid {
-        grid-template-columns: 1fr;
-      }
-      .nav-links {
-        display: none;
-      }
-      .box-card {
-        position: static;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .hours-strip {
-        grid-template-columns: 1fr;
-      }
-      .menu-row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+    @media (max-width: 920px) {
+      .mast-title-row, .spread, .builder-grid { grid-template-columns: minmax(0, 1fr); }
+      .mast-side, .mast-side.right { text-align: center; padding-bottom: 0; }
+      .spread-photo { border-right: none; border-bottom: 1px solid var(--line); min-height: 300px; }
+      .kraft-tray-card { position: static; }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a href="#top" class="brand">Fournil Bakery</a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#box">Morning box</a>
-        <a href="#schedule">Oven schedule</a>
-        <a href="../">Back to studio</a>
-      </nav>
-      <a href="#box" class="nav-cta">Reserve pickup</a>
+  <header class="masthead">
+    <div class="container">
+      <div class="mast-meta">
+        <span>42 CHURCH STREET, STOKE NEWINGTON N16</span>
+        <span>DECK OVEN: 248°C | SHIPTON MILL ORGANIC FLOUR</span>
+        <span><a href="../">STUDIO INDEX</a></span>
+      </div>
+      <div class="mast-title-row">
+        <div class="mast-side">Wed to Sun, 07:00 until sold out</div>
+        <h1 class="mast-wordmark">Fournil</h1>
+        <div class="mast-side right">Pre-order morning boxes before 18:00</div>
+      </div>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-grid">
+  <main>
+    <section class="container spread">
+      <figure class="spread-photo">
+        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1800&q=85" alt="Freshly baked hearth sourdough loaves dusted with flour" />
+        <figcaption class="spread-caption">
+          <span>36-hour naturally leavened country miche and laminated pastries</span>
+          <span class="mono">N16 BAKEHOUSE</span>
+        </figcaption>
+      </figure>
+
+      <div class="oven-panel">
         <div>
-          <p class="eyebrow">Stoke Newington, London N16</p>
-          <h1>Stone-milled sourdough pulled warm at seven</h1>
-          <p class="hero-lead">
-            Long-fermented country loaves and cultured-butter viennoiserie baked on a hearth deck each morning. Pre-order a pickup box before 18:00 so your table never misses the weekend bake.
+          <div class="oven-k">Live hearth schedule</div>
+          <h2 class="oven-headline" id="oven-title">First Pastry Tray</h2>
+          <p style="font-size: 0.92rem; color: var(--ink-muted);" id="oven-desc">
+            Isigny cultured-butter croissants, cardamom knots, and pain au chocolat pulled golden as the doors open.
           </p>
-          <div class="hero-actions">
-            <a href="#box" class="btn-primary">Build a morning box</a>
-            <a href="#schedule" class="btn-secondary">Daily oven times</a>
-          </div>
-          <div class="hours-strip">
-            <div>
-              <div class="strip-label">Open</div>
-              <div class="strip-val">Wed to Sun, 07:00</div>
-            </div>
-            <div>
-              <div class="strip-label">Flour</div>
-              <div class="strip-val">Shipton Mill organic</div>
-            </div>
-            <div>
-              <div class="strip-label">Address</div>
-              <div class="strip-val">42 Church Street</div>
-            </div>
+        </div>
+
+        <div class="oven-slots" role="group" aria-label="Select bake hour">
+          <button type="button" class="slot-btn" data-slot="0700" aria-pressed="true">07:00</button>
+          <button type="button" class="slot-btn" data-slot="0830" aria-pressed="false">08:30</button>
+          <button type="button" class="slot-btn" data-slot="1000" aria-pressed="false">10:00</button>
+          <button type="button" class="slot-btn" data-slot="1130" aria-pressed="false">11:30</button>
+        </div>
+
+        <div class="oven-readout">
+          <div class="oven-stats">
+            <div><div class="stat-k">Deck temp</div><div class="stat-v" id="oven-temp">210°C</div></div>
+            <div><div class="stat-k">Ferment</div><div class="stat-v" id="oven-ferm">72 hrs</div></div>
+            <div><div class="stat-k">Flour</div><div class="stat-v" id="oven-flour">T45 / AOP</div></div>
           </div>
         </div>
 
-        <figure class="hero-photo-frame">
-          <img
-            src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1600&q=85"
-            alt="Freshly scored sourdough loaves resting on a baker table"
-          />
-          <figcaption class="hero-photo-caption">
-            <span>36-hour cold-proofed country miche</span>
-            <span class="mono">Batch 01 | 07:00</span>
-          </figcaption>
-        </figure>
+        <a href="#box" class="cta-crust">Pack your morning box</a>
       </div>
     </section>
 
-    <section class="section" id="box">
+    <section class="builder-sec" id="box">
       <div class="container">
-        <div class="section-head">
-          <h2>Build your morning pickup box</h2>
-          <p class="section-sub">
-            Select loaves and pastries below. Boxes of six or more pastries receive a £2.50 baker discount automatically.
+        <div class="sec-head">
+          <div>
+            <p class="oven-k" style="margin-bottom: 6px;">Counter Pre-Order</p>
+            <h2>Fill your six-slot morning box</h2>
+          </div>
+          <p style="max-width: 44ch; font-size: 0.94rem; color: var(--ink-muted);">
+            Add loaves and viennoiserie below. Filling six pastry slots unlocks an automatic £2.50 baker discount and generates your counter ticket.
           </p>
         </div>
 
         <div class="builder-grid">
-          <div class="menu-list" id="menu-list"></div>
+          <div class="bake-sheet" id="bake-sheet"></div>
 
-          <aside class="box-card" aria-label="Pickup box summary">
-            <div class="box-header">
-              <strong>Your pickup box</strong>
-              <span class="mono" id="item-count">0 items</span>
+          <aside class="kraft-tray-card" aria-label="Visual pastry box tray">
+            <div class="tray-head">
+              <strong style="font-family: var(--font-serif); font-size: 1.35rem;">Your Kraft Box</strong>
+              <span class="mono" style="font-size: 0.78rem;" id="tray-weight">0g | 0 items</span>
             </div>
 
-            <div class="box-items" id="box-items">
-              <p class="box-empty">Add loaves or pastries on the left to reserve a morning box.</p>
+            <div class="kraft-box-visual" id="kraft-box" aria-label="Six pastry box slots"></div>
+
+            <div class="discount-banner" id="discount-banner">
+              Add 4 more pastries to unlock the £2.50 six-box ribbon
             </div>
 
-            <div class="box-total-row">
-              <span>Estimated total</span>
-              <span class="box-total" id="box-total">£0.00</span>
+            <div class="ticket-lines" id="ticket-lines"></div>
+
+            <div class="ticket-total">
+              <span>Counter total</span>
+              <span class="total-num" id="box-total">£0.00</span>
             </div>
 
-            <form class="pickup-form" id="pickup-form">
-              <select aria-label="Pickup window" id="pickup-slot">
+            <form id="ticket-form" style="display: grid; gap: 10px;">
+              <select id="pickup-time" aria-label="Pickup window">
                 <option>Saturday 08:00 to 09:00</option>
                 <option>Saturday 09:30 to 10:30</option>
                 <option>Sunday 08:30 to 09:30</option>
-                <option>Sunday 10:00 to 11:00</option>
               </select>
-              <input type="text" required placeholder="Name for the counter bag" aria-label="Customer name" />
-              <button type="submit" class="btn-primary">Hold box for pickup</button>
-              <div class="form-confirm" id="pickup-confirm" role="status">
-                Pickup reservation held for demo inspection. Pay at the counter or connect Stripe Checkout for pre-payment.
-              </div>
+              <input type="text" id="cust-name" required placeholder="Name for counter bag" aria-label="Customer name" />
+              <button type="submit" class="cta-crust">Print counter pickup ticket</button>
+              <div class="ticket-stub" id="ticket-stub" role="status"></div>
             </form>
           </aside>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="schedule">
-      <div class="container">
-        <div class="section-head">
-          <h2>Daily oven schedule</h2>
-        </div>
-
-        <div class="bake-grid">
-          <article class="bake-card">
-            <div class="bake-time">07:00</div>
-            <h3>First pastry tray</h3>
-            <p>Butter croissants, pain au chocolat, cardamom knots, and seasonal fruit danishes hit the cooling rack as the shutters open.</p>
-          </article>
-          <article class="bake-card">
-            <div class="bake-time">08:30</div>
-            <h3>Country sourdough</h3>
-            <p>White and wholemeal hearth loaves, seeded rye tins, and rosemary sea-salt focaccia come off the deck oven.</p>
-          </article>
-          <article class="bake-card">
-            <div class="bake-time">11:30</div>
-            <h3>Lunchtime focaccia</h3>
-            <p>Warm olive-oil slabs topped with charred courgette, whipped ricotta, and thyme, plus baguettes for supper.</p>
-          </article>
         </div>
       </div>
     </section>
@@ -650,103 +539,122 @@
 
   <footer>
     <div class="container footer-inner">
-      <span>Fournil Bakery storefront demo built by Mayank Sahu.</span>
-      <span><a href="../">Studio index</a> | <a href="../before/bakery/">View original before snapshot</a></span>
+      <span>Fournil Bakehouse flagship demo built by Mayank Sahu</span>
+      <span><a href="../">Back to studio</a> | <a href="../before/bakery/">Compare original v0 snapshot</a></span>
     </div>
   </footer>
 
   <script>
-    const MENU = [
-      { id: "country", name: "Country Sourdough Miche", desc: "Stone-milled wheat, 20% wholegrain rye, 36h ferment", price: 5.50, pastry: false },
-      { id: "croissant", name: "Cultured Butter Croissant", desc: "Isigny AOP butter, laminated over three days", price: 3.40, pastry: true },
-      { id: "cardamom", name: "Brown Butter Cardamom Knot", desc: "Freshly ground green cardamom, pearl sugar glaze", price: 3.80, pastry: true },
-      { id: "chocolat", name: "Pain au Chocolat", desc: "Two batons of 70% dark Valrhona chocolate", price: 3.70, pastry: true },
-      { id: "focaccia", name: "Rosemary & Maldon Focaccia", desc: "Cold-pressed olive oil, blistered crust, half slab", price: 4.90, pastry: false },
-      { id: "cannele", name: "Bordeaux Cannele", desc: "Beeswax tin, Madagascar vanilla, dark rum", price: 3.50, pastry: true }
+    const OVEN = {
+      "0700": { title: "First Pastry Tray", desc: "Isigny cultured-butter croissants, cardamom knots, and pain au chocolat pulled golden as the doors open.", temp: "210°C", ferm: "72 hrs", flour: "T45 / AOP" },
+      "0830": { title: "Country Sourdough", desc: "82% hydration stone-milled country miche and seeded wholemeal rye loaves straight off the hearth stone.", temp: "248°C", ferm: "36 hrs", flour: "T65 + Rye" },
+      "1000": { title: "Cannelé & Fruit Danish", desc: "Beeswax-baked Bordeaux cannelés and seasonal poached rhubarb danishes glazed warm.", temp: "225°C", ferm: "24 hrs", flour: "Vanilla" },
+      "1130": { title: "Lunchtime Focaccia", desc: "Blistered rosemary sea-salt slabs, charred courgette ricotta squares, and supper baguettes.", temp: "255°C", ferm: "40 hrs", flour: "Tipo 00" }
+    };
+
+    document.querySelectorAll(".slot-btn").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll(".slot-btn").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        const d = OVEN[b.dataset.slot];
+        document.getElementById("oven-title").textContent = d.title;
+        document.getElementById("oven-desc").textContent = d.desc;
+        document.getElementById("oven-temp").textContent = d.temp;
+        document.getElementById("oven-ferm").textContent = d.ferm;
+        document.getElementById("oven-flour").textContent = d.flour;
+      });
+    });
+
+    const ITEMS = [
+      { id: "miche", code: "SRD", short: "Country Miche", name: "Country Sourdough Miche", meta: "82% hydration, 20% wholegrain rye, 900g loaf", price: 5.50, grams: 900, pastry: false },
+      { id: "crois", code: "CRS", short: "Butter Croissant", name: "Cultured Butter Croissant", meta: "Isigny AOP butter, 3-day lamination, 95g", price: 3.40, grams: 95, pastry: true },
+      { id: "kard", code: "CRD", short: "Cardamom Knot", name: "Brown Butter Cardamom Knot", meta: "Freshly cracked green cardamom, pearl sugar, 110g", price: 3.80, grams: 110, pastry: true },
+      { id: "choc", code: "PAC", short: "Pain au Choc", name: "Pain au Chocolat", meta: "Double Valrhona 70% dark batons, 105g", price: 3.70, grams: 105, pastry: true },
+      { id: "can", code: "CNL", short: "Cannelé", name: "Bordeaux Cannelé", meta: "Beeswax tin, Madagascar vanilla, rum, 75g", price: 3.50, grams: 75, pastry: true },
+      { id: "foc", code: "FOC", short: "Rosemary Slab", name: "Rosemary & Maldon Focaccia", meta: "Cold-pressed olive oil, half hearth slab, 420g", price: 4.90, grams: 420, pastry: false }
     ];
 
-    const cart = { country: 1, croissant: 2 };
+    const cart = { miche: 1, crois: 2, kard: 1 };
 
-    const listEl = document.getElementById("menu-list");
-    const boxItemsEl = document.getElementById("box-items");
-    const countEl = document.getElementById("item-count");
-    const totalEl = document.getElementById("box-total");
-
-    function renderMenu() {
-      listEl.innerHTML = MENU.map((item) => {
-        const qty = cart[item.id] || 0;
-        return `
-          <div class="menu-row">
-            <div>
-              <div class="menu-title">${item.name}</div>
-              <div class="menu-desc">${item.desc}</div>
-            </div>
-            <div class="menu-right">
-              <span class="menu-price">£${item.price.toFixed(2)}</span>
-              <div class="qty-control" aria-label="Quantity for ${item.name}">
-                <button type="button" class="qty-btn" data-op="dec" data-id="${item.id}" aria-label="Decrease ${item.name}">-</button>
-                <span class="qty-num">${qty}</span>
-                <button type="button" class="qty-btn" data-op="inc" data-id="${item.id}" aria-label="Increase ${item.name}">+</button>
-              </div>
-            </div>
+    function renderAll() {
+      const sheet = document.getElementById("bake-sheet");
+      sheet.innerHTML = ITEMS.map((it) => `
+        <div class="bake-row">
+          <div>
+            <div class="bake-name">${it.name}</div>
+            <div class="bake-meta">${it.meta}</div>
           </div>
-        `;
-      }).join("");
+          <span class="bake-price">£${it.price.toFixed(2)}</span>
+          <div class="stepper">
+            <button type="button" class="step-btn" data-op="dec" data-id="${it.id}" aria-label="Remove ${it.name}">-</button>
+            <span class="step-val">${cart[it.id] || 0}</span>
+            <button type="button" class="step-btn" data-op="inc" data-id="${it.id}" aria-label="Add ${it.name}">+</button>
+          </div>
+        </div>
+      `).join("");
 
-      listEl.querySelectorAll(".qty-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const id = btn.dataset.id;
-          const cur = cart[id] || 0;
-          cart[id] = btn.dataset.op === "inc" ? cur + 1 : Math.max(0, cur - 1);
-          renderMenu();
-          renderCart();
+      sheet.querySelectorAll(".step-btn").forEach((b) => {
+        b.addEventListener("click", () => {
+          const cur = cart[b.dataset.id] || 0;
+          cart[b.dataset.id] = b.dataset.op === "inc" ? cur + 1 : Math.max(0, cur - 1);
+          renderAll();
         });
       });
-    }
 
-    function renderCart() {
-      let totalItems = 0;
-      let pastryItems = 0;
-      let subtotal = 0;
+      // Fill visual 6-slot tray
+      const tokens = [];
+      let totalItems = 0, totalGrams = 0, pastryCount = 0, subtotal = 0;
       const lines = [];
 
-      MENU.forEach((item) => {
-        const qty = cart[item.id] || 0;
-        if (qty > 0) {
-          totalItems += qty;
-          if (item.pastry) pastryItems += qty;
-          subtotal += qty * item.price;
-          lines.push(`
-            <div class="box-line">
-              <span>${qty} x ${item.name}</span>
-              <span class="mono">£${(qty * item.price).toFixed(2)}</span>
-            </div>
-          `);
+      ITEMS.forEach((it) => {
+        const q = cart[it.id] || 0;
+        if (q > 0) {
+          totalItems += q;
+          totalGrams += q * it.grams;
+          if (it.pastry) pastryCount += q;
+          subtotal += q * it.price;
+          lines.push(`<div class="ticket-row"><span>${q} x ${it.name}</span><span class="mono">£${(q * it.price).toFixed(2)}</span></div>`);
+          for (let i = 0; i < q; i++) tokens.push({ code: it.code, short: it.short });
         }
       });
 
-      const discount = pastryItems >= 6 ? 2.5 : 0;
+      const slotsHtml = [];
+      for (let i = 0; i < 6; i++) {
+        if (tokens[i]) {
+          slotsHtml.push(`<div class="tray-slot is-filled"><span class="slot-code">${tokens[i].code}</span><span>${tokens[i].short}</span></div>`);
+        } else {
+          slotsHtml.push(`<div class="tray-slot"><span>Slot 0${i + 1}</span></div>`);
+        }
+      }
+      document.getElementById("kraft-box").innerHTML = slotsHtml.join("");
+
+      const discount = pastryCount >= 6 ? 2.5 : 0;
+      const banner = document.getElementById("discount-banner");
       if (discount > 0) {
-        lines.push(`
-          <div class="box-line" style="color: var(--accent);">
-            <span>Six-pastry box discount</span>
-            <span class="mono">-£2.50</span>
-          </div>
-        `);
+        banner.classList.add("is-unlocked");
+        banner.textContent = "Six-pastry baker discount unlocked (-£2.50 applied)";
+        lines.push(`<div class="ticket-row" style="color: var(--crust);"><span>Six-pastry discount</span><span class="mono">-£2.50</span></div>`);
+      } else {
+        banner.classList.remove("is-unlocked");
+        const rem = 6 - pastryCount;
+        banner.textContent = `Add ${rem} more ${rem === 1 ? "pastry" : "pastries"} to unlock the £2.50 six-box discount`;
       }
 
-      countEl.textContent = `${totalItems} ${totalItems === 1 ? "item" : "items"}`;
-      boxItemsEl.innerHTML = lines.length ? lines.join("") : `<p class="box-empty">Add loaves or pastries on the left to reserve a morning box.</p>`;
-      totalEl.textContent = `£${Math.max(0, subtotal - discount).toFixed(2)}`;
+      document.getElementById("tray-weight").textContent = `${totalGrams}g | ${totalItems} ${totalItems === 1 ? "item" : "items"}`;
+      document.getElementById("ticket-lines").innerHTML = lines.join("") || `<p style="color: var(--ink-muted);">Your kraft box is empty.</p>`;
+      document.getElementById("box-total").textContent = `£${Math.max(0, subtotal - discount).toFixed(2)}`;
     }
 
-    document.getElementById("pickup-form").addEventListener("submit", (e) => {
+    document.getElementById("ticket-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      document.getElementById("pickup-confirm").classList.add("is-visible");
+      const name = document.getElementById("cust-name").value.trim() || "Guest";
+      const slot = document.getElementById("pickup-time").value;
+      const total = document.getElementById("box-total").textContent;
+      const stub = document.getElementById("ticket-stub");
+      stub.innerHTML = `TICKET #FRN-408 | HELD FOR ${name.toUpperCase()}<br>WINDOW: ${slot}<br>TOTAL DUE AT COUNTER: ${total}`;
+      stub.classList.add("is-visible");
     });
 
-    renderMenu();
-    renderCart();
+    renderAll();
   </script>
 </body>
 </html>

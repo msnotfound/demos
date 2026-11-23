@@ -8,26 +8,24 @@
   <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: oklch(0.145 0.006 260);
-      --surface: oklch(0.185 0.007 260);
-      --surface-raised: oklch(0.22 0.008 260);
-      --border: oklch(0.28 0.008 260);
-      --border-strong: oklch(0.36 0.01 260);
-      --ink: oklch(0.95 0.006 85);
-      --ink-muted: oklch(0.72 0.008 260);
-      --ink-dim: oklch(0.56 0.008 260);
-      --accent: oklch(0.76 0.145 72);
-      --accent-ink: oklch(0.15 0.015 72);
-      --ok: oklch(0.74 0.12 152);
-      --warn: oklch(0.78 0.13 78);
+      --bg: oklch(0.125 0.005 260);
+      --surface: oklch(0.16 0.006 260);
+      --surface-2: oklch(0.195 0.007 260);
+      --line: oklch(0.255 0.008 260);
+      --line-strong: oklch(0.35 0.01 260);
+      --ink: oklch(0.955 0.005 85);
+      --ink-muted: oklch(0.71 0.008 260);
+      --ink-dim: oklch(0.53 0.008 260);
+      --amber: oklch(0.77 0.148 70);
+      --amber-ink: oklch(0.14 0.015 70);
+      --ok: oklch(0.74 0.125 152);
+      --err: oklch(0.69 0.155 26);
       --font-sans: "Switzer", -apple-system, BlinkMacSystemFont, sans-serif;
       --font-mono: "IBM Plex Mono", ui-monospace, monospace;
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-      --radius-outer: 16px;
-      --radius-inner: 10px;
     }
 
     *, *::before, *::after {
@@ -47,14 +45,15 @@
 
     body {
       min-height: 100dvh;
-      line-height: 1.55;
+      line-height: 1.5;
       overflow-x: hidden;
+      background-image:
+        linear-gradient(to right, oklch(0.2 0.005 260 / 0.28) 1px, transparent 1px),
+        linear-gradient(to bottom, oklch(0.2 0.005 260 / 0.22) 1px, transparent 1px);
+      background-size: 96px 96px;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
 
     button {
       font: inherit;
@@ -63,965 +62,1279 @@
       border: none;
       cursor: pointer;
       touch-action: manipulation;
-      transition: transform 140ms var(--ease-out), background-color 180ms var(--ease-out), border-color 180ms var(--ease-out), color 180ms var(--ease-out);
+      transition: transform 130ms var(--ease-out), background-color 160ms ease, border-color 160ms ease, color 160ms ease;
     }
 
-    button:active {
-      transform: scale(0.97);
-    }
-
-    button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
-      outline: 2px solid var(--accent);
+    button:active { transform: scale(0.97); }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--ink);
       outline-offset: 2px;
     }
 
-    .container {
-      width: min(1160px, 100% - 40px);
-      margin-inline: auto;
+    .mono {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums;
     }
 
-    /* Header */
-    .topbar {
+    /* Architectural full-bleed top rail */
+    .rail-header {
       position: sticky;
       top: 0;
-      z-index: 40;
-      background: color-mix(in oklch, var(--bg) 88%, transparent);
+      z-index: 50;
+      background: color-mix(in oklch, var(--bg) 90%, transparent);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--line);
     }
 
-    .topbar-inner {
-      display: flex;
+    .rail-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      height: 60px;
+      padding: 0 28px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      justify-content: space-between;
-      height: 68px;
-      gap: 20px;
+      gap: 24px;
     }
 
     .brand {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 10px;
       font-weight: 600;
       letter-spacing: -0.02em;
-      font-size: 1rem;
     }
 
-    .brand-mark {
+    .brand-chip {
       width: 24px;
       height: 24px;
-      border-radius: 6px;
-      background: var(--accent);
-      color: var(--accent-ink);
+      background: var(--amber);
+      color: var(--amber-ink);
       display: grid;
       place-items: center;
       font-family: var(--font-mono);
-      font-size: 0.78rem;
-      font-weight: 500;
+      font-size: 0.72rem;
+      font-weight: 600;
     }
 
-    .nav-links {
+    .nav-mid {
       display: flex;
-      align-items: center;
-      gap: 28px;
-      font-size: 0.92rem;
+      justify-content: center;
+      gap: 32px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       color: var(--ink-muted);
     }
 
-    .nav-links a {
-      text-underline-offset: 0.2em;
-    }
-
+    .nav-mid a { text-underline-offset: 0.25em; }
     @media (hover: hover) {
-      .nav-links a:hover {
-        color: var(--ink);
-        text-decoration: underline;
-      }
+      .nav-mid a:hover { color: var(--ink); text-decoration: underline; }
     }
 
-    .nav-cta {
-      padding: 9px 16px;
-      border-radius: 8px;
+    .rail-cta {
+      padding: 8px 16px;
       background: var(--ink);
       color: var(--bg);
+      font-size: 0.84rem;
       font-weight: 600;
-      font-size: 0.88rem;
     }
 
     @media (hover: hover) {
-      .nav-cta:hover {
-        background: var(--accent);
-        color: var(--accent-ink);
-      }
+      .rail-cta:hover { background: var(--amber); color: var(--amber-ink); }
     }
 
-    /* Hero */
-    .hero {
-      padding: clamp(56px, 8vh, 96px) 0 64px;
-      border-bottom: 1px solid var(--border);
+    /* Monumental Blueprint Hero */
+    .shell {
+      max-width: 1360px;
+      margin: 0 auto;
+      border-inline: 1px solid var(--line);
+      background: color-mix(in oklch, var(--bg) 92%, transparent);
     }
 
-    .hero-grid {
+    .hero-band {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-      gap: 48px;
-      align-items: center;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+      border-bottom: 1px solid var(--line);
     }
 
-    .eyebrow {
+    .hero-left {
+      padding: clamp(44px, 6.5vh, 80px) 36px 44px;
+      border-right: 1px solid var(--line);
+    }
+
+    .spec-line {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      margin-bottom: 18px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 5.1vw, 4.65rem);
+      font-weight: 600;
+      line-height: 0.98;
+      letter-spacing: -0.04em;
+      max-width: 14ch;
+      text-wrap: balance;
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: 1.06rem;
+      color: var(--ink-muted);
+      max-width: 52ch;
+      text-wrap: pretty;
+    }
+
+    .hero-right {
+      display: grid;
+      grid-template-rows: 1fr auto;
+    }
+
+    .hero-specs {
+      padding: 32px 28px;
+      display: grid;
+      gap: 20px;
+      align-content: start;
+    }
+
+    .kv {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+    }
+
+    .kv:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .kv-k {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-dim);
+      margin-bottom: 4px;
+    }
+
+    .kv-v {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .hero-cta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--line);
+    }
+
+    .cta-cell {
+      padding: 18px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cta-cell.primary {
+      background: var(--amber);
+      color: var(--amber-ink);
+    }
+
+    .cta-cell.secondary {
+      background: var(--surface);
+      color: var(--ink);
+      border-left: 1px solid var(--line);
+    }
+
+    @media (hover: hover) {
+      .cta-cell.primary:hover { filter: brightness(1.07); }
+      .cta-cell.secondary:hover { background: var(--surface-2); }
+    }
+
+    /* SIGNATURE MOMENT: Live Interactive Topology Simulator */
+    .bench-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .bench-label {
       font-family: var(--font-mono);
       font-size: 0.78rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: var(--accent);
-      margin-bottom: 18px;
-    }
-
-    h1 {
-      font-size: clamp(2.35rem, 4.4vw, 3.6rem);
-      line-height: 1.06;
-      letter-spacing: -0.035em;
-      font-weight: 600;
-      margin-bottom: 20px;
-      max-width: 15ch;
-    }
-
-    .hero-lead {
-      font-size: 1.06rem;
-      color: var(--ink-muted);
-      max-width: 48ch;
-      margin-bottom: 28px;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 13px 22px;
-      border-radius: 10px;
-      background: var(--accent);
-      color: var(--accent-ink);
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 13px 22px;
-      border-radius: 10px;
-      border: 1px solid var(--border-strong);
-      background: var(--surface);
-      color: var(--ink);
-      font-weight: 500;
-      font-size: 0.95rem;
-    }
-
-    @media (hover: hover) {
-      .btn-primary:hover {
-        filter: brightness(1.06);
-      }
-      .btn-secondary:hover {
-        border-color: var(--ink-muted);
-        background: var(--surface-raised);
-      }
-    }
-
-    .hero-notes {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-    }
-
-    .note-label {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--ink-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 4px;
-    }
-
-    .note-value {
-      font-size: 0.92rem;
-      font-weight: 500;
       color: var(--ink);
     }
 
-    /* Interactive Trace Console */
-    .trace-shell {
-      min-width: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-outer);
-      padding: 16px;
+    .trigger-group {
       display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .trace-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
       flex-wrap: wrap;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .trace-title {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--ink);
-      letter-spacing: 0.02em;
-    }
-
-    .scenario-tabs {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .scenario-btn {
-      padding: 6px 11px;
-      border-radius: 6px;
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      color: var(--ink-muted);
-      border: 1px solid var(--border);
-      background: var(--bg);
-    }
-
-    .scenario-btn[aria-pressed="true"] {
-      background: var(--accent);
-      color: var(--accent-ink);
-      border-color: var(--accent);
-      font-weight: 500;
-    }
-
-    .stage-rail {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
     }
 
-    .stage-card {
+    .trigger-btn {
+      padding: 8px 14px;
+      border: 1px solid var(--line-strong);
       background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-inner);
-      padding: 11px 12px;
-      text-align: left;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .stage-card.is-active {
-      border-color: var(--accent);
-      background: color-mix(in oklch, var(--accent) 8%, var(--bg));
-    }
-
-    .stage-card.is-done {
-      border-color: color-mix(in oklch, var(--ok) 45%, var(--border));
-    }
-
-    .stage-name {
-      font-size: 0.82rem;
-      font-weight: 600;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
       color: var(--ink);
     }
 
-    .stage-meta {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--ink-dim);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .trace-code {
-      background: oklch(0.115 0.005 260);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-inner);
-      padding: 14px;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      line-height: 1.6;
-      color: oklch(0.88 0.01 85);
-      overflow-x: auto;
-      min-height: 224px;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .trace-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .trace-status {
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      color: var(--ok);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .replay-btn {
-      padding: 7px 14px;
-      border-radius: 7px;
-      border: 1px solid var(--border-strong);
-      background: var(--surface-raised);
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      color: var(--ink);
-    }
-
-    @media (hover: hover) {
-      .replay-btn:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-    }
-
-    /* Systems Section */
-    .section {
-      padding: 72px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 24px;
-      margin-bottom: 36px;
-      flex-wrap: wrap;
-    }
-
-    h2 {
-      font-size: clamp(1.75rem, 3vw, 2.35rem);
-      line-height: 1.12;
-      letter-spacing: -0.03em;
+    .trigger-btn[aria-pressed="true"] {
+      background: var(--amber);
+      color: var(--amber-ink);
+      border-color: var(--amber);
       font-weight: 600;
-      max-width: 22ch;
     }
 
-    .section-sub {
-      color: var(--ink-muted);
-      max-width: 44ch;
-      font-size: 0.98rem;
-    }
-
-    .systems-grid {
+    .bench-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+      border-bottom: 1px solid var(--line);
     }
 
-    .sys-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-outer);
-      padding: 24px;
+    .topology-stage {
+      padding: 28px;
+      border-right: 1px solid var(--line);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 20px;
+      min-width: 0;
+      background: oklch(0.115 0.005 260);
     }
 
-    .sys-tag {
+    .svg-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .topo-svg {
+      width: 100%;
+      min-width: 640px;
+      height: auto;
+      display: block;
+    }
+
+    .wire {
+      fill: none;
+      stroke: oklch(0.32 0.01 260);
+      stroke-width: 1.75;
+      transition: stroke 220ms ease;
+    }
+
+    .wire.is-lit {
+      stroke: var(--amber);
+      stroke-width: 2.5;
+    }
+
+    .wire.is-ok {
+      stroke: var(--ok);
+      stroke-width: 2.5;
+    }
+
+    .wire.is-err {
+      stroke: var(--err);
+      stroke-width: 2.5;
+    }
+
+    .node-group {
+      cursor: pointer;
+    }
+
+    .node-box {
+      fill: oklch(0.165 0.006 260);
+      stroke: oklch(0.32 0.01 260);
+      stroke-width: 1.25;
+      transition: fill 180ms ease, stroke 180ms ease;
+    }
+
+    .node-group:hover .node-box {
+      fill: oklch(0.2 0.008 260);
+      stroke: oklch(0.55 0.01 260);
+    }
+
+    .node-group.is-selected .node-box {
+      stroke: var(--ink);
+      stroke-width: 1.8;
+    }
+
+    .node-group.state-active .node-box {
+      fill: oklch(0.22 0.03 70);
+      stroke: var(--amber);
+      stroke-width: 2;
+    }
+
+    .node-group.state-ok .node-box {
+      stroke: var(--ok);
+      stroke-width: 1.8;
+    }
+
+    .node-group.state-err .node-box {
+      fill: oklch(0.21 0.035 26);
+      stroke: var(--err);
+      stroke-width: 2;
+    }
+
+    .node-title {
+      fill: oklch(0.95 0.005 85);
+      font-family: "Switzer", sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .node-sub {
+      fill: oklch(0.65 0.008 260);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10.5px;
+    }
+
+    .node-ms {
+      fill: var(--amber);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10.5px;
+    }
+
+    .stage-telemetry {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .tel-cell {
+      padding: 12px 14px;
+      border-right: 1px solid var(--line);
+    }
+
+    .tel-cell:last-child { border-right: none; }
+
+    .tel-k {
       font-family: var(--font-mono);
-      font-size: 0.74rem;
-      color: var(--accent);
+      font-size: 0.68rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      margin-bottom: 10px;
+      color: var(--ink-dim);
+      margin-bottom: 3px;
     }
 
-    .sys-card h3 {
-      font-size: 1.2rem;
+    .tel-v {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+    }
+
+    /* Live Inspector Drawer */
+    .inspector {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--surface);
+    }
+
+    .inspector-bar {
+      padding: 13px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+    }
+
+    .inspector-badge {
+      padding: 3px 8px;
+      border: 1px solid var(--line-strong);
+      color: var(--amber);
+    }
+
+    .inspector-code {
+      flex: 1;
+      padding: 18px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.62;
+      color: oklch(0.9 0.008 85);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      background: oklch(0.11 0.004 260);
+      min-height: 290px;
+    }
+
+    .inspector-foot {
+      padding: 14px 18px;
+      border-top: 1px solid var(--line);
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+    }
+
+    /* Cost & Concurrency Bench */
+    .calc-band {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .calc-left {
+      padding: 44px 36px;
+      border-right: 1px solid var(--line);
+      display: grid;
+      gap: 24px;
+      align-content: start;
+    }
+
+    h2 {
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      text-wrap: balance;
+    }
+
+    .slider-block {
+      display: grid;
+      gap: 10px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .slider-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.9rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--amber);
+      cursor: pointer;
+    }
+
+    .calc-right {
+      padding: 44px 36px;
+      display: grid;
+      gap: 22px;
+      align-content: center;
+      background: var(--surface);
+    }
+
+    .bar-compare {
+      display: grid;
+      gap: 16px;
+    }
+
+    .bar-row {
+      display: grid;
+      gap: 7px;
+    }
+
+    .bar-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+    }
+
+    .bar-track {
+      height: 12px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      transition: width 260ms var(--ease-out);
+    }
+
+    .bar-fill.zap { background: oklch(0.45 0.02 260); }
+    .bar-fill.rf { background: var(--amber); }
+
+    .savings-callout {
+      padding: 18px 20px;
+      border: 1px solid var(--line-strong);
+      background: var(--bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .savings-num {
+      font-family: var(--font-mono);
+      font-size: 1.85rem;
+      font-weight: 600;
+      color: var(--amber);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Systems matrix */
+    .matrix-band {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .matrix-cell {
+      padding: 36px 28px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .matrix-cell:last-child { border-right: none; }
+
+    .matrix-k {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+      margin-bottom: 12px;
+    }
+
+    .matrix-cell h3 {
+      font-size: 1.25rem;
       font-weight: 600;
       letter-spacing: -0.02em;
       margin-bottom: 10px;
     }
 
-    .sys-card p {
+    .matrix-cell p {
       font-size: 0.93rem;
       color: var(--ink-muted);
     }
 
-    .sys-stack {
+    .matrix-foot {
       padding-top: 16px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--line);
       font-family: var(--font-mono);
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       color: var(--ink-dim);
       display: flex;
       justify-content: space-between;
       gap: 8px;
-      font-variant-numeric: tabular-nums;
     }
 
-    /* Delivery table */
-    .delivery-list {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-outer);
-      overflow: hidden;
+    /* Direct Intake */
+    .intake-band {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    }
+
+    .intake-copy {
+      padding: 48px 36px;
+      border-right: 1px solid var(--line);
+    }
+
+    .intake-form-wrap {
+      padding: 48px 36px;
       background: var(--surface);
     }
 
-    .delivery-row {
-      display: grid;
-      grid-template-columns: 180px minmax(0, 1.3fr) minmax(0, 1fr);
-      gap: 24px;
-      padding: 22px 24px;
-      border-bottom: 1px solid var(--border);
-      align-items: start;
-    }
-
-    .delivery-row:last-child {
-      border-bottom: none;
-    }
-
-    .delivery-week {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--accent);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .delivery-title {
-      font-size: 1.02rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .delivery-desc {
-      font-size: 0.92rem;
-      color: var(--ink-muted);
-    }
-
-    .delivery-artifact {
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      color: var(--ink-dim);
-    }
-
-    /* Intake Form */
-    .intake-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-      gap: 40px;
-      align-items: start;
-    }
-
-    .intake-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-outer);
-      padding: 24px;
-    }
-
-    .form-grid {
+    .intake-form {
       display: grid;
       gap: 16px;
     }
 
-    label {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      font-size: 0.86rem;
-      color: var(--ink-muted);
-      font-weight: 500;
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
     }
 
-    input, select, textarea {
+    label {
+      display: grid;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+    }
+
+    input[type="text"], input[type="email"], select, textarea {
       width: 100%;
-      padding: 11px 13px;
-      border-radius: var(--radius-inner);
-      border: 1px solid var(--border-strong);
+      padding: 12px 14px;
       background: var(--bg);
+      border: 1px solid var(--line-strong);
       color: var(--ink);
       font-family: var(--font-sans);
       font-size: 16px;
     }
 
-    textarea {
-      min-height: 96px;
-      resize: vertical;
+    textarea { min-height: 92px; resize: vertical; }
+
+    .submit-btn {
+      padding: 14px 20px;
+      background: var(--amber);
+      color: var(--amber-ink);
+      font-weight: 600;
+      font-size: 0.94rem;
     }
 
-    .form-confirm {
+    .confirm-bar {
       display: none;
-      margin-top: 12px;
-      padding: 12px 14px;
-      border-radius: var(--radius-inner);
-      border: 1px solid color-mix(in oklch, var(--ok) 45%, var(--border));
-      background: color-mix(in oklch, var(--ok) 10%, var(--bg));
+      padding: 14px 16px;
+      border: 1px solid var(--ok);
+      background: color-mix(in oklch, var(--ok) 12%, var(--bg));
       font-size: 0.88rem;
       color: var(--ink);
     }
 
-    .form-confirm.is-visible {
-      display: block;
-    }
+    .confirm-bar.is-visible { display: block; }
 
     footer {
-      padding: 32px 0 48px;
-      font-size: 0.86rem;
-      color: var(--ink-dim);
-    }
-
-    .footer-inner {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 24px 28px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
       flex-wrap: wrap;
+      gap: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--ink-dim);
     }
 
-    .footer-inner a {
-      text-underline-offset: 0.2em;
-      text-decoration: underline;
-    }
+    footer a { text-decoration: underline; text-underline-offset: 0.25em; }
 
-    @media (max-width: 920px) {
-      .hero-grid, .systems-grid, .intake-grid {
+    @media (max-width: 1020px) {
+      .hero-band, .bench-grid, .calc-band, .matrix-band, .intake-band {
         grid-template-columns: minmax(0, 1fr);
       }
-      .delivery-row {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 10px;
+      .hero-left, .topology-stage, .calc-left, .matrix-cell, .intake-copy {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
       }
-      .nav-links {
-        display: none;
-      }
+      .nav-mid { display: none; }
     }
 
-    @media (max-width: 600px) {
-      .hero-notes, .stage-rail {
-        grid-template-columns: 1fr;
+    @media (max-width: 640px) {
+      .stage-telemetry, .two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .tel-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .tel-cell:last-child { border-bottom: none; }
+      .hero-left, .calc-left, .calc-right, .intake-copy, .intake-form-wrap {
+        padding: 32px 20px;
       }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
+  <header class="rail-header">
+    <div class="rail-inner">
       <a href="#top" class="brand">
-        <span class="brand-mark">RF</span>
+        <span class="brand-chip">RF</span>
         <span>Relay Foundry</span>
       </a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#trace">Live trace</a>
-        <a href="#systems">Systems</a>
-        <a href="#delivery">Delivery</a>
-        <a href="../">Back to studio</a>
+      <nav class="nav-mid" aria-label="Primary">
+        <a href="#topology">Pipeline bench</a>
+        <a href="#cost">Cost bench</a>
+        <a href="#systems">Architectures</a>
+        <a href="../">Studio index</a>
       </nav>
-      <a href="#scope" class="nav-cta">Scope a workflow</a>
+      <a href="#intake" class="rail-cta">Scope a pipeline</a>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-grid">
+  <main class="shell" id="top">
+    <section class="hero-band">
+      <div class="hero-left">
+        <div class="spec-line">
+          <span>SYSTEM SPEC RF-04</span>
+          <span>IDEMPOTENT WEBHOOK &amp; LLM PIPELINES</span>
+        </div>
+        <h1>Production AI workflows engineered to survive real load</h1>
+        <p class="hero-sub">
+          Replace fragile no-code zaps with typed FastAPI webhooks, strict JSON model routing, automatic dead-letter recovery, and human approval queues running inside your own Git repository.
+        </p>
+      </div>
+      <div class="hero-right">
+        <div class="hero-specs">
+          <div class="kv">
+            <div class="kv-k">Runtime &amp; Storage</div>
+            <div class="kv-v">Python / FastAPI, Node.js, PostgreSQL, Redis queues</div>
+          </div>
+          <div class="kv">
+            <div class="kv-k">Model Providers</div>
+            <div class="kv-v">Claude API, OpenAI structured outputs, Gemini</div>
+          </div>
+          <div class="kv">
+            <div class="kv-k">Ownership</div>
+            <div class="kv-v">100% source code, Docker deploy, alert runbook</div>
+          </div>
+        </div>
+        <div class="hero-cta-row">
+          <a href="#topology" class="cta-cell primary">Run live simulator</a>
+          <a href="#intake" class="cta-cell secondary">Request fixed quote</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="topology" aria-label="Interactive pipeline execution bench">
+      <div class="bench-head">
+        <span class="bench-label">Live execution topology | click any scenario or node</span>
+        <div class="trigger-group" role="group" aria-label="Pipeline simulation scenario">
+          <button type="button" class="trigger-btn" data-run="healthy" aria-pressed="true">Fire WhatsApp Lead (200 OK)</button>
+          <button type="button" class="trigger-btn" data-run="mismatch" aria-pressed="false">Inject VAT Mismatch (Hold Queue)</button>
+          <button type="button" class="trigger-btn" data-run="retry" aria-pressed="false">Simulate 429 Backoff + Recovery</button>
+        </div>
+      </div>
+
+      <div class="bench-grid">
+        <div class="topology-stage">
+          <div class="svg-wrap">
+            <svg class="topo-svg" viewBox="0 0 760 280" role="img" aria-label="Interactive webhook to LLM to CRM topology diagram">
+              <!-- Wires -->
+              <path id="w-0-1" class="wire" d="M 150 92 L 208 92" />
+              <path id="w-1-2" class="wire" d="M 358 92 L 416 92" />
+              <path id="w-2-3" class="wire" d="M 566 92 C 590 92, 590 66, 614 66" />
+              <path id="w-2-4" class="wire" d="M 566 106 C 594 106, 588 206, 614 206" />
+
+              <!-- Animated pulse packet -->
+              <circle id="packet" r="5" cx="75" cy="92" fill="oklch(0.77 0.148 70)" opacity="0" />
+
+              <!-- Node 0: Ingest -->
+              <g class="node-group is-selected" data-node="ingest" transform="translate(12, 54)">
+                <rect class="node-box" width="138" height="76" rx="4" />
+                <text class="node-title" x="12" y="26">1. Webhook Ingest</text>
+                <text class="node-sub" x="12" y="45">HMAC + Dedup Key</text>
+                <text class="node-ms" id="ms-ingest" x="12" y="64">14 ms</text>
+              </g>
+
+              <!-- Node 1: LLM Triage -->
+              <g class="node-group" data-node="triage" transform="translate(208, 54)">
+                <rect class="node-box" width="150" height="76" rx="4" />
+                <text class="node-title" x="12" y="26">2. LLM Triage</text>
+                <text class="node-sub" x="12" y="45">Strict JSON Schema</text>
+                <text class="node-ms" id="ms-triage" x="12" y="64">640 ms</text>
+              </g>
+
+              <!-- Node 2: Guardrail Gate -->
+              <g class="node-group" data-node="gate" transform="translate(416, 54)">
+                <rect class="node-box" width="150" height="76" rx="4" />
+                <text class="node-title" x="12" y="26">3. Policy Gate</text>
+                <text class="node-sub" x="12" y="45">Math &amp; Risk Check</text>
+                <text class="node-ms" id="ms-gate" x="12" y="64">9 ms</text>
+              </g>
+
+              <!-- Node 3: CRM Upsert (Top branch) -->
+              <g class="node-group" data-node="crm" transform="translate(614, 28)">
+                <rect class="node-box" width="134" height="76" rx="4" />
+                <text class="node-title" x="12" y="26">4A. CRM Upsert</text>
+                <text class="node-sub" x="12" y="45">Postgres + Reply</text>
+                <text class="node-ms" id="ms-crm" x="12" y="64">88 ms</text>
+              </g>
+
+              <!-- Node 4: Human Hold / DLQ (Bottom branch) -->
+              <g class="node-group" data-node="dlq" transform="translate(614, 168)">
+                <rect class="node-box" width="134" height="76" rx="4" />
+                <text class="node-title" x="12" y="26">4B. Hold Queue</text>
+                <text class="node-sub" x="12" y="45">Slack + Replay</text>
+                <text class="node-ms" id="ms-dlq" x="12" y="64">idle</text>
+              </g>
+
+              <!-- Labels on branch paths -->
+              <text x="572" y="54" fill="oklch(0.62 0.008 260)" font-family="IBM Plex Mono" font-size="9.5">PASS</text>
+              <text x="568" y="182" fill="oklch(0.62 0.008 260)" font-family="IBM Plex Mono" font-size="9.5">HOLD</text>
+            </svg>
+          </div>
+
+          <div class="stage-telemetry">
+            <div class="tel-cell">
+              <div class="tel-k">Run status</div>
+              <div class="tel-v" id="tel-status">COMMITTED</div>
+            </div>
+            <div class="tel-cell">
+              <div class="tel-k">End-to-end</div>
+              <div class="tel-v" id="tel-latency">751 ms</div>
+            </div>
+            <div class="tel-cell">
+              <div class="tel-k">Token cost</div>
+              <div class="tel-v" id="tel-cost">$0.0018</div>
+            </div>
+            <div class="tel-cell">
+              <div class="tel-k">Retries used</div>
+              <div class="tel-v" id="tel-retries">0 / 3</div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="inspector" aria-label="Node JSON payload inspector">
+          <div class="inspector-bar">
+            <span id="insp-title">NODE: 1. WEBHOOK INGEST</span>
+            <span class="inspector-badge" id="insp-badge">VERIFIED</span>
+          </div>
+          <pre class="inspector-code" id="insp-json"></pre>
+          <div class="inspector-foot" id="insp-note">
+            Click any box in the diagram to inspect the exact contract verified at that step.
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="calc-band" id="cost">
+      <div class="calc-left">
+        <div class="spec-line"><span>INFRASTRUCTURE ECONOMICS</span></div>
+        <h2>See when custom code beats per-task automation bills</h2>
+        <p class="hero-sub">
+          Drag your expected daily inbound events (WhatsApp threads, invoices, or support tickets) to estimate monthly runtime cost vs typical multi-step no-code plans.
+        </p>
+
+        <div class="slider-block">
+          <div class="slider-top">
+            <label for="vol-slider" style="text-transform: none; font-family: var(--font-sans); font-size: 0.92rem; color: var(--ink);">Daily inbound events</label>
+            <span class="mono" style="color: var(--amber); font-weight: 600;" id="vol-label">2,500 / day</span>
+          </div>
+          <input id="vol-slider" type="range" min="200" max="25000" step="100" value="2500" />
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--ink-dim);" class="mono">
+            <span>200/day</span>
+            <span>12,500/day</span>
+            <span>25,000/day</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-right">
+        <div class="bar-compare">
+          <div class="bar-row">
+            <div class="bar-head">
+              <span>Multi-step no-code SaaS (5 tasks/event)</span>
+              <span class="mono" id="cost-nocode">$780 / mo</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill zap" id="bar-nocode" style="width: 100%;"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-head">
+              <span>Owned FastAPI + Redis + LLM API</span>
+              <span class="mono" id="cost-custom" style="color: var(--amber);">$155 / mo</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill rf" id="bar-custom" style="width: 20%;"></div></div>
+          </div>
+        </div>
+
+        <div class="savings-callout">
+          <div>
+            <div class="kv-k">Estimated annual infrastructure savings</div>
+            <div style="font-size: 0.86rem; color: var(--ink-muted);" id="vol-monthly">75,000 monthly events processed</div>
+          </div>
+          <div class="savings-num" id="annual-save">$7,500 / yr</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="matrix-band" id="systems">
+      <article class="matrix-cell">
         <div>
-          <p class="eyebrow">AI workflow engineering</p>
-          <h1>Automation pipelines built to survive real traffic</h1>
-          <p class="hero-lead">
-            We replace brittle zap chains and unmonitored chat wrappers with typed webhooks, structured model outputs, human review queues, and full audit logs you own in your own repository.
-          </p>
-          <div class="hero-actions">
-            <a href="#scope" class="btn-primary">Request a technical scope</a>
-            <a href="#systems" class="btn-secondary">Inspect architectures</a>
-          </div>
-          <div class="hero-notes">
-            <div>
-              <div class="note-label">Stack</div>
-              <div class="note-value">Python, FastAPI, n8n, Postgres</div>
-            </div>
-            <div>
-              <div class="note-label">Models</div>
-              <div class="note-value">Claude, OpenAI, Gemini APIs</div>
-            </div>
-            <div>
-              <div class="note-label">Handoff</div>
-              <div class="note-value">Repo, Docker, runbook</div>
-            </div>
-          </div>
+          <div class="matrix-k">Pattern A | Revenue Triage</div>
+          <h3>WhatsApp &amp; web lead qualifier</h3>
+          <p>Ingests inbound inquiries, extracts project scope into strict JSON, asks at most two missing questions, writes clean records to Notion or HubSpot, and pings sales on Slack.</p>
         </div>
-
-        <div class="trace-shell" id="trace" aria-label="Interactive pipeline trace">
-          <div class="trace-header">
-            <span class="trace-title">pipeline_event_trace.json</span>
-            <div class="scenario-tabs" role="group" aria-label="Select workflow scenario">
-              <button type="button" class="scenario-btn" data-scenario="whatsapp" aria-pressed="true">WhatsApp triage</button>
-              <button type="button" class="scenario-btn" data-scenario="invoice" aria-pressed="false">Invoice intake</button>
-              <button type="button" class="scenario-btn" data-scenario="support" aria-pressed="false">Ticket routing</button>
-            </div>
-          </div>
-
-          <div class="stage-rail">
-            <button type="button" class="stage-card is-active" data-stage="0">
-              <span class="stage-name">Webhook ingest</span>
-              <span class="stage-meta" id="meta-0">POST /v1/inbound</span>
-            </button>
-            <button type="button" class="stage-card" data-stage="1">
-              <span class="stage-name">Structured triage</span>
-              <span class="stage-meta" id="meta-1">JSON schema strict</span>
-            </button>
-            <button type="button" class="stage-card" data-stage="2">
-              <span class="stage-name">CRM and reply</span>
-              <span class="stage-meta" id="meta-2">Idempotent upsert</span>
-            </button>
-          </div>
-
-          <pre class="trace-code" id="trace-output"></pre>
-
-          <div class="trace-footer">
-            <span class="trace-status" id="trace-status">Stage 1 of 3 active | Schema verified</span>
-            <button type="button" class="replay-btn" id="replay-btn">Step through pipeline</button>
-          </div>
+        <div class="matrix-foot">
+          <span>Webhook + Claude + CRM</span>
+          <span>5 to 7 days</span>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="systems">
-      <div class="container">
-        <div class="section-head">
-          <h2>Three systems small teams actually deploy</h2>
-          <p class="section-sub">
-            No generic chatbot widgets. Every workflow is wired to your CRM, inbox, WhatsApp Business API, or internal database with explicit fallback rules.
-          </p>
-        </div>
-
-        <div class="systems-grid">
-          <article class="sys-card">
-            <div>
-              <p class="sys-tag">Lead qualification</p>
-              <h3>WhatsApp and web inquiry router</h3>
-              <p>
-                Reads inbound prospect messages, asks two clarifying questions only when required fields are missing, writes structured lead records to Postgres or HubSpot, and alerts sales on Slack.
-              </p>
-            </div>
-            <div class="sys-stack">
-              <span>Webhook + Claude API + CRM</span>
-              <span>5 to 7 days</span>
-            </div>
-          </article>
-
-          <article class="sys-card">
-            <div>
-              <p class="sys-tag">Document extraction</p>
-              <h3>PDF and invoice verification desk</h3>
-              <p>
-                Parses supplier PDFs and receipts into strict line-item JSON, flags tax or total mismatches against purchase orders, and queues exceptions for one-click approval before accounting sync.
-              </p>
-            </div>
-            <div class="sys-stack">
-              <span>FastAPI + Vision + Postgres</span>
-              <span>7 to 10 days</span>
-            </div>
-          </article>
-
-          <article class="sys-card">
-            <div>
-              <p class="sys-tag">Operations support</p>
-              <h3>Grounded ticket draft assistant</h3>
-              <p>
-                Retrieves exact policy paragraphs and order records before drafting a reply inside Help Scout or Zendesk. Never auto-sends refunds or billing changes without human sign-off.
-              </p>
-            </div>
-            <div class="sys-stack">
-              <span>pgvector + Reranker + Helpdesk</span>
-              <span>7 to 10 days</span>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="delivery">
-      <div class="container">
-        <div class="section-head">
-          <h2>Fixed-scope build schedule</h2>
-          <p class="section-sub">
-            Clear milestones with working staging endpoints rather than slide decks.
-          </p>
-        </div>
-
-        <div class="delivery-list">
-          <div class="delivery-row">
-            <div class="delivery-week">Days 1 to 2</div>
-            <div>
-              <div class="delivery-title">Payload audit and schema contract</div>
-              <p class="delivery-desc">Map real inbound events, edge cases, failure modes, and exact JSON fields required by your downstream tools.</p>
-            </div>
-            <div class="delivery-artifact">Deliverable: Signed JSON schema and retry spec</div>
-          </div>
-          <div class="delivery-row">
-            <div class="delivery-week">Days 3 to 5</div>
-            <div>
-              <div class="delivery-title">Staging pipeline and replay harness</div>
-              <p class="delivery-desc">Build idempotent webhook handlers, structured LLM calls, rate-limit backoff, and a replay script tested against historical tickets.</p>
-            </div>
-            <div class="delivery-artifact">Deliverable: Live staging endpoint with test suite</div>
-          </div>
-          <div class="delivery-row">
-            <div class="delivery-week">Days 6 to 7</div>
-            <div>
-              <div class="delivery-title">Observability, alerts, and repo handoff</div>
-              <p class="delivery-desc">Deploy to your cloud or VPS with dead-letter queues, token-cost logging, and a plain-English runbook for your team.</p>
-            </div>
-            <div class="delivery-artifact">Deliverable: Dockerized repo and alert hooks</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="scope">
-      <div class="container intake-grid">
+      </article>
+      <article class="matrix-cell">
         <div>
-          <p class="eyebrow">Direct technical intake</p>
-          <h2>Describe the manual bottleneck you want removed</h2>
-          <p class="section-sub" style="margin-top: 14px;">
-            Share the tools involved and rough daily volume. You will get back a clear architecture note, fixed price, and realistic timeline within one business day.
-          </p>
+          <div class="matrix-k">Pattern B | Finance Controls</div>
+          <h3>Invoice &amp; PO exception desk</h3>
+          <p>Reads multi-page supplier PDFs, verifies VAT math and line totals deterministically in Python, posts clean bills as drafts, and routes any mismatch to human approval.</p>
         </div>
+        <div class="matrix-foot">
+          <span>FastAPI + Vision + Xero</span>
+          <span>7 to 10 days</span>
+        </div>
+      </article>
+      <article class="matrix-cell">
+        <div>
+          <div class="matrix-k">Pattern C | Grounded Support</div>
+          <h3>Citation-locked ticket drafter</h3>
+          <p>Fetches live order status from PostgreSQL and cites exact policy clauses before saving a private agent draft in Help Scout or Zendesk. Zero unapproved refunds.</p>
+        </div>
+        <div class="matrix-foot">
+          <span>pgvector + Rerank + Helpdesk</span>
+          <span>7 to 10 days</span>
+        </div>
+      </article>
+    </section>
 
-        <div class="intake-card">
-          <form class="form-grid" id="scope-form">
+    <section class="intake-band" id="intake">
+      <div class="intake-copy">
+        <div class="spec-line"><span>DIRECT ENGINEERING BRIEF</span></div>
+        <h2>Ship your first pipeline in one week</h2>
+        <p class="hero-sub" style="margin-top: 16px;">
+          Tell me what triggers the manual work, which APIs or databases are involved, and your rough daily volume. You will get a written architecture plan and fixed quote within 24 hours.
+        </p>
+      </div>
+      <div class="intake-form-wrap">
+        <form class="intake-form" id="intake-form">
+          <div class="two-col">
             <label>
-              Your name
-              <input type="text" name="name" required placeholder="Dicky Satrya" />
+              Name
+              <input type="text" required placeholder="Dicky Satrya" />
             </label>
             <label>
-              Work email
-              <input type="email" name="email" required placeholder="founder@company.com" />
+              Email
+              <input type="email" required placeholder="founder@company.com" />
             </label>
-            <label>
-              Primary integration
-              <select name="integration">
-                <option>WhatsApp Business + CRM</option>
-                <option>n8n / Webhook + OpenAI or Claude API</option>
-                <option>PDF / Invoice extraction to Accounting</option>
-                <option>Support desk + Internal knowledge base</option>
-              </select>
-            </label>
-            <label>
-              Workflow brief
-              <textarea name="brief" required placeholder="What triggers the process today, where does it break, and where should clean data land?"></textarea>
-            </label>
-            <button type="submit" class="btn-primary">Generate scope request</button>
-          </form>
-          <div class="form-confirm" id="form-confirm" role="status">
-            Scope brief logged for demo review. In production this submits directly to the FastAPI intake webhook with a confirmation copy sent to your inbox.
           </div>
-        </div>
+          <label>
+            Workflow type
+            <select>
+              <option>WhatsApp / Inbound Lead Triage to CRM</option>
+              <option>Invoice / PDF Extraction + Exception Queue</option>
+              <option>Grounded Support Draft Assistant</option>
+              <option>Custom Webhook / Agent Backend</option>
+            </select>
+          </label>
+          <label>
+            Brief &amp; current stack
+            <textarea required placeholder="Tools involved, current pain point, and where clean records should land."></textarea>
+          </label>
+          <button type="submit" class="submit-btn">Generate technical scope request</button>
+          <div class="confirm-bar" id="confirm-bar" role="status">
+            Technical brief logged for demo verification. In production this dispatches directly to the FastAPI intake endpoint with an instant JSON receipt.
+          </div>
+        </form>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="container footer-inner">
-      <span>Relay Foundry concept demo built by Mayank Sahu.</span>
-      <span><a href="../">Studio index</a> | <a href="../before/ai-studio/">View original before snapshot</a></span>
-    </div>
+    <span>Relay Foundry flagship demo built by Mayank Sahu</span>
+    <span><a href="../">Back to studio</a> | <a href="../before/ai-studio/">Compare original v0 snapshot</a></span>
   </footer>
 
   <script>
-    const SCENARIOS = {
-      whatsapp: {
-        stages: [
-          {
-            meta: "POST /v1/whatsapp",
-            status: "Stage 1 of 3 | Signature verified (HMAC-SHA256)",
-            json: {
+    const RUNS = {
+      healthy: {
+        branch: "crm",
+        status: "COMMITTED",
+        latency: "751 ms",
+        cost: "$0.0018",
+        retries: "0 / 3",
+        ms: { ingest: "14 ms", triage: "640 ms", gate: "9 ms", crm: "88 ms", dlq: "idle" },
+        nodes: {
+          ingest: {
+            title: "1. WEBHOOK INGEST",
+            badge: "HMAC VALID",
+            note: "Idempotency key checked in Redis; duplicate delivery guaranteed safe.",
+            payload: {
               event_id: "wa_evt_98412",
-              channel: "whatsapp_cloud_api",
-              from_phone: "+62-812-****-4410",
-              message_text: "Hi, we run a 14-villa property group in Canggu. Need WhatsApp booking triage connected to our Notion CRM.",
-              received_at: "2026-11-24T04:12:08Z"
+              signature: "sha256=verified",
+              from: "+62-812-****-4410",
+              text: "We manage 14 villas in Canggu and need WhatsApp guest booking triage linked to Notion.",
+              dedup_cache: "MISS (new event)"
             }
           },
-          {
-            meta: "claude-sonnet strict JSON",
-            status: "Stage 2 of 3 | Structured extraction passed schema validation",
-            json: {
-              intent: "custom_automation_inquiry",
-              business_type: "hospitality_villa_group",
-              unit_count: 14,
-              requested_channels: ["whatsapp", "notion_crm"],
-              qualification_tier: "high_fit",
-              missing_fields: ["monthly_inquiry_volume"],
-              draft_reply: "Thanks for reaching out. We build WhatsApp-to-Notion triage workflows. Roughly how many guest messages do your 14 villas handle each week?"
+          triage: {
+            title: "2. LLM TRIAGE",
+            badge: "SCHEMA PASS",
+            note: "Model forced to emit strict JSON schema with zero unparsed prose.",
+            payload: {
+              model: "claude-sonnet-4",
+              intent: "automation_project_lead",
+              company_size_units: 14,
+              systems_requested: ["whatsapp_cloud", "notion_crm"],
+              confidence: 0.96,
+              reply_draft: "We build WhatsApp-to-Notion triage pipelines. Roughly how many guest messages do your 14 villas receive weekly?"
             }
           },
-          {
-            meta: "Notion + Slack upsert",
-            status: "Stage 3 of 3 | CRM record created and reply queued",
-            json: {
-              idempotency_key: "wa_evt_98412",
+          gate: {
+            title: "3. POLICY GATE",
+            badge: "ROUTE: 4A",
+            note: "Confidence >= 0.85 and zero high-risk financial mutation flags.",
+            payload: {
+              rule_engine: "deterministic_v2",
+              confidence_threshold: 0.85,
+              pii_redacted_for_logs: true,
+              route_decision: "4A_CRM_UPSERT"
+            }
+          },
+          crm: {
+            title: "4A. CRM UPSERT",
+            badge: "200 COMMITTED",
+            note: "Atomic PostgreSQL audit write + Notion lead page + outbound WhatsApp reply.",
+            payload: {
               notion_page_id: "ntn_7b31c90a",
-              slack_alert_channel: "#qualified-leads",
-              outbound_whatsapp_status: "dispatched",
-              audit_log_persisted: true
+              slack_alert: "#qualified-leads",
+              whatsapp_reply: "dispatched",
+              audit_row_id: "aud_98412_ok"
             }
+          },
+          dlq: {
+            title: "4B. HOLD QUEUE",
+            badge: "STANDBY",
+            note: "Not triggered during this healthy execution path.",
+            payload: { queue_depth: 0, last_hold_reason: null }
           }
-        ]
+        }
       },
-      invoice: {
-        stages: [
-          {
-            meta: "POST /v1/mailhook",
-            status: "Stage 1 of 3 | PDF attachment checksum computed",
-            json: {
-              event_id: "inv_8831",
-              source: "ap-inbox@clientdomain.co.uk",
-              filename: "kestrel_joinery_inv_409.pdf",
-              page_count: 2,
+      mismatch: {
+        branch: "dlq",
+        status: "HELD FOR REVIEW",
+        latency: "912 ms",
+        cost: "$0.0029",
+        retries: "0 / 3",
+        ms: { ingest: "18 ms", triage: "810 ms", gate: "12 ms", crm: "blocked", dlq: "72 ms" },
+        nodes: {
+          ingest: {
+            title: "1. WEBHOOK INGEST",
+            badge: "PDF RECEIVED",
+            note: "Inbound supplier invoice hashed via SHA-256 before vision extraction.",
+            payload: {
+              event_id: "inv_409_ctj",
+              source: "ap@kestrelstone.co.uk",
+              attachment: "cotswold_joinery_409.pdf",
+              pages: 2,
               sha256_prefix: "9e4a1f02c881"
             }
           },
-          {
-            meta: "Vision + math check",
-            status: "Stage 2 of 3 | VAT total mismatch caught before posting",
-            json: {
-              vendor_name: "Cotswold Timber Joinery Ltd",
-              invoice_number: "CTJ-409",
+          triage: {
+            title: "2. LLM TRIAGE",
+            badge: "EXTRACTED",
+            note: "Line items parsed into Decimal-safe numeric fields for Python verification.",
+            payload: {
+              vendor: "Cotswold Timber Joinery Ltd",
               currency: "GBP",
               subtotal: 4250.00,
-              vat_stated: 890.00,
-              vat_expected_20pct: 850.00,
-              discrepancy_flag: "vat_mismatch_40_gbp",
-              auto_approve_allowed: false
+              vat_stated_on_pdf: 890.00,
+              total_stated_on_pdf: 5140.00
             }
           },
-          {
-            meta: "Review queue + Xero hold",
-            status: "Stage 3 of 3 | Held for human finance review",
-            json: {
-              queue_ticket: "AP-REV-219",
-              xero_draft_created: true,
+          gate: {
+            title: "3. POLICY GATE",
+            badge: "MATH EXCEPTION",
+            note: "Deterministic Python check caught a £40.00 VAT overcharge before posting.",
+            payload: {
+              expected_vat_20pct: 850.00,
+              stated_vat: 890.00,
+              variance_gbp: 40.00,
+              auto_post_blocked: true,
+              route_decision: "4B_HOLD_QUEUE"
+            }
+          },
+          crm: {
+            title: "4A. CRM / XERO POST",
+            badge: "BLOCKED",
+            note: "Protected from posting an erroneous accounting ledger entry.",
+            payload: { status: "skipped_by_policy_gate" }
+          },
+          dlq: {
+            title: "4B. HOLD QUEUE",
+            badge: "SLACK ALERTED",
+            note: "Finance lead received an interactive Slack approve/reject card with diff.",
+            payload: {
+              ticket_id: "AP-HOLD-219",
               xero_status: "DRAFT_ON_HOLD",
-              assignee: "finance-lead",
-              reason: "Stated VAT exceeds 20% calculation by GBP 40.00"
+              assignee: "@finance-lead",
+              reason: "VAT exceeds 20% calculation by GBP 40.00"
             }
           }
-        ]
+        }
       },
-      support: {
-        stages: [
-          {
-            meta: "POST /v1/helpscout",
-            status: "Stage 1 of 3 | Order history hydrated from Postgres",
-            json: {
-              ticket_id: "hs_51904",
-              customer_email: "claire.bennett@example.co.uk",
-              subject: "Change delivery window for order #8821",
-              order_status: "packed_not_dispatched",
-              carrier_cutoff_local: "16:30 GMT"
+      retry: {
+        branch: "crm",
+        status: "RECOVERED (200)",
+        latency: "1,840 ms",
+        cost: "$0.0019",
+        retries: "2 / 3",
+        ms: { ingest: "12 ms", triage: "1,710 ms", gate: "11 ms", crm: "107 ms", dlq: "idle" },
+        nodes: {
+          ingest: {
+            title: "1. WEBHOOK INGEST",
+            badge: "QUEUED SAFE",
+            note: "Event persisted to Postgres queue before external LLM call so crashes never lose data.",
+            payload: {
+              event_id: "hs_51904",
+              provider: "helpscout_webhook",
+              persisted_before_call: true
             }
           },
-          {
-            meta: "Policy grounding",
-            status: "Stage 2 of 3 | Cited delivery policy section 3.2",
-            json: {
-              eligible_for_reschedule: true,
-              policy_citation: "shipping_policy_v4#section-3.2",
-              confidence: 0.94,
-              requires_agent_approval: true,
-              suggested_note: "Order #8821 is packed but still at the depot before the 16:30 cutoff. Confirm Thursday AM slot and update carrier manifest."
+          triage: {
+            title: "2. LLM TRIAGE",
+            badge: "2 RETRIES -> OK",
+            note: "Handled upstream 429 rate-limit with jittered exponential backoff + fallback model.",
+            payload: {
+              attempt_1: "HTTP 429 Too Many Requests (backoff 350ms)",
+              attempt_2: "HTTP 429 Too Many Requests (fallback -> gemini-2.5-flash)",
+              attempt_3: "HTTP 200 OK (schema verified)",
+              policy_citation: "shipping_policy_v4#sec-3.2"
             }
           },
-          {
-            meta: "Help Scout draft",
-            status: "Stage 3 of 3 | Private draft attached (zero auto-send)",
-            json: {
-              helpscout_action: "create_draft_reply",
-              tags_added: ["delivery-change", "pre-cutoff"],
-              auto_sent: false,
-              audit_id: "aud_51904_02"
+          gate: {
+            title: "3. POLICY GATE",
+            badge: "DRAFT ONLY",
+            note: "Ticket marked eligible for reschedule before 16:30 depot cutoff.",
+            payload: {
+              order_status: "packed_at_depot",
+              auto_send_allowed: false,
+              route_decision: "4A_ATTACH_DRAFT"
             }
+          },
+          crm: {
+            title: "4A. HELPDESK DRAFT",
+            badge: "DRAFT SAVED",
+            note: "Zero events dropped despite upstream API spike; agent reviews draft in 1 click.",
+            payload: {
+              helpscout_ticket: "hs_51904",
+              draft_attached: true,
+              auto_sent: false
+            }
+          },
+          dlq: {
+            title: "4B. HOLD QUEUE",
+            badge: "STANDBY",
+            note: "Dead-letter queue only fires if all 3 backoff attempts exhaust.",
+            payload: { exhausted: false, dlq_entries: 0 }
           }
-        ]
+        }
       }
     };
 
-    let currentScenario = "whatsapp";
-    let currentStage = 0;
-    let replayTimer = null;
+    let activeRun = "healthy";
+    let activeNode = "ingest";
+    let animTimers = [];
 
-    const outputEl = document.getElementById("trace-output");
-    const statusEl = document.getElementById("trace-status");
-    const stageCards = Array.from(document.querySelectorAll(".stage-card"));
-    const scenarioBtns = Array.from(document.querySelectorAll(".scenario-btn"));
+    const nodesEls = Array.from(document.querySelectorAll(".node-group"));
+    const wires = {
+      w01: document.getElementById("w-0-1"),
+      w12: document.getElementById("w-1-2"),
+      w23: document.getElementById("w-2-3"),
+      w24: document.getElementById("w-2-4")
+    };
 
-    function renderTrace() {
-      const data = SCENARIOS[currentScenario];
-      const stage = data.stages[currentStage];
-      data.stages.forEach((s, i) => {
-        document.getElementById(`meta-${i}`).textContent = s.meta;
-        stageCards[i].classList.toggle("is-active", i === currentStage);
-        stageCards[i].classList.toggle("is-done", i < currentStage);
-      });
-      outputEl.textContent = JSON.stringify(stage.json, null, 2);
-      statusEl.textContent = stage.status;
+    function clearVisuals() {
+      animTimers.forEach(clearTimeout);
+      animTimers = [];
+      nodesEls.forEach((n) => n.classList.remove("state-active", "state-ok", "state-err"));
+      Object.values(wires).forEach((w) => w.classList.remove("is-lit", "is-ok", "is-err"));
     }
 
-    scenarioBtns.forEach((btn) => {
+    function inspectNode(nodeKey) {
+      activeNode = nodeKey;
+      nodesEls.forEach((n) => n.classList.toggle("is-selected", n.dataset.node === nodeKey));
+      const info = RUNS[activeRun].nodes[nodeKey];
+      document.getElementById("insp-title").textContent = "NODE: " + info.title;
+      document.getElementById("insp-badge").textContent = info.badge;
+      document.getElementById("insp-json").textContent = JSON.stringify(info.payload, null, 2);
+      document.getElementById("insp-note").textContent = info.note;
+    }
+
+    function executeRun(runKey) {
+      activeRun = runKey;
+      clearVisuals();
+      const run = RUNS[runKey];
+
+      document.getElementById("tel-status").textContent = "RUNNING...";
+      document.getElementById("tel-latency").textContent = run.latency;
+      document.getElementById("tel-cost").textContent = run.cost;
+      document.getElementById("tel-retries").textContent = run.retries;
+      Object.entries(run.ms).forEach(([k, v]) => {
+        document.getElementById("ms-" + k).textContent = v;
+      });
+
+      const byKey = (k) => document.querySelector(`.node-group[data-node="${k}"]`);
+      const finalNode = run.branch;
+      const finalWire = run.branch === "crm" ? wires.w23 : wires.w24;
+      const finalClass = run.branch === "crm" ? "state-ok" : "state-err";
+      const wireClass = run.branch === "crm" ? "is-ok" : "is-err";
+
+      const steps = [
+        [0, () => {
+          byKey("ingest").classList.add("state-active");
+          inspectNode("ingest");
+        }],
+        [320, () => {
+          byKey("ingest").classList.replace("state-active", "state-ok");
+          wires.w01.classList.add("is-ok");
+          byKey("triage").classList.add("state-active");
+          inspectNode("triage");
+        }],
+        [720, () => {
+          byKey("triage").classList.replace("state-active", "state-ok");
+          wires.w12.classList.add("is-ok");
+          byKey("gate").classList.add("state-active");
+          inspectNode("gate");
+        }],
+        [1080, () => {
+          byKey("gate").classList.replace("state-active", finalClass);
+          finalWire.classList.add(wireClass);
+          byKey(finalNode).classList.add(finalClass);
+          inspectNode(finalNode);
+          document.getElementById("tel-status").textContent = run.status;
+        }]
+      ];
+
+      steps.forEach(([delay, fn]) => {
+        animTimers.push(setTimeout(fn, delay));
+      });
+    }
+
+    document.querySelectorAll(".trigger-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
-        clearInterval(replayTimer);
-        currentScenario = btn.dataset.scenario;
-        currentStage = 0;
-        scenarioBtns.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
-        renderTrace();
+        document.querySelectorAll(".trigger-btn").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+        executeRun(btn.dataset.run);
       });
     });
 
-    stageCards.forEach((card) => {
-      card.addEventListener("click", () => {
-        clearInterval(replayTimer);
-        currentStage = Number(card.dataset.stage);
-        renderTrace();
-      });
+    nodesEls.forEach((n) => {
+      n.addEventListener("click", () => inspectNode(n.dataset.node));
     });
 
-    document.getElementById("replay-btn").addEventListener("click", () => {
-      clearInterval(replayTimer);
-      currentStage = 0;
-      renderTrace();
-      replayTimer = setInterval(() => {
-        if (currentStage < 2) {
-          currentStage += 1;
-          renderTrace();
-        } else {
-          clearInterval(replayTimer);
-        }
-      }, 950);
-    });
+    // Cost calculator
+    const volSlider = document.getElementById("vol-slider");
+    function updateCost() {
+      const daily = Number(volSlider.value);
+      const monthly = daily * 30;
+      const nocode = Math.round(49 + (monthly * 5 / 1000) * 1.95);
+      const custom = Math.round(35 + monthly * 0.0016);
+      const annualSave = Math.max(0, (nocode - custom) * 12);
 
-    document.getElementById("scope-form").addEventListener("submit", (e) => {
+      document.getElementById("vol-label").textContent = daily.toLocaleString("en-US") + " / day";
+      document.getElementById("vol-monthly").textContent = monthly.toLocaleString("en-US") + " monthly events processed";
+      document.getElementById("cost-nocode").textContent = "$" + nocode.toLocaleString("en-US") + " / mo";
+      document.getElementById("cost-custom").textContent = "$" + custom.toLocaleString("en-US") + " / mo";
+      document.getElementById("annual-save").textContent = "$" + annualSave.toLocaleString("en-US") + " / yr";
+      document.getElementById("bar-custom").style.width = Math.max(8, Math.round((custom / nocode) * 100)) + "%";
+    }
+    volSlider.addEventListener("input", updateCost);
+    updateCost();
+
+    document.getElementById("intake-form").addEventListener("submit", (e) => {
       e.preventDefault();
-      document.getElementById("form-confirm").classList.add("is-visible");
+      document.getElementById("confirm-bar").classList.add("is-visible");
     });
 
-    renderTrace();
+    executeRun("healthy");
   </script>
 </body>
 </html>
