@@ -43,16 +43,16 @@
       <div class="wrap hero-inner">
         <h1>Music that stays <span class="hero-accent">on</span> when your screen locks</h1>
         <p class="hero-sub">
-          An 18.5 MB native Android player with zero mid-song ads, a built-in 5-band equalizer, and permanent offline downloads. No account required.
+          A 19.7 MB Android music player and instant browser web player with a working 5-band acoustic equalizer, permanent offline downloads, and zero account wall.
         </p>
         <div class="hero-ctas">
-          <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--dark">
-            <span>Download Android APK</span>
-            <span class="cta-meta">18.5 MB</span>
-          </a>
-          <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener" class="btn btn--light">
+          <a href="./player/" class="btn btn--dark">
             <span>Launch Web Player</span>
-            <span class="cta-meta">Browser</span>
+            <span class="cta-meta">Live Demo</span>
+          </a>
+          <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--light">
+            <span>Download Android APK</span>
+            <span class="cta-meta">19.7 MB</span>
           </a>
         </div>
       </div>
@@ -343,10 +343,10 @@
         <div class="install-card reveal">
           <div>
             <h2>Install SoundPlus 1.6.0 in under a minute</h2>
-            <p>Download the verified 18.5 MB APK directly from GraphiKrafts, or stream right away in your desktop browser.</p>
+            <p>Download the verified 19.7 MB APK (SHA-256: <code class="mono" style="font-size:0.82em;">d7a3d041...3bcad</code>) directly from GraphiKrafts, or stream immediately in our unified Web Player redesign.</p>
             <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-              <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--dark">Download APK (18.5 MB)</a>
-              <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener" class="btn btn--light">Open Web Player</a>
+              <a href="./player/" class="btn btn--dark">Open Web Player</a>
+              <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--light">Download APK (19.7 MB)</a>
             </div>
           </div>
 
@@ -382,10 +382,10 @@
     <div class="wrap footer-inner">
       <span>SoundPlus for Android &amp; Web</span>
       <div class="footer-links">
+        <a href="./player/">Web Player</a>
         <a href="https://music.graphikrafts.com/SoundPlus.apk">Download APK</a>
-        <a href="https://music.graphikrafts.com/webplayer/" target="_blank" rel="noopener">Web Player</a>
         <a href="https://music.graphikrafts.com/" target="_blank" rel="noopener">music.graphikrafts.com</a>
-        <a href="https://msnotfound.github.io/#quote" target="_top">Redesign concept by Mayank Sahu</a>
+        <a href="https://mayanksahu.dev/" target="_blank" rel="noopener">Redesign concept by Mayank Sahu</a>
       </div>
     </div>
   </footer>
@@ -433,7 +433,16 @@
       else document.documentElement.setAttribute("data-palette", pal);
       paletteName.textContent = label;
       paletteBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.palette === pal)));
+      try { localStorage.setItem("sp_palette", pal); } catch (_) {}
     }
+
+    try {
+      const savedPal = localStorage.getItem("sp_palette");
+      if (savedPal) {
+        const b = paletteBtns.find((x) => x.dataset.palette === savedPal);
+        if (b) applyPalette(b.dataset.palette, b.dataset.label);
+      }
+    } catch (_) {}
 
     paletteBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
