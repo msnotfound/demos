@@ -3,41 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Relay Foundry engineers production AI workflows, idempotent webhook ingestion, strict JSON model routing, and dead-letter recovery in your own Git repository." />
-  <title>Relay Foundry | Durable AI Workflows &amp; Production Webhook Pipelines</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230c0a09'/%3E%3Cpath d='M9 22V10h7.5c3 0 4.8 1.5 4.8 4 0 1.9-1 3.2-2.7 3.7L22 22h-3.4l-2.9-3.9H12V22H9zm3-6.4h4.1c1.3 0 2-.6 2-1.6s-.7-1.6-2-1.6H12v3.2z' fill='%23f2553a'/%3E%3C/svg%3E" />
-  <link rel="preconnect" href="https://api.fontshare.com" />
-  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet" />
+  <meta name="description" content="Relay Foundry turns brittle webhooks and LLM prompts into observable, self-healing workflows with inline human approvals and full trace replay." />
+  <title>Relay Foundry | Orchestrate Autonomous AI Pipelines</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23c24e28'/%3E%3Ccircle cx='16' cy='16' r='6.5' fill='none' stroke='%23fbfaf7' stroke-width='2.6'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #0c0a09;
-      --bg-elev: #141110;
-      --bg-card: #181412;
-      --ink: #f6f4f0;
-      --ink-2: #b8b2a8;
-      --muted: #7f786e;
-      --line: rgba(246, 244, 240, 0.11);
-      --line-strong: rgba(246, 244, 240, 0.22);
-      --accent: #f2553a;
-      --accent-soft: rgba(242, 85, 58, 0.15);
-      --ok: #34d399;
-      --ok-soft: rgba(52, 211, 153, 0.14);
-      --warn: #fbbf24;
-      --warn-soft: rgba(251, 191, 36, 0.14);
-      --blue: #60a5fa;
-      --font-sans: "Switzer", -apple-system, BlinkMacSystemFont, sans-serif;
+      color-scheme: light;
+      --paper: #fbfaf7;
+      --surface: #ffffff;
+      --surface-warm: #f4f1ea;
+      --surface-tint: #f8ede7;
+      --ink: #211f1b;
+      --ink-2: #524d46;
+      --muted: #8a8278;
+      --stone: #a79f95;
+      --line: rgba(33, 31, 27, 0.1);
+      --line-strong: rgba(33, 31, 27, 0.18);
+      --accent: #c24e28;
+      --accent-hover: #ad421f;
+      --accent-soft: rgba(194, 78, 40, 0.11);
+      --ok: #1d7a52;
+      --ok-soft: rgba(29, 122, 82, 0.11);
+      --warn: #a16207;
+      --warn-soft: rgba(161, 98, 7, 0.12);
+      --font-sans: "Hanken Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-serif: "Newsreader", Georgia, serif;
       --font-mono: "IBM Plex Mono", ui-monospace, monospace;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --shadow-pill: 0 4px 20px rgba(33, 31, 27, 0.08), 0 1px 2px rgba(33, 31, 27, 0.06);
+      --shadow-win: 0 28px 80px rgba(33, 31, 27, 0.11), 0 4px 16px rgba(33, 31, 27, 0.05);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
-      background: var(--bg);
+      background: var(--paper);
       color: var(--ink);
       font-family: var(--font-sans);
       -webkit-font-smoothing: antialiased;
@@ -45,501 +48,218 @@
       line-height: 1.55;
     }
 
-    /* Subtle analog grain texture (Inngest signature dark tactile feel) */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.045;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    }
-
-    main, header, footer { position: relative; z-index: 1; }
     a { color: inherit; text-decoration: none; }
-    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    button, input { font: inherit; color: inherit; }
+    button { background: none; border: 0; cursor: pointer; }
     button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
     .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-    .wrap { width: min(1200px, 100% - 40px); margin-inline: auto; }
-    section[id] { scroll-margin-top: 84px; }
+    .serif { font-family: var(--font-serif); }
+    .wrap { width: min(1140px, 100% - 40px); margin-inline: auto; }
+    section[id] { scroll-margin-top: 96px; }
 
-    /* Sticky Topbar */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(12, 10, 9, 0.82);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--line);
+    /* Floating Frosted Pill Navbar (OrchaLabs Signature) */
+    .nav-shell {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      padding-inline: 20px;
+      pointer-events: none;
     }
 
-    .topbar-inner {
-      height: 66px;
+    .nav-pill {
+      pointer-events: auto;
+      max-width: 1120px;
+      margin-inline: auto;
+      height: 58px;
+      padding: 0 10px 0 20px;
+      border-radius: 999px;
+      background: rgba(251, 250, 247, 0.78);
+      backdrop-filter: blur(20px) saturate(150%);
+      -webkit-backdrop-filter: blur(20px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      box-shadow: var(--shadow-pill);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 18px;
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .nav-pill.is-scrolled {
+      background: rgba(251, 250, 247, 0.92);
+      border-color: var(--line);
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      font-weight: 700;
-      font-size: 0.98rem;
+      font-family: var(--font-serif);
+      font-size: 1.18rem;
+      font-weight: 500;
       letter-spacing: -0.02em;
+      color: var(--ink);
     }
 
-    .brand-mark {
-      width: 26px;
-      height: 26px;
-      border-radius: 7px;
-      background: var(--accent);
-      color: #0c0a09;
-      display: grid;
-      place-items: center;
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      font-weight: 600;
+    .brand-icon {
+      width: 22px;
+      height: 22px;
+      flex: none;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 26px;
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      gap: 28px;
+      font-size: 0.9rem;
+      font-weight: 500;
       color: var(--ink-2);
     }
-
     .nav-links a { transition: color 0.16s ease; }
     .nav-links a:hover { color: var(--ink); }
 
-    .nav-cta-row { display: flex; align-items: center; gap: 10px; }
-
-    .btn {
+    .btn-terracotta {
+      height: 40px;
+      padding: 0 20px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      height: 44px;
-      padding: 0 20px;
-      border-radius: 8px;
-      font-size: 0.86rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      transition: transform 0.18s var(--ease), background 0.16s ease, border-color 0.16s ease;
+      gap: 7px;
+      transition: transform 0.18s var(--ease), background 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 2px 10px rgba(194, 78, 40, 0.24);
     }
-    .btn:active { transform: scale(0.98); }
+    .btn-terracotta:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-terracotta:active { transform: scale(0.98); }
 
-    .btn--accent {
-      background: var(--accent);
-      color: #0c0a09;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .btn--accent:hover { background: #ff694e; transform: translateY(-1px); }
-
-    .btn--ghost {
-      background: var(--bg-elev);
-      color: var(--ink);
-      border: 1px solid var(--line-strong);
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-    }
-    .btn--ghost:hover { border-color: var(--ink); background: var(--bg-card); }
-
-    .btn--white {
-      background: var(--ink);
-      color: var(--bg);
-      height: 36px;
-      padding: 0 15px;
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .btn--white:hover { opacity: 0.9; }
-
-    /* Hero: Inngest-Inspired Asymmetric Split (Display Type Left + Live Animated Step Code Right) */
+    /* Full-Bleed 100dvh Atmospheric Cinema Hero (OrchaLabs Signature) */
     .hero {
-      padding: clamp(54px, 8vh, 96px) 0 64px;
-      border-bottom: 1px solid var(--line);
+      position: relative;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: #1b1917;
+      color: #ffffff;
     }
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-      gap: clamp(32px, 5vw, 68px);
-      align-items: center;
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 42%;
+      transform: scale(1.04);
+      animation: heroDrift 22s var(--ease) infinite alternate;
     }
 
-    .eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 18px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    @keyframes heroDrift {
+      from { transform: scale(1.02) translate3d(0, 0, 0); }
+      to { transform: scale(1.08) translate3d(-0.8%, -0.8%, 0); }
     }
-    .eyebrow::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
+
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(95deg, rgba(19, 17, 15, 0.64) 0%, rgba(19, 17, 15, 0.34) 48%, rgba(19, 17, 15, 0.12) 100%),
+        linear-gradient(180deg, rgba(19, 17, 15, 0.22) 0%, transparent 32%, rgba(19, 17, 15, 0.45) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 120px 0 92px;
+      max-width: 680px;
     }
 
     .hero h1 {
-      font-size: clamp(2.85rem, 5.4vw, 4.75rem);
-      font-weight: 700;
-      line-height: 0.96;
-      letter-spacing: -0.04em;
-      text-transform: uppercase;
+      font-size: clamp(2.8rem, 5.4vw, 4.7rem);
+      font-weight: 600;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      color: #ffffff;
       margin-bottom: 22px;
-    }
-
-    .h1-outline {
-      display: block;
-      color: transparent;
-      -webkit-text-stroke: 1.4px rgba(246, 244, 240, 0.72);
+      text-wrap: balance;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.24);
     }
 
     .hero-sub {
-      font-size: 1.06rem;
-      color: var(--ink-2);
+      font-size: clamp(1.02rem, 1.45vw, 1.18rem);
+      line-height: 1.62;
+      color: rgba(251, 250, 247, 0.88);
       max-width: 48ch;
-      margin-bottom: 28px;
-      line-height: 1.6;
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .copy-pill {
-      position: relative;
-      padding-right: 16px;
-    }
-    .copy-pill .copy-tag {
-      font-size: 0.68rem;
-      color: var(--ok);
-      margin-left: 6px;
-    }
-
-    /* Live Annotated Code Panel (Inngest Hero Signature) */
-    .code-stage {
-      background: linear-gradient(180deg, rgba(24, 20, 18, 0.92), rgba(14, 12, 11, 0.96));
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
-    }
-
-    .code-head {
-      padding: 11px 16px;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    .code-dots { display: inline-flex; gap: 6px; }
-    .code-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(246, 244, 240, 0.16); display: block; }
-
-    .code-body {
-      padding: 18px 18px 20px;
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      line-height: 1.65;
-      color: #c8c2b8;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      overflow-x: auto;
-    }
-
-    .code-step {
-      position: relative;
-      padding: 10px 14px 10px 16px;
-      border-radius: 9px;
-      border: 1px solid transparent;
-      border-left: 2px solid rgba(246, 244, 240, 0.14);
-      transition: background 0.25s var(--ease), border-color 0.25s var(--ease), opacity 0.25s ease;
-      cursor: pointer;
-    }
-
-    .code-step:hover { background: rgba(246, 244, 240, 0.03); }
-
-    .code-step.is-active {
-      background: rgba(52, 211, 153, 0.06);
-      border-color: rgba(52, 211, 153, 0.24);
-      border-left-color: var(--ok);
-    }
-
-    .code-step.is-warn {
-      background: rgba(251, 191, 36, 0.07);
-      border-color: rgba(251, 191, 36, 0.28);
-      border-left-color: var(--warn);
-    }
-
-    .step-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.66rem;
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-bottom: 4px;
-      letter-spacing: 0.04em;
-      background: rgba(246, 244, 240, 0.07);
-      color: var(--muted);
-    }
-
-    .code-step.is-active .step-badge { background: var(--ok-soft); color: var(--ok); }
-    .code-step.is-warn .step-badge { background: var(--warn-soft); color: var(--warn); }
-
-    .kw { color: var(--accent); }
-    .fn { color: var(--blue); }
-    .str { color: var(--ok); }
-    .cm { color: var(--muted); }
-
-    /* Proof Strip (Subtle Monospace Engineering Credibility) */
-    .stack-strip {
-      padding: 24px 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .stack-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .stack-items {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 22px;
-      color: var(--ink-2);
-    }
-
-    /* Section 2: Interactive Live Topology Simulator */
-    .bench-sec {
-      padding: clamp(64px, 9vh, 108px) 0;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .sec-head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
       margin-bottom: 32px;
     }
 
-    .sec-head h2 {
-      font-size: clamp(1.9rem, 3.4vw, 2.85rem);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.06;
-    }
-
-    .sec-head p {
-      color: var(--ink-2);
-      max-width: 46ch;
-      font-size: 0.96rem;
-    }
-
-    .scenario-bar {
+    .hero-ctas {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .sc-btn {
-      height: 38px;
-      padding: 0 15px;
-      border-radius: 8px;
-      border: 1px solid var(--line-strong);
-      background: var(--bg-elev);
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
-      color: var(--ink-2);
-      transition: all 0.16s var(--ease);
-    }
-
-    .sc-btn:hover { border-color: var(--ink); color: var(--ink); }
-    .sc-btn[aria-pressed="true"] {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #0c0a09;
-      font-weight: 600;
-    }
-
-    .topology-frame {
-      position: relative;
-      background: var(--bg-elev);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
-      overflow: hidden;
-    }
-
-    /* Helicon Corner Registration Pins */
-    .pin {
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      background: var(--line-strong);
-      z-index: 4;
-      pointer-events: none;
-    }
-    .pin-tl { top: -4px; left: -4px; }
-    .pin-tr { top: -4px; right: -4px; }
-    .pin-bl { bottom: -4px; left: -4px; }
-    .pin-br { bottom: -4px; right: -4px; }
-
-    .topo-canvas {
-      padding: 28px 24px;
-      border-right: 1px solid var(--line);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .topo-svg {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .node-box {
-      fill: #181412;
-      stroke: rgba(246, 244, 240, 0.2);
-      stroke-width: 1.25;
-      transition: stroke 0.25s ease, fill 0.25s ease;
-      cursor: pointer;
-    }
-    .node-g.is-ok .node-box { stroke: var(--ok); fill: rgba(52, 211, 153, 0.08); }
-    .node-g.is-warn .node-box { stroke: var(--warn); fill: rgba(251, 191, 36, 0.09); }
-    .node-g.is-selected .node-box { stroke-width: 2; }
-
-    .wire {
-      fill: none;
-      stroke: rgba(246, 244, 240, 0.16);
-      stroke-width: 1.6;
-    }
-    .wire.is-ok { stroke: var(--ok); }
-    .wire.is-warn { stroke: var(--warn); }
-
-    .pulse-dot {
-      fill: var(--ok);
-      filter: drop-shadow(0 0 6px var(--ok));
-    }
-    .pulse-dot.is-warn {
-      fill: var(--warn);
-      filter: drop-shadow(0 0 6px var(--warn));
-    }
-
-    .kpi-strip {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      border-top: 1px solid var(--line);
-      padding-top: 18px;
-      gap: 12px;
-    }
-
-    .kpi-cell span {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 0.66rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-    .kpi-cell strong {
-      display: block;
-      margin-top: 4px;
-      font-family: var(--font-mono);
-      font-size: 1rem;
-      color: var(--ink);
-    }
-
-    .inspector {
-      padding: 24px;
-      background: #100e0d;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .insp-head {
-      display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
+      gap: 20px;
     }
 
-    .insp-status {
-      padding: 3px 9px;
-      border-radius: 5px;
-      font-size: 0.7rem;
+    .btn-white-pill {
+      height: 48px;
+      padding: 0 26px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: var(--ink);
+      font-size: 0.94rem;
       font-weight: 600;
-      background: var(--ok-soft);
-      color: var(--ok);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: transform 0.18s var(--ease), background 0.16s ease;
     }
-    .insp-status.is-warn { background: var(--warn-soft); color: var(--warn); }
+    .btn-white-pill:hover { transform: translateY(-1px); background: #f8f6f2; }
 
-    .insp-json {
+    .hero-link {
+      font-size: 0.94rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.92);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: gap 0.2s var(--ease), opacity 0.2s ease;
+    }
+    .hero-link:hover { gap: 11px; opacity: 1; }
+
+    .scroll-cue {
+      position: absolute;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
       font-family: var(--font-mono);
-      font-size: 0.78rem;
-      line-height: 1.65;
-      color: #d6d0c6;
-      white-space: pre-wrap;
-      word-break: break-word;
-      margin: 0;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      color: rgba(255, 255, 255, 0.72);
     }
 
-    /* Section 3: Scroll-Illuminated Manifesto Band (OrchaLabs signature) */
+    /* Band 2: Scroll-Illuminating Manifesto (OrchaLabs Signature) */
     .manifesto {
-      padding: clamp(72px, 11vh, 128px) 0;
-      border-bottom: 1px solid var(--line);
+      padding: clamp(104px, 15vh, 164px) 0 clamp(88px, 12vh, 132px);
       text-align: center;
     }
 
-    .manifesto-text {
-      max-width: 24ch;
+    .manifesto-copy {
+      max-width: 19ch;
       margin-inline: auto;
-      font-size: clamp(1.9rem, 4.1vw, 3.45rem);
+      font-size: clamp(2.15rem, 4.5vw, 3.85rem);
       font-weight: 600;
       line-height: 1.14;
       letter-spacing: -0.035em;
@@ -547,448 +267,764 @@
 
     .m-word {
       display: inline-block;
-      color: var(--muted);
-      opacity: 0.36;
+      color: var(--stone);
+      opacity: 0.56;
       margin-right: 0.2em;
-      transition: color 0.32s var(--ease), opacity 0.32s var(--ease);
+      transition: color 0.35s var(--ease), opacity 0.35s var(--ease);
     }
     .m-word.is-lit { color: var(--ink); opacity: 1; }
-    .m-accent { color: var(--accent); opacity: 1; }
 
-    /* Section 4: Architectural 3-Column Capabilities + Interactive Cost Bench */
-    .arch-sec {
-      padding: clamp(64px, 9vh, 108px) 0;
-      border-bottom: 1px solid var(--line);
+    .m-punch {
+      position: relative;
+      display: inline-block;
+      color: var(--accent);
+      opacity: 1;
+    }
+    .m-punch::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -4px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--accent);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.8s var(--ease);
+    }
+    .m-punch.is-drawn::after { transform: scaleX(1); }
+
+    /* Band 3: Editorial 4-Step Storyboard + Warm macOS App Window (OrchaLabs Signature) */
+    .story-sec {
+      padding: 20px 0 clamp(96px, 13vh, 144px);
     }
 
-    .arch-grid {
+    .story-intro {
+      text-align: center;
+      margin-bottom: clamp(48px, 7vh, 72px);
+    }
+
+    .kicker {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .story-intro h2 {
+      font-size: clamp(1.9rem, 3.4vw, 2.85rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+      gap: clamp(32px, 5vw, 68px);
+      align-items: center;
+    }
+
+    .step-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .step-num {
+      font-family: var(--font-serif);
+      font-size: 2.55rem;
+      line-height: 1;
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .step-title {
+      font-size: clamp(1.65rem, 2.6vw, 2.15rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      color: var(--ink);
+    }
+
+    .step-desc {
+      font-size: 1rem;
+      color: var(--ink-2);
+      line-height: 1.62;
+      max-width: 34ch;
+    }
+
+    .step-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .step-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(33, 31, 27, 0.16);
+      transition: width 0.28s var(--ease), background 0.25s ease;
+    }
+    .step-dot[aria-pressed="true"] {
+      width: 30px;
+      background: var(--accent);
+    }
+
+    .step-list-btns {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+
+    .step-row-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      text-align: left;
+      transition: background 0.16s ease, color 0.16s ease;
+    }
+    .step-row-btn:hover { background: var(--surface-warm); color: var(--ink); }
+    .step-row-btn[aria-pressed="true"] {
+      background: var(--surface-tint);
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .step-row-btn span:first-child {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--accent);
+    }
+
+    /* Warm macOS Product Window */
+    .mac-window {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow-win);
+      overflow: hidden;
+      min-height: 410px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mac-bar {
+      height: 46px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fdfcfa;
+    }
+
+    .mac-dots { display: inline-flex; gap: 7px; }
+    .mac-dots i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+    .mac-dots i:nth-child(1) { background: #ef5a52; }
+    .mac-dots i:nth-child(2) { background: #f2bc3e; }
+    .mac-dots i:nth-child(3) { background: #46c153; }
+
+    .mac-title {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      color: var(--ink-2);
+    }
+
+    .mac-step-ind {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    .mac-step-ind strong { color: var(--accent); }
+
+    .mac-body {
+      padding: 26px 26px 28px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      animation: panelFade 0.3s var(--ease);
+    }
+
+    @keyframes panelFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .win-card {
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.88rem;
+    }
+
+    .win-card.is-highlight {
+      background: var(--surface-tint);
+      border-color: rgba(194, 78, 40, 0.25);
+    }
+
+    .pill-ok {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--ok-soft);
+      color: var(--ok);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .pill-warn {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--warn-soft);
+      color: var(--warn);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .code-snippet {
+      padding: 15px 16px;
+      border-radius: 12px;
+      background: var(--surface-warm);
+      border: 1px solid var(--line);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.65;
+      color: var(--ink);
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Band 4: Helicon-Inspired Architectural Blueprint Canvas + Live Incident Replay */
+    .blueprint-band {
+      padding: clamp(76px, 10vh, 118px) 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background-color: #f9f8f5;
+      background-image:
+        linear-gradient(to right, rgba(33, 31, 27, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(33, 31, 27, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .arch-box {
       position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: clamp(28px, 4.5vw, 48px);
+    }
+
+    .pin {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      background: rgba(33, 31, 27, 0.34);
+      pointer-events: none;
+    }
+    .pin-tl { top: -4px; left: -4px; }
+    .pin-tr { top: -4px; right: -4px; }
+    .pin-bl { bottom: -4px; left: -4px; }
+    .pin-br { bottom: -4px; right: -4px; }
+
+    .arch-box h2 {
+      font-size: clamp(1.85rem, 3.2vw, 2.65rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .arch-sub {
+      color: var(--ink-2);
+      font-size: 1rem;
+      max-width: 54ch;
+      margin-bottom: 26px;
+    }
+
+    .preset-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      border: 1px solid var(--line);
-      background: var(--bg-elev);
-      margin-bottom: 48px;
+      gap: 12px;
+      margin-bottom: 14px;
     }
 
-    .arch-cell {
-      padding: 30px 26px;
-      border-right: 1px solid var(--line);
+    .preset-card {
+      padding: 16px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s var(--ease);
+    }
+    .preset-card:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+    .preset-card[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: var(--surface-tint);
+    }
+    .preset-card strong { font-size: 0.92rem; color: var(--ink); }
+    .preset-card span { font-family: var(--font-mono); font-size: 0.74rem; color: var(--muted); }
+
+    .replay-input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .replay-input {
+      flex: 1;
+      min-width: 0;
+      height: 44px;
+      padding: 0 15px;
+      border-radius: 11px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
+      font-size: 0.9rem;
+      color: var(--ink);
+    }
+    .replay-input::placeholder { color: var(--muted); }
+
+    .replay-btn {
+      height: 44px;
+      padding: 0 22px;
+      border-radius: 11px;
+      border: 1px solid var(--line-strong);
+      background: var(--ink);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: opacity 0.16s ease;
+    }
+    .replay-btn:hover { opacity: 0.9; }
+
+    .replay-log {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .arch-cell:last-child { border-right: 0; }
-    .arch-num { font-family: var(--font-mono); font-size: 0.74rem; color: var(--accent); }
-    .arch-cell h3 { font-size: 1.16rem; font-weight: 600; letter-spacing: -0.02em; }
-    .arch-cell p { font-size: 0.9rem; color: var(--ink-2); line-height: 1.6; }
 
-    /* Cost Savings Interactive Bench */
-    .cost-card {
-      background: var(--bg-elev);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: clamp(24px, 3.5vw, 36px);
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-      gap: 32px;
-      align-items: center;
-    }
-
-    .slider-wrap { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-    .vol-slider {
-      width: 100%;
-      accent-color: var(--accent);
-      cursor: pointer;
-    }
-
-    .cost-compare {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .cost-box {
-      padding: 18px;
+    .log-entry {
+      padding: 13px 15px;
       border-radius: 11px;
       border: 1px solid var(--line);
-      background: var(--bg-card);
-    }
-    .cost-box.is-win {
-      border-color: rgba(52, 211, 153, 0.4);
-      background: rgba(52, 211, 153, 0.06);
-    }
-    .cost-box small {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-    .cost-box strong {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 1.65rem;
-      margin-top: 6px;
-    }
-    .cost-box.is-win strong { color: var(--ok); }
-
-    /* Closing CTA Band */
-    .cta-sec {
-      padding: clamp(64px, 9vh, 108px) 0;
-    }
-
-    .cta-box {
-      position: relative;
-      border: 1px solid var(--line-strong);
-      border-radius: 18px;
-      padding: clamp(32px, 5vw, 56px);
-      background: radial-gradient(circle at 85% 20%, rgba(242, 85, 58, 0.14), transparent 52%), var(--bg-elev);
-      display: flex;
-      flex-wrap: wrap;
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 28px;
+      gap: 12px;
+      font-size: 0.86rem;
+      animation: panelFade 0.25s var(--ease);
     }
 
-    .cta-box h2 {
-      font-size: clamp(1.85rem, 3.2vw, 2.75rem);
+    .log-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ok);
+    }
+    .log-dot.is-warn { background: var(--accent); }
+
+    /* Band 5: Corner-Pinned 2x2 Architectural Guarantees Grid (Helicon Signature) */
+    .guarantees-sec {
+      padding: clamp(72px, 10vh, 112px) 0;
+    }
+
+    .g-head {
+      margin-bottom: 36px;
+    }
+    .g-head h2 {
+      font-size: clamp(1.9rem, 3.2vw, 2.7rem);
       font-weight: 600;
       letter-spacing: -0.03em;
       line-height: 1.08;
-      max-width: 18ch;
+      margin-bottom: 10px;
+    }
+    .g-head p {
+      color: var(--ink-2);
+      max-width: 50ch;
+      font-size: 1rem;
     }
 
-    .cta-box p {
+    .g-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .g-cell {
+      padding: 32px 30px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .g-cell:nth-child(2n) { border-right: 0; }
+    .g-cell:nth-last-child(-n+2) { border-bottom: 0; }
+
+    .g-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--surface-tint);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      margin-bottom: 4px;
+    }
+
+    .g-cell h3 {
+      font-size: 1.12rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .g-cell p {
+      font-size: 0.92rem;
+      color: var(--ink-2);
+      line-height: 1.6;
+    }
+
+    /* Band 6: Quiet Editorial Closing Band */
+    .closing-sec {
+      padding: 12px 0 clamp(84px, 11vh, 120px);
+    }
+
+    .closing-card {
+      border-radius: 24px;
+      padding: clamp(34px, 5vw, 60px);
+      background: linear-gradient(135deg, #f6ece5 0%, #f3efe8 55%, #ede6dc 100%);
+      border: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: 36px;
+      align-items: center;
+    }
+
+    .closing-card h2 {
+      font-size: clamp(1.9rem, 3.3vw, 2.85rem);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+      margin-bottom: 12px;
+    }
+
+    .closing-card p {
       color: var(--ink-2);
       max-width: 44ch;
-      margin-top: 10px;
-      font-size: 0.96rem;
+      font-size: 0.98rem;
+    }
+
+    .demo-form {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-pill);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .demo-input {
+      height: 44px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      font-size: 0.9rem;
     }
 
     footer {
       border-top: 1px solid var(--line);
-      padding: 26px 0 40px;
-      font-family: var(--font-mono);
-      font-size: 0.76rem;
+      padding: 28px 0 44px;
+      font-size: 0.85rem;
       color: var(--muted);
     }
+
     .footer-inner {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      gap: 14px;
+      align-items: center;
+      gap: 16px;
     }
-    .footer-links { display: flex; flex-wrap: wrap; gap: 20px; }
+
+    .footer-links { display: flex; flex-wrap: wrap; gap: 22px; }
     .footer-links a:hover { color: var(--ink); }
 
-    @media (max-width: 980px) {
-      .hero-grid, .topology-frame, .cost-card { grid-template-columns: 1fr; }
-      .topo-canvas { border-right: 0; border-bottom: 1px solid var(--line); }
-      .arch-grid { grid-template-columns: 1fr; }
-      .arch-cell { border-right: 0; border-bottom: 1px solid var(--line); }
-      .arch-cell:last-child { border-bottom: 0; }
+    @media (max-width: 920px) {
       .nav-links { display: none; }
+      .story-grid, .preset-grid, .g-grid, .closing-card { grid-template-columns: 1fr; }
+      .g-cell { border-right: 0; border-bottom: 1px solid var(--line); }
+      .g-cell:last-child { border-bottom: 0; }
     }
 
     @media (max-width: 600px) {
-      .wrap { width: min(1200px, 100% - 28px); }
-      .topbar-inner { height: 58px; }
-      .hero { padding: 38px 0 44px; }
-      .hero h1 { font-size: clamp(2.25rem, 10.5vw, 3.1rem); }
-      .kpi-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .cost-compare { grid-template-columns: 1fr; }
-      .hero-actions .btn { width: 100%; }
+      .wrap { width: min(1140px, 100% - 28px); }
+      .nav-shell { top: 12px; padding-inline: 12px; }
+      .nav-pill { height: 52px; padding: 0 8px 0 16px; }
+      .brand { font-size: 1.04rem; }
+      .btn-terracotta { height: 36px; padding: 0 15px; font-size: 0.82rem; }
+      .hero-content { padding: 104px 0 76px; }
+      .hero h1 { font-size: clamp(2.25rem, 10vw, 3rem); }
+      .replay-input-row { flex-direction: column; }
+      .arch-box { padding: 22px 18px; }
+      .mac-body { padding: 18px 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-bg { animation: none !important; }
+      .m-word, .m-punch::after, .mac-body { transition: none !important; animation: none !important; }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="wrap topbar-inner">
+  <header class="nav-shell">
+    <div class="nav-pill" id="navPill">
       <a href="#top" class="brand">
-        <span class="brand-mark">RF</span>
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect width="24" height="24" rx="7" fill="#c24e28" />
+          <circle cx="12" cy="12" r="5" stroke="#fbfaf7" stroke-width="2.2" />
+        </svg>
         <span>Relay Foundry</span>
       </a>
 
       <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#bench">Live Topology</a>
-        <a href="#architecture">Guarantees</a>
-        <a href="#cost">Pricing Bench</a>
-        <a href="#quickstart">Quickstart</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#replay">Replay</a>
+        <a href="#guarantees">Guarantees</a>
       </nav>
 
-      <div class="nav-cta-row">
-        <a href="#quickstart" class="btn btn--white">Start Free</a>
-      </div>
+      <a href="#demo" class="btn-terracotta">Book a demo</a>
     </div>
   </header>
 
   <main id="top">
-    <!-- HERO -->
+    <!-- FULL-BLEED ATMOSPHERIC CINEMA HERO -->
     <section class="hero">
-      <div class="wrap hero-grid">
-        <div>
-          <h1>
-            MAKE EVERY<br/>
-            AI PIPELINE<br/>
-            <span class="h1-outline">UNBREAKABLE.</span>
-          </h1>
-          <p class="hero-sub">
-            Orchestrate webhooks, strict JSON model routing, exponential retries, and human-in-the-loop approvals in plain TypeScript or Python. One SDK, zero fragile glue code.
-          </p>
-          <div class="hero-actions">
-            <button type="button" class="btn btn--ghost copy-pill" id="copyCurlBtn">
-              <span class="mono">npm install @relayfoundry/sdk</span>
-              <span class="copy-tag" id="copyFeedback"></span>
-            </button>
-            <a href="#quickstart" class="btn btn--accent">Start Free in Cloud</a>
-          </div>
-        </div>
+      <img src="./assets/hero-dawn.jpg" alt="" class="hero-bg" />
+      <div class="hero-scrim" aria-hidden="true"></div>
 
-        <!-- Live Animated Annotated Execution Code (Inngest Signature) -->
-        <div class="code-stage" aria-label="Live step execution code trace">
-          <div class="code-head">
-            <span class="code-dots"><i></i><i></i><i></i></span>
-            <span id="codeRunLabel">relay_triage.ts &middot; run_98412</span>
-            <span id="codeStatusPill" style="color:var(--ok);">200 COMMITTED</span>
-          </div>
-          <div class="code-body" id="codeStepsList">
-            <div class="code-step is-active" data-step="0">
-              <div class="step-badge" id="sb-0">COMPLETED | 14ms</div>
-              <div><span class="kw">const</span> event = <span class="kw">await</span> step.<span class="fn">run</span>(<span class="str">"verify-hmac-dedup"</span>, () =&gt; verifySignature(req));</div>
-            </div>
-            <div class="code-step" data-step="1">
-              <div class="step-badge" id="sb-1">COMPLETED | 420ms</div>
-              <div><span class="kw">const</span> lead = <span class="kw">await</span> step.<span class="fn">run</span>(<span class="str">"llm-strict-json"</span>, () =&gt; routeModel(event, LeadSchema));</div>
-            </div>
-            <div class="code-step" data-step="2">
-              <div class="step-badge" id="sb-2">COMPLETED | 9ms</div>
-              <div><span class="kw">const</span> gate = <span class="kw">await</span> step.<span class="fn">run</span>(<span class="str">"policy-risk-gate"</span>, () =&gt; checkVatAndRisk(lead));</div>
-            </div>
-            <div class="code-step" data-step="3">
-              <div class="step-badge" id="sb-3">COMMITTED | 88ms</div>
-              <div><span class="kw">return await</span> step.<span class="fn">run</span>(<span class="str">"crm-postgres-upsert"</span>, () =&gt; upsertAndNotify(lead, gate));</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="stack-strip">
-      <div class="wrap stack-row">
-        <span>Built on battle-tested primitives</span>
-        <div class="stack-items">
-          <span>Python / FastAPI</span>
-          <span>Node.js / TypeScript</span>
-          <span>PostgreSQL + Redis</span>
-          <span>Claude / OpenAI / Gemini</span>
-          <span>Docker + 100% Git Ownership</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- LIVE INTERACTIVE EXECUTION TOPOLOGY -->
-    <section class="bench-sec" id="bench">
       <div class="wrap">
-        <div class="sec-head">
-          <div>
-            <div class="eyebrow">Live Execution Topology</div>
-            <h2>Watch how failures recover before customers notice</h2>
-          </div>
-          <p>Trigger real failure modes below or click any node to inspect the exact JSON payload, retry backoff, and database commit state.</p>
-        </div>
-
-        <div class="scenario-bar" role="group" aria-label="Select simulation scenario">
-          <button type="button" class="sc-btn" data-sc="happy" aria-pressed="true">Fire WhatsApp Lead (200 OK)</button>
-          <button type="button" class="sc-btn" data-sc="mismatch" aria-pressed="false">Inject VAT Mismatch (Hold Queue)</button>
-          <button type="button" class="sc-btn" data-sc="retry" aria-pressed="false">Simulate 429 Backoff + Recovery</button>
-        </div>
-
-        <div class="topology-frame">
-          <span class="pin pin-tl" aria-hidden="true"></span>
-          <span class="pin pin-tr" aria-hidden="true"></span>
-          <span class="pin pin-bl" aria-hidden="true"></span>
-          <span class="pin pin-br" aria-hidden="true"></span>
-
-          <div class="topo-canvas">
-            <svg class="topo-svg" viewBox="0 0 680 260" role="img" aria-label="Interactive pipeline node graph">
-              <!-- Edges -->
-              <path id="w-01" class="wire is-ok" d="M 142 92 L 182 92" />
-              <path id="w-12" class="wire is-ok" d="M 314 92 L 354 92" />
-              <path id="w-23" class="wire is-ok" d="M 486 92 C 510 92, 506 58, 530 58" />
-              <path id="w-24" class="wire" d="M 486 92 C 510 92, 506 188, 530 188" />
-
-              <!-- Animated Signal Packet -->
-              <circle id="sigPacket" class="pulse-dot" r="4.5" cx="142" cy="92" />
-
-              <!-- Node 1 -->
-              <g class="node-g is-ok" data-node="ingest" transform="translate(12, 52)">
-                <rect class="node-box" width="130" height="80" rx="10" />
-                <text x="14" y="27" fill="#f6f4f0" font-size="12" font-weight="600">1. Webhook Ingest</text>
-                <text x="14" y="46" fill="#7f786e" font-family="IBM Plex Mono" font-size="10">HMAC + Dedup Key</text>
-                <text id="lat-ingest" x="14" y="66" fill="#34d399" font-family="IBM Plex Mono" font-size="10">14 ms</text>
-              </g>
-
-              <!-- Node 2 -->
-              <g class="node-g is-ok" data-node="llm" transform="translate(182, 52)">
-                <rect class="node-box" width="132" height="80" rx="10" />
-                <text x="14" y="27" fill="#f6f4f0" font-size="12" font-weight="600">2. LLM Triage</text>
-                <text x="14" y="46" fill="#7f786e" font-family="IBM Plex Mono" font-size="10">Strict JSON Schema</text>
-                <text id="lat-llm" x="14" y="66" fill="#34d399" font-family="IBM Plex Mono" font-size="10">420 ms</text>
-              </g>
-
-              <!-- Node 3 -->
-              <g class="node-g is-ok" data-node="policy" transform="translate(354, 52)">
-                <rect class="node-box" width="132" height="80" rx="10" />
-                <text x="14" y="27" fill="#f6f4f0" font-size="12" font-weight="600">3. Policy Gate</text>
-                <text x="14" y="46" fill="#7f786e" font-family="IBM Plex Mono" font-size="10">Math &amp; Risk Check</text>
-                <text id="lat-policy" x="14" y="66" fill="#34d399" font-family="IBM Plex Mono" font-size="10">9 ms</text>
-              </g>
-
-              <!-- Node 4A -->
-              <g class="node-g is-ok is-selected" data-node="crm" transform="translate(530, 18)">
-                <rect class="node-box" width="138" height="80" rx="10" />
-                <text x="14" y="27" fill="#f6f4f0" font-size="12" font-weight="600">4A. CRM Upsert</text>
-                <text x="14" y="46" fill="#7f786e" font-family="IBM Plex Mono" font-size="10">Postgres + Reply</text>
-                <text id="lat-crm" x="14" y="66" fill="#34d399" font-family="IBM Plex Mono" font-size="10">88 ms</text>
-              </g>
-
-              <!-- Node 4B -->
-              <g class="node-g" data-node="hold" transform="translate(530, 148)">
-                <rect class="node-box" width="138" height="80" rx="10" />
-                <text x="14" y="27" fill="#f6f4f0" font-size="12" font-weight="600">4B. Hold Queue</text>
-                <text x="14" y="46" fill="#7f786e" font-family="IBM Plex Mono" font-size="10">Slack + Replay</text>
-                <text id="lat-hold" x="14" y="66" fill="#7f786e" font-family="IBM Plex Mono" font-size="10">idle</text>
-              </g>
-            </svg>
-
-            <div class="kpi-strip">
-              <div class="kpi-cell"><span>Run Status</span><strong id="kpiStatus" style="color:var(--ok);">200 COMMITTED</strong></div>
-              <div class="kpi-cell"><span>End-to-End</span><strong id="kpiLatency">531 ms</strong></div>
-              <div class="kpi-cell"><span>Token Cost</span><strong id="kpiCost">$0.0014</strong></div>
-              <div class="kpi-cell"><span>Retries Used</span><strong id="kpiRetries">0 / 3</strong></div>
-            </div>
-          </div>
-
-          <div class="inspector">
-            <div class="insp-head">
-              <span id="inspNodeLabel">NODE: 4A. CRM UPSERT</span>
-              <span class="insp-status" id="inspBadge">200 COMMITTED</span>
-            </div>
-            <pre class="insp-json" id="inspJson"></pre>
+        <div class="hero-content">
+          <h1>Direct autonomous AI pipelines. You set the rules. They verify, retry, and ship.</h1>
+          <p class="hero-sub">
+            Relay Foundry turns brittle webhooks and LLM prompts into observable, self-healing workflows. Every event, model call, and human approval lives in one calm workspace.
+          </p>
+          <div class="hero-ctas">
+            <a href="#demo" class="btn-white-pill">Book a demo</a>
+            <a href="#how-it-works" class="hero-link">See how it works <span aria-hidden="true">-&gt;</span></a>
           </div>
         </div>
       </div>
+
+      <div class="scroll-cue" aria-hidden="true">
+        <span>SCROLL</span>
+        <span>&darr;</span>
+      </div>
     </section>
 
-    <!-- SCROLL-ILLUMINATED MANIFESTO -->
+    <!-- SCROLL-ILLUMINATING EDITORIAL MANIFESTO -->
     <section class="manifesto" id="manifesto">
       <div class="wrap">
-        <p class="manifesto-text" id="manifestoText">
-          <span class="m-word">No-code</span>
-          <span class="m-word">zaps</span>
-          <span class="m-word">break</span>
-          <span class="m-word">silently</span>
-          <span class="m-word">at</span>
-          <span class="m-word">midnight.</span>
-          <span class="m-word">Typed</span>
-          <span class="m-word">pipelines</span>
-          <span class="m-word">verify,</span>
-          <span class="m-word">retry,</span>
+        <p class="manifesto-copy" id="manifestoCopy">
+          <span class="m-word">Zapier</span>
           <span class="m-word">and</span>
-          <span class="m-word m-accent">never drop a lead.</span>
+          <span class="m-word">Make</span>
+          <span class="m-word">were</span>
+          <span class="m-word">built</span>
+          <span class="m-word">for</span>
+          <span class="m-word">simple</span>
+          <span class="m-word">triggers.</span>
+          <span class="m-word">Relay</span>
+          <span class="m-word">Foundry</span>
+          <span class="m-word">is</span>
+          <span class="m-word">built</span>
+          <span class="m-word">for</span>
+          <span class="m-punch" id="mPunch">autonomous pipelines.</span>
         </p>
       </div>
     </section>
 
-    <!-- ARCHITECTURE & COST BENCH -->
-    <section class="arch-sec" id="architecture">
+    <!-- 4-STEP EDITORIAL STORYBOARD + WARM MACOS WORKSPACE -->
+    <section class="story-sec" id="how-it-works">
       <div class="wrap">
-        <div class="sec-head">
-          <div>
-            <div class="eyebrow">Production Guarantees</div>
-            <h2>Engineered to run inside your own repo</h2>
-          </div>
-          <p>Zero black-box vendor lock-in. Every workflow ships with idempotency keys, structured outputs, Docker Compose deployment, and alert runbooks.</p>
+        <div class="story-intro">
+          <span class="kicker">How Relay Foundry Works</span>
+          <h2>From raw webhook to verified production commit</h2>
         </div>
 
-        <div class="arch-grid">
+        <div class="story-grid">
+          <div class="step-col">
+            <div class="step-num" id="stepNum">01</div>
+            <h3 class="step-title" id="stepTitle">Verify every incoming event</h3>
+            <p class="step-desc" id="stepDesc">Every WhatsApp, Stripe, or API webhook is HMAC-verified and locked with an idempotency key before a single model token is spent.</p>
+
+            <div class="step-dots" role="group" aria-label="Pipeline step indicator">
+              <button type="button" class="step-dot" data-step="0" aria-label="Step 1" aria-pressed="true"></button>
+              <button type="button" class="step-dot" data-step="1" aria-label="Step 2" aria-pressed="false"></button>
+              <button type="button" class="step-dot" data-step="2" aria-label="Step 3" aria-pressed="false"></button>
+              <button type="button" class="step-dot" data-step="3" aria-label="Step 4" aria-pressed="false"></button>
+            </div>
+
+            <div class="step-list-btns">
+              <button type="button" class="step-row-btn" data-step="0" aria-pressed="true"><span>01</span><span>Verify &amp; deduplicate webhooks</span></button>
+              <button type="button" class="step-row-btn" data-step="1" aria-pressed="false"><span>02</span><span>Route models with strict JSON schemas</span></button>
+              <button type="button" class="step-row-btn" data-step="2" aria-pressed="false"><span>03</span><span>Pause risky anomalies for approval</span></button>
+              <button type="button" class="step-row-btn" data-step="3" aria-pressed="false"><span>04</span><span>Commit cleanly with full audit trace</span></button>
+            </div>
+          </div>
+
+          <div class="mac-window" aria-live="polite">
+            <div class="mac-bar">
+              <span class="mac-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="mac-title" id="macTitle">Invoice Triage · directed by Relay</span>
+              <span class="mac-step-ind">Step <strong id="macStepNum">1</strong> / 4</span>
+            </div>
+            <div class="mac-body" id="macBody"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HELICON-INSPIRED ARCHITECTURAL BLUEPRINT + INTERACTIVE REPLAY WORKBENCH -->
+    <section class="blueprint-band" id="replay">
+      <div class="wrap">
+        <div class="arch-box">
           <span class="pin pin-tl" aria-hidden="true"></span>
           <span class="pin pin-tr" aria-hidden="true"></span>
           <span class="pin pin-bl" aria-hidden="true"></span>
           <span class="pin pin-br" aria-hidden="true"></span>
 
-          <article class="arch-cell">
-            <span class="arch-num">01 / IDEMPOTENT INGESTION</span>
-            <h3>Zero duplicate CRM rows</h3>
-            <p>Every incoming WhatsApp, Stripe, or form webhook is HMAC-verified and deduplicated in PostgreSQL before a single LLM token is spent.</p>
-          </article>
+          <h2>Watch Relay Foundry handle a real incident</h2>
+          <p class="arch-sub">Pick a recorded production scenario or enter any custom event below. Watch each verification, fallback retry, and commit land step by step.</p>
 
-          <article class="arch-cell">
-            <span class="arch-num">02 / STRICT SCHEMA ROUTING</span>
-            <h3>Deterministic JSON, zero hallucinations</h3>
-            <p>Route fast classification to lightweight models and complex reasoning to Claude or GPT with Pydantic/Zod validation and automatic fallback retries.</p>
-          </article>
-
-          <article class="arch-cell">
-            <span class="arch-num">03 / DEAD-LETTER &amp; REPLAY</span>
-            <h3>Human approval without losing state</h3>
-            <p>High-risk actions (pricing anomalies, refunds, low-confidence extractions) park cleanly in a Slack/WhatsApp hold queue with 1-click replay.</p>
-          </article>
-        </div>
-
-        <!-- Cost Bench -->
-        <div class="cost-card" id="cost">
-          <div>
-            <div class="eyebrow">Monthly Infra Cost Bench</div>
-            <h3 style="font-size:1.55rem;letter-spacing:-0.025em;margin-bottom:8px;">Stop paying per-task tax as volume scales</h3>
-            <p style="color:var(--ink-2);font-size:0.92rem;">Drag monthly automation volume to compare recurring no-code task billing against a self-hosted Relay Foundry pipeline.</p>
-            <div class="slider-wrap">
-              <div style="display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:0.8rem;">
-                <span>Monthly Webhook Events</span>
-                <strong id="volLabel" style="color:var(--accent);">50,000 / mo</strong>
-              </div>
-              <input type="range" id="volSlider" class="vol-slider" min="10" max="500" step="10" value="50" aria-label="Monthly webhook volume in thousands" />
-            </div>
+          <div class="preset-grid" role="group" aria-label="Recorded incident scenarios">
+            <button type="button" class="preset-card" data-replay="rate" aria-pressed="true">
+              <strong>Recover a 429 rate-limit storm</strong>
+              <span>model-router · fallback + backoff</span>
+            </button>
+            <button type="button" class="preset-card" data-replay="vat" aria-pressed="false">
+              <strong>Catch a VAT invoice mismatch</strong>
+              <span>finance-gate · human approval</span>
+            </button>
+            <button type="button" class="preset-card" data-replay="dedup" aria-pressed="false">
+              <strong>Deduplicate a double WhatsApp lead</strong>
+              <span>ingest-guard · idempotency lock</span>
+            </button>
           </div>
 
-          <div class="cost-compare">
-            <div class="cost-box">
-              <small>No-Code Zapier / Make</small>
-              <strong id="zapCost">$449/mo</strong>
-              <div style="font-size:0.78rem;color:var(--muted);margin-top:6px;">Recurring per-step billing + silent rate-limit drops</div>
+          <form class="replay-input-row" id="customReplayForm">
+            <input type="text" id="customEventInput" class="replay-input" placeholder="Or type a custom event, like: refund request over $500 from VIP account" aria-label="Custom event to replay" />
+            <button type="submit" class="replay-btn">Replay</button>
+          </form>
+
+          <div class="mac-window" style="min-height: 290px; box-shadow: 0 10px 34px rgba(33, 31, 27, 0.06);">
+            <div class="mac-bar">
+              <span class="mac-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="mac-title" id="replayWinTitle">Recover a 429 rate-limit storm</span>
+              <span class="pill-ok" id="replayWinStatus">Recorded run</span>
             </div>
-            <div class="cost-box is-win">
-              <small>Self-Hosted Pipeline</small>
-              <strong id="rfCost">$42/mo</strong>
-              <div style="font-size:0.78rem;color:var(--ok);margin-top:6px;" id="saveLabel">Saves $4,884 / year</div>
+            <div class="mac-body" style="justify-content: flex-start;">
+              <div class="replay-log" id="replayLog"></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- QUICKSTART & CLOUD ACCESS CTA (Industry-Leader Dev-Infra Pattern) -->
-    <section class="cta-sec" id="quickstart">
+    <!-- HELICON-INSPIRED CORNER-PINNED 2x2 ARCHITECTURAL GUARANTEES -->
+    <section class="guarantees-sec" id="guarantees">
       <div class="wrap">
-        <div class="cta-box">
-          <div style="flex:1;min-width:260px;">
-            <div class="eyebrow">Start Locally, Scale Globally</div>
-            <h2>Deploy your first durable step in 60 seconds</h2>
-            <p>50,000 free monthly step runs in Relay Cloud, or self-host the open runtime in your own VPC with Docker and PostgreSQL.</p>
-            <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:18px;font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-2);">
-              <span>Hobby: $0 / mo</span>
-              <span>Pro: $79 / mo</span>
-              <span>VPC Enterprise: Custom</span>
+        <div class="g-head">
+          <h2>Everything a production workflow needs, in one calm runtime</h2>
+          <p>Ingestion, typed model routing, human approvals, and cost accounting live side by side so engineers stop hunting through fragmented logs.</p>
+        </div>
+
+        <div class="g-grid">
+          <span class="pin pin-tl" aria-hidden="true"></span>
+          <span class="pin pin-tr" aria-hidden="true"></span>
+          <span class="pin pin-bl" aria-hidden="true"></span>
+          <span class="pin pin-br" aria-hidden="true"></span>
+
+          <article class="g-cell">
+            <div class="g-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
+            <h3>Idempotent by default</h3>
+            <p>Every webhook carries a deterministic lock key in PostgreSQL. Retried deliveries from Stripe or WhatsApp never create duplicate records or double replies.</p>
+          </article>
+
+          <article class="g-cell">
+            <div class="g-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <h3>Inline human approvals</h3>
+            <p>When a confidence score drops or an invoice total fails arithmetic verification, execution pauses cleanly and waits for one-click approval without losing state.</p>
+          </article>
+
+          <article class="g-cell">
+            <div class="g-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h3>Strict schema contracts</h3>
+            <p>Validate every Claude, OpenAI, or Gemini response against typed Pydantic or Zod contracts with automatic secondary-model fallback on 429 rate limits.</p>
+          </article>
+
+          <article class="g-cell">
+            <div class="g-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3>Runs inside your own VPC</h3>
+            <p>Deploy via Docker alongside your existing Postgres and Redis stack, or run on Relay Cloud with zero per-step vendor tax as webhook volume scales.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIET EDITORIAL CLOSING DEMO BAND -->
+    <section class="closing-sec" id="demo">
+      <div class="wrap">
+        <div class="closing-card">
+          <div>
+            <span class="kicker">Early Access &amp; Live Walkthrough</span>
+            <h2>Ready for pipelines you never have to babysit?</h2>
+            <p>Book a 15-minute live walkthrough with the engineering team or provision a sandbox workspace to test your own webhook payloads.</p>
           </div>
 
-          <form id="sandboxForm" style="display:flex;flex-direction:column;gap:10px;width:min(380px, 100%);">
-            <input type="email" id="workEmailInput" required placeholder="you@company.com" aria-label="Work email" style="height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--bg);color:var(--ink);font-family:var(--font-mono);font-size:0.82rem;" />
-            <div style="display:flex;gap:8px;">
-              <button type="submit" class="btn btn--accent" style="flex:1;">Provision Sandbox Key</button>
-              <a href="#bench" class="btn btn--ghost">Docs</a>
-            </div>
-            <div id="sandboxStatus" class="mono" style="font-size:0.74rem;color:var(--ok);min-height:18px;" role="status"></div>
+          <form class="demo-form" id="demoForm">
+            <label for="demoEmail" class="mono" style="font-size:0.72rem;color:var(--muted);">WORK EMAIL</label>
+            <input type="email" id="demoEmail" class="demo-input" required placeholder="alex@company.com" />
+            <button type="submit" class="btn-terracotta" style="height:44px;width:100%;">Request Sandbox &amp; Demo</button>
+            <div id="demoStatus" class="mono" style="font-size:0.74rem;color:var(--ok);min-height:18px;" role="status"></div>
           </form>
         </div>
       </div>
@@ -997,11 +1033,11 @@
 
   <footer>
     <div class="wrap footer-inner">
-      <span>Relay Foundry &middot; Durable Execution Runtime</span>
+      <span class="serif" style="font-size:1rem;color:var(--ink);">Relay Foundry</span>
       <div class="footer-links">
-        <a href="#bench">Topology</a>
-        <a href="#architecture">Guarantees</a>
-        <a href="#cost">Pricing Bench</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#replay">Incident Replay</a>
+        <a href="#guarantees">Guarantees</a>
         <a href="https://mayanksahu.dev/" target="_blank" rel="noopener">Concept by Mayank Sahu</a>
       </div>
     </div>
@@ -1010,20 +1046,20 @@
   <script>
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // 1. Silky Exponential Smooth Anchor Scroll
-    function smoothScrollTo(targetY, duration = 640) {
+    // 1. Exponential Smooth Anchor Scroll
+    function smoothScrollTo(targetY, duration = 680) {
       if (reduced) { window.scrollTo({ top: targetY, behavior: "instant" }); return; }
       const startY = window.scrollY;
       const dist = targetY - startY;
       let t0 = null;
-      function step(ts) {
+      function frame(ts) {
         if (!t0) t0 = ts;
         const p = Math.min(1, (ts - t0) / duration);
         const ease = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
         window.scrollTo({ top: Math.round(startY + dist * ease), behavior: "instant" });
-        if (p < 1) requestAnimationFrame(step);
+        if (p < 1) requestAnimationFrame(frame);
       }
-      requestAnimationFrame(step);
+      requestAnimationFrame(frame);
     }
 
     document.querySelectorAll('a[href^="#"]').forEach((a) => {
@@ -1033,231 +1069,225 @@
         const el = document.querySelector(id);
         if (!el) return;
         e.preventDefault();
-        const y = id === "#top" ? 0 : Math.max(0, el.getBoundingClientRect().top + window.scrollY - 76);
+        const y = id === "#top" ? 0 : Math.max(0, el.getBoundingClientRect().top + window.scrollY - 88);
         smoothScrollTo(y);
       });
     });
 
-    // 2. Copy SDK Install Command Button
-    document.getElementById("copyCurlBtn").addEventListener("click", () => {
-      navigator.clipboard?.writeText("npm install @relayfoundry/sdk").catch(() => {});
-      const fb = document.getElementById("copyFeedback");
-      fb.textContent = "Copied";
-      setTimeout(() => { fb.textContent = ""; }, 1800);
-    });
+    // 2. Nav Scroll State + Scroll-Illuminating Manifesto
+    const navPill = document.getElementById("navPill");
+    const mWords = Array.from(document.querySelectorAll(".m-word"));
+    const mPunch = document.getElementById("mPunch");
+    const mSec = document.getElementById("manifesto");
 
-    // 2B. Interactive Sandbox Key Provisioning Form
-    document.getElementById("sandboxForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = document.getElementById("workEmailInput").value.trim();
-      const st = document.getElementById("sandboxStatus");
-      if (!email) return;
-      const key = "rf_live_" + Math.random().toString(36).slice(2, 10);
-      st.textContent = `Sandbox provisioned for ${email} -> ${key}`;
-      document.getElementById("workEmailInput").value = "";
-    });
+    function onScroll() {
+      navPill.classList.toggle("is-scrolled", window.scrollY > 40);
+      if (reduced) {
+        mWords.forEach((w) => w.classList.add("is-lit"));
+        mPunch.classList.add("is-drawn");
+        return;
+      }
+      const r = mSec.getBoundingClientRect();
+      const prog = Math.max(0, Math.min(1, (window.innerHeight * 0.78 - r.top) / (r.height * 0.7)));
+      const lit = Math.floor(prog * (mWords.length + 2));
+      mWords.forEach((w, i) => w.classList.toggle("is-lit", i < lit));
+      mPunch.classList.toggle("is-drawn", prog > 0.72);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 
-    // 3. Live Animated Code Step Cycling
-    const codeSteps = Array.from(document.querySelectorAll(".code-step"));
-    let activeCodeIdx = 0;
-    let codeTimer = null;
+    // 3. Editorial 4-Step Storyboard inside Warm macOS Window
+    const STEPS = [
+      {
+        num: "01",
+        title: "Verify every incoming event",
+        desc: "Every WhatsApp, Stripe, or API webhook is HMAC-verified and locked with an idempotency key before a single model token is spent.",
+        winTitle: "Webhook Ingest · run_98412",
+        html: `
+          <div class="win-card is-highlight">
+            <div><strong>POST /v1/hooks/stripe-invoice</strong><div class="mono" style="font-size:0.74rem;color:var(--muted);margin-top:2px;">sha256 signature valid · idem_98412</div></div>
+            <span class="pill-ok">VERIFIED · 14ms</span>
+          </div>
+          <div class="win-card">
+            <div><strong>Idempotency Guard (PostgreSQL)</strong><div class="mono" style="font-size:0.74rem;color:var(--muted);margin-top:2px;">Unique constraint locked · 0 duplicates</div></div>
+            <span class="pill-ok">LOCKED</span>
+          </div>
+          <div class="win-card">
+            <div><strong>Queue Dispatch</strong><div class="mono" style="font-size:0.74rem;color:var(--muted);margin-top:2px;">Routed to finance-triage worker</div></div>
+            <span class="mono" style="font-size:0.74rem;color:var(--muted);">step 1 of 4</span>
+          </div>`
+      },
+      {
+        num: "02",
+        title: "Route models with strict schemas",
+        desc: "Structured outputs are validated against typed contracts. If a primary provider hits 429 rate limits, Relay swaps cleanly to your fallback model.",
+        winTitle: "Typed Model Router · run_98412",
+        html: `
+          <div class="win-card">
+            <div><strong>Claude Sonnet 4 · InvoiceSchema</strong><div class="mono" style="font-size:0.74rem;color:var(--muted);margin-top:2px;">Structured JSON valid · confidence 0.97</div></div>
+            <span class="pill-ok">410ms · $0.0014</span>
+          </div>
+          <pre class="code-snippet">{
+  "vendor": "Kestrel Joinery Ltd",
+  "subtotal_gbp": 12400,
+  "stated_vat_gbp": 2890,
+  "expected_vat_20pct": 2480
+}</pre>`
+      },
+      {
+        num: "03",
+        title: "Pause risky anomalies for approval",
+        desc: "Arithmetic checks catch mismatches automatically. Instead of pushing bad numbers to accounting, Relay pauses execution for a one-click decision.",
+        winTitle: "Human Approval Gate · run_98412",
+        html: `
+          <div class="win-card is-highlight">
+            <div><strong>VAT arithmetic delta (+£410)</strong><div class="mono" style="font-size:0.74rem;color:var(--muted);margin-top:2px;">Expected £2,480 at 20%, invoice states £2,890</div></div>
+            <span class="pill-warn">PAUSED</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;">
+            <button type="button" class="btn-terracotta" id="approveBtn" style="height:38px;padding:0 16px;font-size:0.84rem;">Approve &amp; Replay Step 4</button>
+            <button type="button" class="replay-btn" id="holdBtn" style="height:38px;background:var(--surface);color:var(--ink);font-size:0.84rem;">Keep in Hold Queue</button>
+          </div>
+          <div id="approvalFeedback" class="mono" style="font-size:0.76rem;color:var(--ok);min-height:20px;"></div>`
+      },
+      {
+        num: "04",
+        title: "Commit cleanly with full audit trace",
+        desc: "Once verified or approved, Relay writes atomically to PostgreSQL, notifies Slack, and stores the full reproducible timeline.",
+        winTitle: "Production Commit · run_98412",
+        html: `
+          <div class="win-card is-highlight">
+            <div><strong>PostgreSQL Ledger Upsert</strong><div class="mono" style="font-size:0.74rem;color:var(--muted);margin-top:2px;">tx_committed · audit_row aud_98412_ok</div></div>
+            <span class="pill-ok">200 COMMITTED</span>
+          </div>
+          <div class="win-card">
+            <div><strong>Slack Dispatch (#finance-ops)</strong><div class="mono" style="font-size:0.74rem;color:var(--muted);margin-top:2px;">Receipt posted with full trace link</div></div>
+            <span class="pill-ok">82ms</span>
+          </div>
+          <div class="win-card">
+            <div><strong>Total End-to-End</strong><div class="mono" style="font-size:0.74rem;color:var(--muted);margin-top:2px;">0 dropped events · 0 duplicate writes</div></div>
+            <span class="mono" style="font-size:0.78rem;font-weight:600;">531ms</span>
+          </div>`
+      }
+    ];
 
-    function highlightCodeStep(idx, warnIdx = -1) {
-      codeSteps.forEach((s, i) => {
-        s.classList.toggle("is-active", i === idx && i !== warnIdx);
-        s.classList.toggle("is-warn", i === warnIdx);
-      });
+    let activeStep = 0;
+    function renderStep(idx) {
+      activeStep = idx;
+      const s = STEPS[idx];
+      document.getElementById("stepNum").textContent = s.num;
+      document.getElementById("stepTitle").textContent = s.title;
+      document.getElementById("stepDesc").textContent = s.desc;
+      document.getElementById("macTitle").textContent = s.winTitle;
+      document.getElementById("macStepNum").textContent = String(idx + 1);
+      const body = document.getElementById("macBody");
+      body.innerHTML = s.html;
+      document.querySelectorAll("[data-step]").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.step) === idx)));
+
+      const appBtn = document.getElementById("approveBtn");
+      if (appBtn) {
+        appBtn.addEventListener("click", () => {
+          document.getElementById("approvalFeedback").textContent = "Approved by operator -> resuming Step 4 commit...";
+          setTimeout(() => renderStep(3), 700);
+        });
+      }
+      const hBtn = document.getElementById("holdBtn");
+      if (hBtn) {
+        hBtn.addEventListener("click", () => {
+          document.getElementById("approvalFeedback").textContent = "Kept safely in #finance-approvals hold queue (zero data loss).";
+        });
+      }
     }
 
-    if (!reduced) {
-      codeTimer = setInterval(() => {
-        activeCodeIdx = (activeCodeIdx + 1) % codeSteps.length;
-        highlightCodeStep(activeCodeIdx);
-      }, 2200);
-    }
-
-    codeSteps.forEach((el, idx) => {
-      el.addEventListener("click", () => {
-        clearInterval(codeTimer);
-        highlightCodeStep(idx);
-      });
+    document.querySelectorAll("[data-step]").forEach((btn) => {
+      btn.addEventListener("click", () => renderStep(Number(btn.dataset.step)));
     });
+    renderStep(0);
 
-    // 4. Interactive Execution Topology Scenarios
-    const SCENARIOS = {
-      happy: {
-        status: "200 COMMITTED",
-        warn: false,
-        latency: "531 ms",
-        cost: "$0.0014",
-        retries: "0 / 3",
-        branch: "crm",
-        lats: { ingest: "14 ms", llm: "420 ms", policy: "9 ms", crm: "88 ms", hold: "idle" },
-        payloads: {
-          ingest: { event_id: "evt_wa_98412", hmac_verified: true, dedup_hit: false, source: "whatsapp_cloud_v20" },
-          llm: { model: "claude-sonnet-4", intent: "interior_renovation_quote", budget_gbp: 45000, confidence: 0.97 },
-          policy: { vat_check: "passed", risk_score: 0.04, route: "crm_upsert" },
-          crm: { notion_page_id: "ntn_7b31c90a", slack_alert: "#qualified-leads", whatsapp_reply: "dispatched", audit_row_id: "aud_98412_ok" },
-          hold: { status: "idle", reason: "No policy anomalies detected on run_98412" }
-        }
+    // 4. Helicon-Inspired Interactive Incident Replay Workbench
+    const REPLAYS = {
+      rate: {
+        title: "Recover a 429 rate-limit storm",
+        status: "200 RECOVERED",
+        logs: [
+          ["ok", "ingest.verify_hmac", "Verified Stripe webhook evt_77102 (12ms)"],
+          ["warn", "model.primary_429", "Primary LLM returned 429 Too Many Requests -> backoff 400ms"],
+          ["ok", "model.fallback_route", "Switched seamlessly to secondary provider with strict JSON schema (310ms)"],
+          ["ok", "db.commit", "Upserted record with zero duplicates (64ms)"]
+        ]
       },
-      mismatch: {
-        status: "202 HELD FOR REVIEW",
-        warn: true,
-        latency: "468 ms",
-        cost: "$0.0016",
-        retries: "0 / 3",
-        branch: "hold",
-        lats: { ingest: "12 ms", llm: "435 ms", policy: "21 ms (FLAG)", crm: "skipped", hold: "32 ms" },
-        payloads: {
-          ingest: { event_id: "evt_inv_44108", hmac_verified: true, dedup_hit: false, source: "stripe_invoice_hook" },
-          llm: { model: "claude-sonnet-4", extracted_subtotal: 12400, extracted_vat: 2890, expected_vat_20pct: 2480 },
-          policy: { vat_check: "FAILED_DELTA_410", risk_score: 0.89, route: "human_hold_queue" },
-          crm: { status: "skipped", guard: "Blocked automatic payout commit due to VAT mismatch" },
-          hold: { queue_id: "dlq_44108", slack_channel: "#finance-approvals", replay_token: "rpl_8f2a10", auto_expire: "24h" }
-        }
+      vat: {
+        title: "Catch a VAT invoice mismatch",
+        status: "202 PAUSED SAFELY",
+        logs: [
+          ["ok", "ingest.verify_hmac", "Verified invoice PDF webhook evt_44108 (14ms)"],
+          ["ok", "llm.extract_fields", "Extracted line items + VAT total (420ms, confidence 0.96)"],
+          ["warn", "policy.arithmetic_check", "Flagged £410 VAT discrepancy -> blocked automatic payout"],
+          ["ok", "approval.park_state", "Dispatched 1-click approval card to #finance-approvals (28ms)"]
+        ]
       },
-      retry: {
-        status: "200 RECOVERED (RETRY #2)",
-        warn: false,
-        latency: "1,840 ms",
-        cost: "$0.0019",
-        retries: "2 / 3",
-        branch: "crm",
-        lats: { ingest: "15 ms", llm: "1,720 ms (429->OK)", policy: "11 ms", crm: "94 ms", hold: "idle" },
-        payloads: {
-          ingest: { event_id: "evt_api_77102", hmac_verified: true, idempotency_key: "idem_77102" },
-          llm: { attempt_1: "429_rate_limit (backoff 400ms)", attempt_2: "429_rate_limit (fallback -> gemini-2.5-flash)", attempt_3: "200_valid_json" },
-          policy: { schema_validated: true, fallback_model_allowed: true, route: "crm_upsert" },
-          crm: { postgres_tx: "committed", zero_duplicates: true, recovered_without_alert: true, audit_row_id: "aud_77102_ok" },
-          hold: { status: "idle", reason: "Recovered automatically inside retry budget" }
-        }
+      dedup: {
+        title: "Deduplicate a double WhatsApp lead",
+        status: "200 DEDUPLICATED",
+        logs: [
+          ["ok", "ingest.delivery_1", "Accepted WhatsApp lead msg_55901 -> locked idem_55901 (11ms)"],
+          ["warn", "ingest.delivery_2", "Duplicate webhook arrived 90ms later -> short-circuited cleanly"],
+          ["ok", "llm.triage_lead", "Qualified lead once ($0.0012 saved on duplicate skip)"],
+          ["ok", "crm.sync", "Single Notion lead created + WhatsApp confirmation sent (74ms)"]
+        ]
       }
     };
 
-    let currentSc = "happy";
-    let currentNode = "crm";
-    let packetRaf = null;
-
-    function animatePacket(branch, isWarn) {
-      cancelAnimationFrame(packetRaf);
-      const dot = document.getElementById("sigPacket");
-      dot.classList.toggle("is-warn", isWarn);
-      const pts = branch === "hold"
-        ? [[77, 92], [248, 92], [420, 92], [599, 188]]
-        : [[77, 92], [248, 92], [420, 92], [599, 58]];
-      if (reduced) { dot.setAttribute("cx", pts[3][0]); dot.setAttribute("cy", pts[3][1]); return; }
-      let t0 = null;
-      const dur = 1100;
-      function frame(ts) {
-        if (!t0) t0 = ts;
-        const p = Math.min(1, (ts - t0) / dur);
-        const seg = Math.min(2, Math.floor(p * 3));
-        const local = (p * 3) - seg;
-        const x = pts[seg][0] + (pts[seg + 1][0] - pts[seg][0]) * local;
-        const y = pts[seg][1] + (pts[seg + 1][1] - pts[seg][1]) * local;
-        dot.setAttribute("cx", x.toFixed(1));
-        dot.setAttribute("cy", y.toFixed(1));
-        if (p < 1) packetRaf = requestAnimationFrame(frame);
-      }
-      packetRaf = requestAnimationFrame(frame);
-    }
-
-    function renderScenario(scKey, focusNode) {
-      currentSc = scKey;
-      const sc = SCENARIOS[scKey];
-      currentNode = focusNode || sc.branch;
-
-      document.querySelectorAll(".sc-btn").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.sc === scKey)));
-      document.getElementById("kpiStatus").textContent = sc.status;
-      document.getElementById("kpiStatus").style.color = sc.warn ? "var(--warn)" : "var(--ok)";
-      document.getElementById("kpiLatency").textContent = sc.latency;
-      document.getElementById("kpiCost").textContent = sc.cost;
-      document.getElementById("kpiRetries").textContent = sc.retries;
-      document.getElementById("codeStatusPill").textContent = sc.status;
-      document.getElementById("codeStatusPill").style.color = sc.warn ? "var(--warn)" : "var(--ok)";
-
-      Object.entries(sc.lats).forEach(([k, v]) => {
-        const el = document.getElementById(`lat-${k}`);
-        if (el) {
-          el.textContent = v;
-          el.setAttribute("fill", v === "idle" || v === "skipped" ? "#7f786e" : (sc.warn && (k === "policy" || k === "hold") ? "#fbbf24" : "#34d399"));
-        }
+    let replayTimers = [];
+    function playReplay(title, status, logs) {
+      replayTimers.forEach(clearTimeout);
+      replayTimers = [];
+      document.getElementById("replayWinTitle").textContent = title;
+      document.getElementById("replayWinStatus").textContent = "Replaying...";
+      const box = document.getElementById("replayLog");
+      box.innerHTML = "";
+      logs.forEach(([kind, fn, msg], i) => {
+        const t = setTimeout(() => {
+          const row = document.createElement("div");
+          row.className = "log-entry";
+          row.innerHTML = `<span class="log-dot ${kind === "warn" ? "is-warn" : ""}"></span><div><strong class="mono" style="font-size:0.78rem;">${fn}</strong><div style="color:var(--ink-2);font-size:0.84rem;margin-top:2px;">${msg}</div></div><span class="mono" style="font-size:0.72rem;color:var(--muted);">0${i + 1}</span>`;
+          box.appendChild(row);
+          if (i === logs.length - 1) document.getElementById("replayWinStatus").textContent = status;
+        }, reduced ? 0 : i * 260);
+        replayTimers.push(t);
       });
-
-      document.getElementById("w-23").className.baseVal = sc.branch === "crm" ? "wire is-ok" : "wire";
-      document.getElementById("w-24").className.baseVal = sc.branch === "hold" ? "wire is-warn" : "wire";
-
-      document.querySelectorAll(".node-g").forEach((g) => {
-        const n = g.dataset.node;
-        const active = (n === "ingest" || n === "llm" || n === "policy" || n === sc.branch);
-        const isWarnNode = sc.warn && (n === "policy" || n === "hold");
-        g.classList.toggle("is-ok", active && !isWarnNode);
-        g.classList.toggle("is-warn", isWarnNode);
-        g.classList.toggle("is-selected", n === currentNode);
-      });
-
-      renderInspector();
-      animatePacket(sc.branch, sc.warn);
     }
 
-    function renderInspector() {
-      const sc = SCENARIOS[currentSc];
-      const names = {
-        ingest: "NODE: 1. WEBHOOK INGEST",
-        llm: "NODE: 2. LLM TRIAGE",
-        policy: "NODE: 3. POLICY GATE",
-        crm: "NODE: 4A. CRM UPSERT",
-        hold: "NODE: 4B. HOLD QUEUE"
-      };
-      document.getElementById("inspNodeLabel").textContent = names[currentNode];
-      const badge = document.getElementById("inspBadge");
-      badge.textContent = sc.status;
-      badge.classList.toggle("is-warn", sc.warn);
-      document.getElementById("inspJson").textContent = JSON.stringify(sc.payloads[currentNode], null, 2);
-    }
-
-    document.querySelectorAll(".sc-btn").forEach((b) => {
-      b.addEventListener("click", () => renderScenario(b.dataset.sc));
-    });
-
-    document.querySelectorAll(".node-g").forEach((g) => {
-      g.addEventListener("click", () => {
-        currentNode = g.dataset.node;
-        document.querySelectorAll(".node-g").forEach((x) => x.classList.toggle("is-selected", x === g));
-        renderInspector();
+    document.querySelectorAll("[data-replay]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-replay]").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+        const r = REPLAYS[btn.dataset.replay];
+        playReplay(r.title, r.status, r.logs);
       });
     });
 
-    renderScenario("happy", "crm");
+    document.getElementById("customReplayForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const val = document.getElementById("customEventInput").value.trim() || "Custom high-value webhook event";
+      document.querySelectorAll("[data-replay]").forEach((b) => b.setAttribute("aria-pressed", "false"));
+      playReplay(`Custom Run: ${val.slice(0, 42)}`, "200 VERIFIED", [
+        ["ok", "ingest.verify_hmac", `Accepted event "${val}" with fresh idempotency lock (13ms)`],
+        ["ok", "llm.classify_schema", "Validated structured intent & policy tier (380ms)"],
+        ["warn", "policy.risk_gate", "Applied custom threshold guardrail & logged trace snapshot (16ms)"],
+        ["ok", "runtime.commit", "Persisted state atomically to Postgres with replay link (58ms)"]
+      ]);
+    });
 
-    // 5. Scroll-Illuminating Manifesto
-    const mWords = Array.from(document.querySelectorAll(".m-word"));
-    const mSec = document.getElementById("manifesto");
-    function updateManifesto() {
-      if (reduced) { mWords.forEach((w) => w.classList.add("is-lit")); return; }
-      const r = mSec.getBoundingClientRect();
-      const prog = Math.max(0, Math.min(1, (window.innerHeight * 0.8 - r.top) / (r.height * 0.72)));
-      const lit = Math.floor(prog * (mWords.length + 2));
-      mWords.forEach((w, i) => w.classList.toggle("is-lit", i < lit));
-    }
-    window.addEventListener("scroll", updateManifesto, { passive: true });
-    updateManifesto();
+    playReplay(REPLAYS.rate.title, REPLAYS.rate.status, REPLAYS.rate.logs);
 
-    // 6. Interactive Cost Bench Slider
-    const volSlider = document.getElementById("volSlider");
-    function updateCost() {
-      const k = Number(volSlider.value);
-      const zap = Math.round(69 + k * 7.6);
-      const rf = Math.round(18 + k * 0.48);
-      const yrSave = (zap - rf) * 12;
-      document.getElementById("volLabel").textContent = `${(k * 1000).toLocaleString("en-US")} / mo`;
-      document.getElementById("zapCost").textContent = `$${zap.toLocaleString("en-US")}/mo`;
-      document.getElementById("rfCost").textContent = `$${rf.toLocaleString("en-US")}/mo`;
-      document.getElementById("saveLabel").textContent = `Saves $${yrSave.toLocaleString("en-US")} / year`;
-    }
-    volSlider.addEventListener("input", updateCost);
-    updateCost();
+    // 5. Demo Form
+    document.getElementById("demoForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const em = document.getElementById("demoEmail").value.trim();
+      if (!em) return;
+      document.getElementById("demoStatus").textContent = `Sandbox invite queued for ${em}. Check your inbox shortly.`;
+      document.getElementById("demoEmail").value = "";
+    });
   </script>
 </body>
 </html>
