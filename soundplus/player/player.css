@@ -1623,11 +1623,47 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 .np-sp-pane[hidden] { display: none !important; }
 
+.np-lyrics-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
 .np-lyrics-status {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--muted);
-  margin-bottom: 4px;
+}
+.np-sync-ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+}
+.np-sync-ctrl[hidden] { display: none !important; }
+.np-sync-btn,
+.np-sync-val {
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: background 0.14s ease, color 0.14s ease;
+}
+.np-sync-btn:hover,
+.np-sync-val:hover {
+  background: var(--surface);
+  color: var(--accent);
+}
+.np-sync-val.is-shifted {
+  color: var(--accent);
 }
 .np-lyrics-list {
   display: flex;

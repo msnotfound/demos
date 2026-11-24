@@ -498,7 +498,14 @@
         </div>
 
         <div class="np-sp-pane" id="npPaneLyrics">
-          <div class="np-lyrics-status" id="npLyricsStatus"></div>
+          <div class="np-lyrics-bar">
+            <div class="np-lyrics-status" id="npLyricsStatus"></div>
+            <div class="np-sync-ctrl" id="npSyncCtrl" hidden aria-label="Lyrics timing offset">
+              <button type="button" class="np-sync-btn" id="npSyncMinus" title="Shift lyrics earlier (-0.5s)" aria-label="Shift lyrics earlier by 0.5 seconds">-0.5s</button>
+              <button type="button" class="np-sync-val mono" id="npSyncReset" title="Reset sync offset to 0.0s">0.0s</button>
+              <button type="button" class="np-sync-btn" id="npSyncPlus" title="Shift lyrics later (+0.5s)" aria-label="Shift lyrics later by 0.5 seconds">+0.5s</button>
+            </div>
+          </div>
           <div class="np-lyrics-list" id="npLyricsList"></div>
         </div>
 
