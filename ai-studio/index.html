@@ -873,17 +873,199 @@
     .footer-links { display: flex; flex-wrap: wrap; gap: 22px; }
     .footer-links a:hover { color: var(--ink); }
 
+    /* Mobile Horizontal Scroll-Snap 4-Step Carousel (Hidden on Desktop) */
+    .story-mobile-carousel {
+      display: none;
+    }
+
+    .story-rail {
+      position: relative;
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      margin-inline: -20px;
+      padding: 6px 20px 18px;
+      scroll-padding-inline: 20px;
+    }
+    .story-rail::-webkit-scrollbar { display: none; }
+
+    .m-step-card {
+      flex: 0 0 85%;
+      max-width: 420px;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px 16px 14px;
+      box-shadow: 0 12px 32px rgba(33, 31, 27, 0.07), 0 2px 6px rgba(33, 31, 27, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      transition: transform 0.35s var(--ease), border-color 0.28s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+      opacity: 0.74;
+      transform: scale(0.975);
+    }
+
+    .m-step-card.is-active {
+      opacity: 1;
+      transform: scale(1);
+      border-color: rgba(194, 78, 40, 0.34);
+      box-shadow: 0 18px 42px rgba(33, 31, 27, 0.1), 0 2px 8px rgba(194, 78, 40, 0.08);
+    }
+
+    .m-step-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .m-step-num {
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      line-height: 1;
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .m-step-badge {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface-warm);
+      border: 1px solid var(--line);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .m-step-title {
+      font-size: 1.16rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.16;
+      color: var(--ink);
+    }
+
+    .m-step-desc {
+      font-size: 0.84rem;
+      line-height: 1.48;
+      color: var(--ink-2);
+    }
+
+    .m-step-win {
+      margin-top: auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .m-step-win .mac-bar {
+      height: 34px;
+      padding: 0 11px;
+      gap: 10px;
+    }
+    .m-step-win .mac-dots { gap: 5px; flex: none; }
+    .m-step-win .mac-dots i { width: 7.5px; height: 7.5px; }
+    .m-step-win .mac-title {
+      font-size: 0.74rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .m-step-win-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .m-step-win-body .win-card {
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 0.77rem;
+      flex-wrap: wrap;
+      gap: 5px 8px;
+      background: var(--surface);
+    }
+    .m-step-win-body .win-card.is-highlight {
+      background: var(--surface-tint);
+    }
+    .m-step-win-body .win-card strong {
+      font-size: 0.78rem;
+      word-break: break-word;
+    }
+    .m-step-win-body .code-snippet {
+      padding: 9px 10px;
+      font-size: 0.7rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .m-rail-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 2px;
+    }
+
+    .m-rail-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .m-rail-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(33, 31, 27, 0.16);
+      transition: width 0.28s var(--ease), background 0.25s ease;
+    }
+    .m-rail-dot[aria-pressed="true"] {
+      width: 28px;
+      background: var(--accent);
+    }
+
+    .m-rail-hint {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
     @media (max-width: 920px) {
       .nav-links { display: none; }
       .story-track { min-height: 0; }
       .story-sticky { position: static; padding: 0; }
-      .story-grid, .preset-grid, .g-grid, .closing-card { grid-template-columns: 1fr; }
+      .story-grid { display: none; }
+      .story-mobile-carousel { display: block; }
+      .preset-grid, .g-grid, .closing-card { grid-template-columns: 1fr; }
       .g-cell { border-right: 0; border-bottom: 1px solid var(--line); }
       .g-cell:last-child { border-bottom: 0; }
     }
 
     @media (max-width: 600px) {
       .wrap { width: min(1140px, 100% - 28px); }
+      .story-intro { margin-bottom: 18px; }
+      .story-intro h2 { font-size: 1.62rem; }
+      .story-rail {
+        margin-inline: -14px;
+        padding: 4px 14px 14px;
+        scroll-padding-inline: 14px;
+      }
+      .m-step-card { flex: 0 0 86%; }
       .nav-shell { top: 12px; padding-inline: 12px; }
       .nav-pill { height: 52px; padding: 0 8px 0 16px; }
       .brand { font-size: 1.04rem; }
@@ -1007,6 +1189,19 @@
                 <span class="mac-step-ind">Step <strong id="macStepNum">1</strong> / 4</span>
               </div>
               <div class="mac-body" id="macBody"></div>
+            </div>
+          </div>
+
+          <div class="story-mobile-carousel" aria-label="4 workflow steps">
+            <div class="story-rail" id="storyRail" role="region" aria-label="Swipe through 4 pipeline steps"></div>
+            <div class="m-rail-footer">
+              <div class="m-rail-dots" id="mRailDots" role="group" aria-label="Jump to pipeline step">
+                <button type="button" class="m-rail-dot" data-mstep="0" aria-label="Go to step 1" aria-pressed="true"></button>
+                <button type="button" class="m-rail-dot" data-mstep="1" aria-label="Go to step 2" aria-pressed="false"></button>
+                <button type="button" class="m-rail-dot" data-mstep="2" aria-label="Go to step 3" aria-pressed="false"></button>
+                <button type="button" class="m-rail-dot" data-mstep="3" aria-label="Go to step 4" aria-pressed="false"></button>
+              </div>
+              <span class="m-rail-hint" id="mRailHint">01 / 04 · Swipe -&gt;</span>
             </div>
           </div>
         </div>
@@ -1366,6 +1561,93 @@
       });
     });
     renderStep(0);
+
+    // 3B. Mobile Horizontal Scroll-Snap 4-Step Carousel
+    const storyRail = document.getElementById("storyRail");
+    const mRailDots = Array.from(document.querySelectorAll("[data-mstep]"));
+    const mRailHint = document.getElementById("mRailHint");
+    if (storyRail) {
+      storyRail.innerHTML = STEPS.map((s, i) => {
+        const mobHtml = s.html
+          .replace('class="btn-terracotta" id="approveBtn"', 'class="btn-terracotta js-mob-approve"')
+          .replace('class="replay-btn" id="holdBtn"', 'class="replay-btn js-mob-hold"')
+          .replace('id="approvalFeedback" class="mono"', 'class="mono js-mob-feedback"');
+        return `
+          <article class="m-step-card${i === 0 ? " is-active" : ""}" data-card-idx="${i}">
+            <div class="m-step-head">
+              <span class="m-step-num">${s.num}</span>
+              <span class="m-step-badge">Step ${i + 1} of 4</span>
+            </div>
+            <h3 class="m-step-title">${s.title}</h3>
+            <p class="m-step-desc">${s.desc}</p>
+            <div class="m-step-win">
+              <div class="mac-bar">
+                <span class="mac-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="mac-title">${s.winTitle}</span>
+              </div>
+              <div class="m-step-win-body">${mobHtml}</div>
+            </div>
+          </article>`;
+      }).join("");
+
+      const mCards = Array.from(storyRail.querySelectorAll(".m-step-card"));
+      let mActive = 0;
+
+      function setMobileActive(idx) {
+        mActive = Math.max(0, Math.min(mCards.length - 1, idx));
+        mCards.forEach((c, i) => c.classList.toggle("is-active", i === mActive));
+        mRailDots.forEach((d, i) => d.setAttribute("aria-pressed", String(i === mActive)));
+        if (mRailHint) {
+          mRailHint.textContent = mActive === mCards.length - 1
+            ? `0${mActive + 1} / 04 · Committed`
+            : `0${mActive + 1} / 04 · Swipe ->`;
+        }
+      }
+
+      function scrollToMobileCard(idx) {
+        const card = mCards[idx];
+        if (!card) return;
+        const padLeft = parseFloat(getComputedStyle(storyRail).paddingLeft) || 14;
+        storyRail.scrollTo({ left: Math.max(0, card.offsetLeft - padLeft), behavior: reduced ? "instant" : "smooth" });
+        setMobileActive(idx);
+      }
+
+      let railRaf = 0;
+      storyRail.addEventListener("scroll", () => {
+        if (railRaf) return;
+        railRaf = requestAnimationFrame(() => {
+          railRaf = 0;
+          const padLeft = parseFloat(getComputedStyle(storyRail).paddingLeft) || 14;
+          const targetX = storyRail.scrollLeft + padLeft;
+          let best = 0;
+          let bestDist = Infinity;
+          mCards.forEach((card, i) => {
+            const dist = Math.abs(card.offsetLeft - targetX);
+            if (dist < bestDist) { bestDist = dist; best = i; }
+          });
+          if (best !== mActive) setMobileActive(best);
+        });
+      }, { passive: true });
+
+      mRailDots.forEach((dot) => {
+        dot.addEventListener("click", () => scrollToMobileCard(Number(dot.dataset.mstep)));
+      });
+
+      const mobAppBtn = storyRail.querySelector(".js-mob-approve");
+      const mobHoldBtn = storyRail.querySelector(".js-mob-hold");
+      const mobFb = storyRail.querySelector(".js-mob-feedback");
+      if (mobAppBtn && mobFb) {
+        mobAppBtn.addEventListener("click", () => {
+          mobFb.textContent = "Approved by operator -> sliding to Step 4 commit...";
+          setTimeout(() => scrollToMobileCard(3), 650);
+        });
+      }
+      if (mobHoldBtn && mobFb) {
+        mobHoldBtn.addEventListener("click", () => {
+          mobFb.textContent = "Kept safely in #finance-approvals hold queue (zero data loss).";
+        });
+      }
+    }
 
     // 4. Helicon-Inspired Interactive Incident Replay Workbench
     const REPLAYS = {
