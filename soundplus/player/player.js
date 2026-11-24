@@ -1008,14 +1008,25 @@
     document.getElementById("videoToggleBtn").classList.toggle("is-saved", state.showVideo);
     document.getElementById("videoToggleBtn").setAttribute("aria-pressed", String(state.showVideo));
 
-    // Spotify-Style Now Playing Sheet sync
+    // Spotify-Style Now Playing Lounge sync
     document.getElementById("npCover").innerHTML = artMarkup(item);
     document.getElementById("npGenre").textContent = (item.genre || "NOW PLAYING").toUpperCase();
     document.getElementById("npTitle").textContent = item.title;
     document.getElementById("npArtist").textContent = item.artist;
     document.getElementById("npPlaySvg").innerHTML = playSvg;
-    document.getElementById("npOfflineBtn").textContent = state.offline.has(item.id) ? "Downloaded" : "Download";
-    document.getElementById("npVideoBtn").textContent = state.showVideo ? "Hide Video" : "Watch Video";
+
+    const isSaved = state.offline.has(item.id);
+    const npOffBtn = document.getElementById("npOfflineBtn");
+    npOffBtn.setAttribute("aria-pressed", String(isSaved));
+    npOffBtn.title = isSaved ? "Saved in downloads (click to remove)" : "Save to downloads";
+    npOffBtn.innerHTML = isSaved
+      ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+      : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+
+    const npVidBtn = document.getElementById("npVideoBtn");
+    npVidBtn.classList.toggle("is-active", state.showVideo);
+    npVidBtn.setAttribute("aria-pressed", String(state.showVideo));
+    npVidBtn.title = state.showVideo ? "Hide video preview" : "Watch video preview";
 
     const npLike = document.getElementById("npLikeBtn");
     npLike.classList.toggle("is-liked", liked);
@@ -1029,16 +1040,21 @@
     const nextItem = getItem(nextId);
     const upNext = document.getElementById("npUpNextCard");
     if (upNext && nextItem) {
-      upNext.dataset.play = nextItem.id;
       upNext.innerHTML = `
         <div style="width:40px;height:40px;border-radius:8px;overflow:hidden;flex:none;">${artMarkup(nextItem)}</div>
         <div style="min-width:0;flex:1;">
           <div class="mono" style="font-size:0.66rem;color:var(--accent);">UP NEXT</div>
           <div style="font-weight:600;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(nextItem.title)}</div>
-          <div style="font-size:0.76rem;color:var(--muted);">${escHtml(nextItem.artist)}</div>
+          <div style="font-size:0.76rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(nextItem.artist)}</div>
         </div>
-        <span class="mono" style="font-size:0.74rem;color:var(--muted);">${fmtTime(nextItem.duration)}</span>
+        <span class="mono" style="font-size:0.74rem;color:var(--muted);flex:none;">${fmtTime(nextItem.duration)}</span>
       `;
+    }
+
+    if (lyricsTrackId !== item.id) {
+      lyricsTrackId = item.id;
+      activeLyricIdx = -1;
+      if (npSubpanel === "lyrics") loadSyncedLyrics(item);
     }
 
     updateScrubber();
@@ -1074,23 +1090,189 @@
     if (npEl) npEl.textContent = fmtTime(state.elapsed);
     const npDur = document.getElementById("npDuration");
     if (npDur) npDur.textContent = fmtTime(dur);
+    syncActiveLyricLine();
+  }
+
+  // ==========================================================
+  // SYNCED LYRICS ENGINE (LRCLIB.NET LRC + CLICK-TO-SEEK)
+  // ==========================================================
+  const lyricsCache = new Map();
+  let lyricsTrackId = null;
+  let currentLyrics = null; // { mode: "synced"|"plain"|"empty", lines: [{time,text}], source }
+  let activeLyricIdx = -1;
+
+  function parseLrc(lrcText) {
+    const out = [];
+    const lines = String(lrcText || "").split(/\r?\n/);
+    const rx = /\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]/g;
+    for (const raw of lines) {
+      const times = [];
+      let m;
+      rx.lastIndex = 0;
+      while ((m = rx.exec(raw)) !== null) {
+        const min = Number(m[1]);
+        const sec = Number(m[2]);
+        const ms = m[3] ? Number(m[3].padEnd(3, "0")) / 1000 : 0;
+        times.push(min * 60 + sec + ms);
+      }
+      const text = raw.replace(rx, "").trim();
+      if (!times.length || !text) continue;
+      for (const t of times) out.push({ time: t, text });
+    }
+    out.sort((a, b) => a.time - b.time);
+    return out;
+  }
+
+  function cleanLyricsQuery(item) {
+    let title = String(item.title || "")
+      .replace(/\s*[\(\[](?:official|lyric|audio|music\s*video|hd|4k|visualizer|live|full\s*song|video\s*song|feat\.?[^\)\]]*)[^\)\]]*[\)\]]/gi, "")
+      .replace(/\s*\|.*$/, "")
+      .trim();
+    let artist = String(item.artist || "").replace(/\s*-\s*Topic$/i, "").trim();
+    if (title.includes(" - ")) {
+      const parts = title.split(" - ");
+      if (parts[0].length < 40) {
+        artist = parts[0].trim();
+        title = parts.slice(1).join(" - ").trim();
+      }
+    }
+    return { title, artist, q: `${artist} ${title}`.trim() };
+  }
+
+  async function loadSyncedLyrics(item) {
+    if (!item) return;
+    const statusEl = document.getElementById("npLyricsStatus");
+    const listEl = document.getElementById("npLyricsList");
+    if (!statusEl || !listEl) return;
+
+    if (lyricsCache.has(item.id)) {
+      currentLyrics = lyricsCache.get(item.id);
+      renderLyricsList();
+      return;
+    }
+
+    currentLyrics = null;
+    activeLyricIdx = -1;
+    statusEl.textContent = "FETCHING SYNCED LYRICS...";
+    listEl.innerHTML = `<div style="padding:20px 6px;color:var(--muted);font-size:0.88rem;">Looking up timed lyrics for ${escHtml(item.title)}...</div>`;
+
+    const { title, artist, q } = cleanLyricsQuery(item);
+    try {
+      const res = await fetch(`https://lrclib.net/api/search?q=${encodeURIComponent(q)}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      let hits = await res.json();
+      if ((!Array.isArray(hits) || !hits.length) && title) {
+        const res2 = await fetch(`https://lrclib.net/api/search?track_name=${encodeURIComponent(title)}`);
+        if (res2.ok) hits = await res2.json();
+      }
+      const arr = Array.isArray(hits) ? hits : [];
+      const syncedHit = arr.find((h) => h && h.syncedLyrics && h.syncedLyrics.trim().length > 20);
+      const plainHit = arr.find((h) => h && h.plainLyrics && h.plainLyrics.trim().length > 20);
+
+      let data;
+      if (syncedHit) {
+        const parsed = parseLrc(syncedHit.syncedLyrics);
+        data = parsed.length
+          ? { mode: "synced", lines: parsed, source: `${syncedHit.artistName || artist} - ${syncedHit.trackName || title}` }
+          : { mode: "plain", lines: syncedHit.plainLyrics.split(/\r?\n/).filter(Boolean).map((text) => ({ time: -1, text })), source: syncedHit.trackName || title };
+      } else if (plainHit) {
+        data = {
+          mode: "plain",
+          lines: plainHit.plainLyrics.split(/\r?\n/).filter((l) => l.trim()).map((text) => ({ time: -1, text: text.trim() })),
+          source: `${plainHit.artistName || artist} - ${plainHit.trackName || title}`
+        };
+      } else {
+        data = { mode: "empty", lines: [], source: "" };
+      }
+
+      lyricsCache.set(item.id, data);
+      if (state.currentId === item.id) {
+        currentLyrics = data;
+        renderLyricsList();
+      }
+    } catch (_) {
+      if (state.currentId === item.id) {
+        currentLyrics = { mode: "empty", lines: [], source: "" };
+        renderLyricsList();
+      }
+    }
+  }
+
+  function renderLyricsList() {
+    const statusEl = document.getElementById("npLyricsStatus");
+    const listEl = document.getElementById("npLyricsList");
+    if (!statusEl || !listEl || !currentLyrics) return;
+
+    if (currentLyrics.mode === "synced") {
+      statusEl.textContent = "SYNCED LYRICS (TAP ANY LINE TO SEEK)";
+      listEl.innerHTML = currentLyrics.lines.map((line, i) =>
+        `<button type="button" class="np-lyric-line is-synced" data-lyric-idx="${i}" data-lyric-time="${line.time.toFixed(2)}">${escHtml(line.text)}</button>`
+      ).join("");
+      activeLyricIdx = -1;
+      syncActiveLyricLine(true);
+    } else if (currentLyrics.mode === "plain") {
+      statusEl.textContent = "LYRICS (UNSYNCED)";
+      listEl.innerHTML = currentLyrics.lines.map((line) =>
+        `<div class="np-lyric-line is-past">${escHtml(line.text)}</div>`
+      ).join("");
+    } else {
+      statusEl.textContent = "LYRICS UNAVAILABLE";
+      listEl.innerHTML = `<div style="padding:24px 8px;color:var(--muted);font-size:0.88rem;line-height:1.55;">No timed lyrics were found for this track yet. Switch to <strong>Up Next</strong> or try another song from the catalog.</div>`;
+    }
+  }
+
+  function syncActiveLyricLine(forceScroll = false) {
+    if (!currentLyrics || currentLyrics.mode !== "synced" || npSubpanel !== "lyrics") return;
+    const lines = currentLyrics.lines;
+    if (!lines.length) return;
+    const t = state.elapsed + 0.25;
+    let idx = -1;
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].time <= t) idx = i;
+      else break;
+    }
+    if (idx === activeLyricIdx && !forceScroll) return;
+    activeLyricIdx = idx;
+    const nodes = document.querySelectorAll("#npLyricsList .np-lyric-line");
+    nodes.forEach((node, i) => {
+      node.classList.toggle("is-active", i === idx);
+      node.classList.toggle("is-past", idx >= 0 && i < idx);
+    });
+    if (idx >= 0 && nodes[idx]) {
+      nodes[idx].scrollIntoView({ block: "center", behavior: forceScroll ? "auto" : "smooth" });
+    }
+  }
+
+  function renderQueueMarkup() {
+    const curIdx = Math.max(0, state.queue.indexOf(state.currentId));
+    const ordered = [
+      ...state.queue.slice(curIdx),
+      ...state.queue.slice(0, curIdx)
+    ].slice(0, 20);
+    return ordered.map((id, idx) => {
+      const t = getItem(id);
+      const isCur = idx === 0 && id === state.currentId;
+      const head = idx === 0
+        ? `<div class="np-q-label">NOW PLAYING</div>`
+        : idx === 1 ? `<div class="np-q-label" style="margin-top:8px;">NEXT IN QUEUE</div>` : "";
+      return `${head}<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:${isCur ? "var(--accent-soft)" : "var(--paper)"};border:1px solid ${isCur ? "color-mix(in oklch, var(--accent) 30%, transparent)" : "var(--line)"};">
+        <span class="mono" style="font-size:0.72rem;color:${isCur ? "var(--accent)" : "var(--muted)"};width:18px;text-align:center;">${isCur ? "▶" : idx}</span>
+        <div style="width:36px;height:36px;border-radius:8px;overflow:hidden;flex:none;cursor:pointer;" data-play="${escHtml(id)}">${artMarkup(t)}</div>
+        <div style="min-width:0;flex:1;cursor:pointer;" data-play="${escHtml(id)}">
+          <div style="font-weight:600;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(t.title)}</div>
+          <div style="font-size:0.75rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(t.artist)}</div>
+        </div>
+        <span class="mono" style="font-size:0.72rem;color:var(--muted);flex:none;">${fmtTime(t.duration)}</span>
+      </div>`;
+    }).join("");
   }
 
   function renderQueue() {
+    const markup = renderQueueMarkup();
     const body = document.getElementById("queueListBody");
-    body.innerHTML = state.queue.slice(0, 20).map((id, idx) => {
-      const t = getItem(id);
-      const isCur = id === state.currentId;
-      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:${isCur ? "var(--accent-soft)" : "var(--paper)"};border:1px solid var(--line);">
-        <span class="mono" style="font-size:0.72rem;color:var(--muted);width:20px;">${idx + 1}</span>
-        <div style="width:36px;height:36px;border-radius:8px;overflow:hidden;flex:none;cursor:pointer;" data-play="${escHtml(id)}">${artMarkup(t)}</div>
-        <div style="min-width:0;flex:1;cursor:pointer;" data-play="${escHtml(id)}">
-          <div style="font-weight:600;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(t.title)}</div>
-          <div style="font-size:0.76rem;color:var(--muted);">${escHtml(t.artist)}</div>
-        </div>
-        <span class="mono" style="font-size:0.72rem;color:var(--muted);">${fmtTime(t.duration)}</span>
-      </div>`;
-    }).join("");
+    if (body) body.innerHTML = markup;
+    const npBody = document.getElementById("npQueueBody");
+    if (npBody) npBody.innerHTML = markup;
   }
 
   function renderTrackRows() {
@@ -1203,10 +1385,52 @@
   }
 
   // ==========================================================
-  // DRAWERS & INTERACTIONS
+  // DRAWERS & IN-LOUNGE NOW PLAYING SUBPANELS
   // ==========================================================
   let activeDrawer = null;
-  function openDrawer(name) {
+  let npSubpanel = null; // null | "lyrics" | "queue"
+  let eqOverNp = false;
+
+  function setNpSubpanel(tab) {
+    const npSheet = document.getElementById("drawer-lyrics");
+    const sidePanel = document.getElementById("npSidePanel");
+    const paneLyrics = document.getElementById("npPaneLyrics");
+    const paneQueue = document.getElementById("npPaneQueue");
+    const btnLyrics = document.getElementById("npLyricsBtn");
+    const btnQueue = document.getElementById("npQueueBtn");
+    const tabLyrics = document.getElementById("npTabLyrics");
+    const tabQueue = document.getElementById("npTabQueue");
+
+    npSubpanel = tab;
+    const isOpen = Boolean(tab);
+    npSheet.classList.toggle("has-sidepanel", isOpen);
+    sidePanel.setAttribute("aria-hidden", String(!isOpen));
+
+    paneLyrics.hidden = tab !== "lyrics";
+    paneQueue.hidden = tab !== "queue";
+    btnLyrics.setAttribute("aria-pressed", String(tab === "lyrics"));
+    btnQueue.setAttribute("aria-pressed", String(tab === "queue"));
+    tabLyrics.setAttribute("aria-selected", String(tab === "lyrics"));
+    tabQueue.setAttribute("aria-selected", String(tab === "queue"));
+
+    if (tab === "lyrics") {
+      loadSyncedLyrics(getItem(state.currentId));
+    } else if (tab === "queue") {
+      renderQueue();
+    }
+  }
+
+  function openDrawer(name, opts = {}) {
+    if (name === "eq" && activeDrawer === "lyrics") {
+      // Keep Now Playing open underneath when opening EQ from inside Now Playing
+      eqOverNp = true;
+      const backdrop = document.getElementById("drawerBackdrop");
+      const eqEl = document.getElementById("drawer-eq");
+      backdrop.classList.add("is-open", "is-over-np");
+      eqEl.classList.add("is-open", "is-over-np");
+      document.getElementById("topEqBtn").classList.add("is-active");
+      return;
+    }
     closeDrawers();
     const el = document.getElementById(`drawer-${name}`);
     if (!el) return;
@@ -1214,15 +1438,46 @@
     document.getElementById("drawerBackdrop").classList.add("is-open");
     el.classList.add("is-open");
     document.getElementById("topEqBtn").classList.toggle("is-active", name === "eq");
+    if (name === "lyrics" && opts.subpanel) {
+      setNpSubpanel(opts.subpanel);
+    }
   }
-  function closeDrawers() {
-    activeDrawer = null;
-    document.getElementById("drawerBackdrop").classList.remove("is-open");
-    document.querySelectorAll(".drawer-panel").forEach((p) => p.classList.remove("is-open"));
+
+  function closeEqOverlay() {
+    eqOverNp = false;
+    document.getElementById("drawerBackdrop").classList.remove("is-over-np");
+    document.getElementById("drawer-eq").classList.remove("is-open", "is-over-np");
     document.getElementById("topEqBtn").classList.remove("is-active");
   }
+
+  function closeDrawers() {
+    if (eqOverNp) {
+      closeEqOverlay();
+      return;
+    }
+    activeDrawer = null;
+    setNpSubpanel(null);
+    document.getElementById("drawerBackdrop").classList.remove("is-open", "is-over-np");
+    document.querySelectorAll(".drawer-panel").forEach((p) => p.classList.remove("is-open", "is-over-np"));
+    document.getElementById("topEqBtn").classList.remove("is-active");
+  }
+
   document.getElementById("drawerBackdrop").addEventListener("click", closeDrawers);
   document.querySelectorAll("[data-close-drawer]").forEach((b) => b.addEventListener("click", closeDrawers));
+  document.getElementById("npSideCloseBtn").addEventListener("click", () => setNpSubpanel(null));
+  document.querySelectorAll("[data-np-tab]").forEach((btn) => {
+    btn.addEventListener("click", () => setNpSubpanel(btn.dataset.npTab));
+  });
+  document.getElementById("npLyricsList").addEventListener("click", (e) => {
+    const lineBtn = e.target.closest("[data-lyric-time]");
+    if (!lineBtn) return;
+    const t = Number(lineBtn.dataset.lyricTime);
+    if (!Number.isFinite(t) || t < 0) return;
+    state.elapsed = Math.min(state.duration || 210, t);
+    if (ytReady && ytPlayer) ytPlayer.seekTo(state.elapsed, true);
+    if (!state.isPlaying) togglePlay();
+    updateScrubber();
+  });
 
   document.addEventListener("click", (e) => {
     const playEl = e.target.closest("[data-play]");
@@ -1300,7 +1555,9 @@
   document.getElementById("dockCover").addEventListener("click", () => openDrawer("lyrics"));
   document.getElementById("dockMeta").addEventListener("click", () => openDrawer("lyrics"));
   document.getElementById("npEqBtn").addEventListener("click", () => openDrawer("eq"));
-  document.getElementById("npQueueBtn").addEventListener("click", () => openDrawer("queue"));
+  document.getElementById("npLyricsBtn").addEventListener("click", () => setNpSubpanel(npSubpanel === "lyrics" ? null : "lyrics"));
+  document.getElementById("npQueueBtn").addEventListener("click", () => setNpSubpanel(npSubpanel === "queue" ? null : "queue"));
+  document.getElementById("npUpNextCard").addEventListener("click", () => setNpSubpanel(npSubpanel === "queue" ? null : "queue"));
   document.getElementById("npVideoBtn").addEventListener("click", () => document.getElementById("videoToggleBtn").click());
   document.getElementById("npShuffleBtn").addEventListener("click", () => document.getElementById("shuffleBtn").click());
   document.getElementById("npRepeatBtn").addEventListener("click", () => document.getElementById("repeatBtn").click());
@@ -1371,8 +1628,14 @@
   // Drawers
   document.getElementById("topEqBtn").addEventListener("click", () => activeDrawer === "eq" ? closeDrawers() : openDrawer("eq"));
   document.getElementById("eqDrawerBtn").addEventListener("click", () => activeDrawer === "eq" ? closeDrawers() : openDrawer("eq"));
-  document.getElementById("lyricsDrawerBtn").addEventListener("click", () => activeDrawer === "lyrics" ? closeDrawers() : openDrawer("lyrics"));
-  document.getElementById("queueDrawerBtn").addEventListener("click", () => activeDrawer === "queue" ? closeDrawers() : openDrawer("queue"));
+  document.getElementById("lyricsDrawerBtn").addEventListener("click", () => {
+    if (activeDrawer === "lyrics" && npSubpanel === "lyrics") closeDrawers();
+    else openDrawer("lyrics", { subpanel: "lyrics" });
+  });
+  document.getElementById("queueDrawerBtn").addEventListener("click", () => {
+    if (activeDrawer === "lyrics") setNpSubpanel(npSubpanel === "queue" ? null : "queue");
+    else activeDrawer === "queue" ? closeDrawers() : openDrawer("queue");
+  });
   document.getElementById("openImportBtn").addEventListener("click", () => openDrawer("import"));
   document.getElementById("libImportBtn").addEventListener("click", () => openDrawer("import"));
 
@@ -1401,7 +1664,7 @@
     const list = state.tracks.length ? state.tracks : SEED_TRACKS;
     toggleOffline(list[state.reelIdx % list.length].id);
   });
-  document.getElementById("reelLyricsBtn").addEventListener("click", () => openDrawer("lyrics"));
+  document.getElementById("reelLyricsBtn").addEventListener("click", () => openDrawer("lyrics", { subpanel: "lyrics" }));
   document.getElementById("reelEqBtn").addEventListener("click", () => openDrawer("eq"));
   document.getElementById("reelDetailsBtn").addEventListener("click", () => openDrawer("lyrics"));
 
@@ -1495,7 +1758,12 @@
   // Keyboard shortcuts
   document.addEventListener("keydown", (e) => {
     const tag = (e.target.tagName || "").toLowerCase();
-    if (e.key === "Escape") { closeDrawers(); return; }
+    if (e.key === "Escape") {
+      if (eqOverNp) closeEqOverlay();
+      else if (activeDrawer === "lyrics" && npSubpanel) setNpSubpanel(null);
+      else closeDrawers();
+      return;
+    }
     if (tag === "input" || tag === "textarea") return;
     if (e.key === "/") { e.preventDefault(); searchInput.focus(); }
     else if (e.code === "Space") { e.preventDefault(); togglePlay(); }
