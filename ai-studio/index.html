@@ -873,30 +873,29 @@
     .footer-links { display: flex; flex-wrap: wrap; gap: 22px; }
     .footer-links a:hover { color: var(--ink); }
 
-    /* Mobile Horizontal Scroll-Snap 4-Step Carousel (Hidden on Desktop) */
+    /* Mobile Sticky Vertical-to-Horizontal 4-Step Track (Hidden on Desktop) */
     .story-mobile-carousel {
       display: none;
+    }
+
+    .story-rail-viewport {
+      overflow: hidden;
+      margin-inline: -20px;
+      padding: 6px 0 14px;
     }
 
     .story-rail {
       position: relative;
       display: flex;
       gap: 14px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      margin-inline: -20px;
-      padding: 6px 20px 18px;
-      scroll-padding-inline: 20px;
+      padding-inline: 20px;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
     }
-    .story-rail::-webkit-scrollbar { display: none; }
 
     .m-step-card {
       flex: 0 0 85%;
       max-width: 420px;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
       background: var(--surface);
       border: 1px solid var(--line);
       border-radius: 18px;
@@ -906,8 +905,8 @@
       flex-direction: column;
       gap: 9px;
       transition: transform 0.35s var(--ease), border-color 0.28s ease, box-shadow 0.3s ease, opacity 0.3s ease;
-      opacity: 0.74;
-      transform: scale(0.975);
+      opacity: 0.72;
+      transform: scale(0.97);
     }
 
     .m-step-card.is-active {
@@ -1012,6 +1011,25 @@
       margin: 0;
     }
 
+    .m-rail-progress {
+      width: 100%;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(33, 31, 27, 0.1);
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .m-rail-progress-fill {
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--accent);
+      transform-origin: left;
+      transform: scaleX(0.06);
+      will-change: transform;
+    }
+
     .m-rail-footer {
       display: flex;
       align-items: center;
@@ -1047,8 +1065,8 @@
 
     @media (max-width: 920px) {
       .nav-links { display: none; }
-      .story-track { min-height: 0; }
-      .story-sticky { position: static; padding: 0; }
+      .story-track { min-height: 300vh; }
+      .story-sticky { position: sticky; top: 72px; padding: 8px 0 16px; }
       .story-grid { display: none; }
       .story-mobile-carousel { display: block; }
       .preset-grid, .g-grid, .closing-card { grid-template-columns: 1fr; }
@@ -1058,13 +1076,13 @@
 
     @media (max-width: 600px) {
       .wrap { width: min(1140px, 100% - 28px); }
-      .story-intro { margin-bottom: 18px; }
-      .story-intro h2 { font-size: 1.62rem; }
-      .story-rail {
+      .story-intro { margin-bottom: 16px; }
+      .story-intro h2 { font-size: 1.56rem; }
+      .story-rail-viewport {
         margin-inline: -14px;
-        padding: 4px 14px 14px;
-        scroll-padding-inline: 14px;
+        padding: 4px 0 12px;
       }
+      .story-rail { padding-inline: 14px; }
       .m-step-card { flex: 0 0 86%; }
       .nav-shell { top: 12px; padding-inline: 12px; }
       .nav-pill { height: 52px; padding: 0 8px 0 16px; }
@@ -1080,6 +1098,10 @@
     @media (prefers-reduced-motion: reduce) {
       .hero-bg, .hero-anim, .scroll-cue-arrow, .live-pulse { animation: none !important; opacity: 1 !important; transform: none !important; }
       .m-word, .m-punch::after, .mac-body, .reveal { transition: none !important; animation: none !important; opacity: 1 !important; transform: none !important; }
+      .story-track { min-height: 0 !important; }
+      .story-sticky { position: static !important; }
+      .story-rail-viewport { overflow-x: auto !important; }
+      .story-rail { transform: none !important; }
     }
   </style>
 </head>
@@ -1193,7 +1215,12 @@
           </div>
 
           <div class="story-mobile-carousel" aria-label="4 workflow steps">
-            <div class="story-rail" id="storyRail" role="region" aria-label="Swipe through 4 pipeline steps"></div>
+            <div class="story-rail-viewport" id="storyRailViewport">
+              <div class="story-rail" id="storyRail" role="region" aria-label="Scroll vertically to advance through 4 pipeline steps"></div>
+            </div>
+            <div class="m-rail-progress" aria-hidden="true">
+              <div class="m-rail-progress-fill" id="mRailFill"></div>
+            </div>
             <div class="m-rail-footer">
               <div class="m-rail-dots" id="mRailDots" role="group" aria-label="Jump to pipeline step">
                 <button type="button" class="m-rail-dot" data-mstep="0" aria-label="Go to step 1" aria-pressed="true"></button>
@@ -1201,7 +1228,7 @@
                 <button type="button" class="m-rail-dot" data-mstep="2" aria-label="Go to step 3" aria-pressed="false"></button>
                 <button type="button" class="m-rail-dot" data-mstep="3" aria-label="Go to step 4" aria-pressed="false"></button>
               </div>
-              <span class="m-rail-hint" id="mRailHint">01 / 04 · Swipe -&gt;</span>
+              <span class="m-rail-hint" id="mRailHint">01 / 04 · Scroll -&gt;</span>
             </div>
           </div>
         </div>
@@ -1377,8 +1404,10 @@
     const mPunch = document.getElementById("mPunch");
     const mSec = document.getElementById("manifesto");
     const storyTrack = document.getElementById("storyTrack");
+    const storySticky = storyTrack ? storyTrack.querySelector(".story-sticky") : null;
     let activeStep = 0;
     let scrollStepLockUntil = 0;
+    let updateMobileStickyRail = () => {};
 
     function onScroll() {
       const sy = window.scrollY;
@@ -1419,8 +1448,14 @@
           if (idx !== activeStep) renderStep(idx);
         }
       }
+
+      // Scroll-driven sticky vertical-to-horizontal progress on mobile
+      if (window.innerWidth <= 920 && !reduced) {
+        updateMobileStickyRail();
+      }
     }
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => { if (window.innerWidth <= 920 && !reduced) updateMobileStickyRail(); }, { passive: true });
     onScroll();
 
     // 2B. IntersectionObserver Staggered Section Reveals
@@ -1562,11 +1597,13 @@
     });
     renderStep(0);
 
-    // 3B. Mobile Horizontal Scroll-Snap 4-Step Carousel
+    // 3B. Mobile Sticky Vertical-Scroll -> Horizontal Progress Track
+    const storyRailViewport = document.getElementById("storyRailViewport");
     const storyRail = document.getElementById("storyRail");
+    const mRailFill = document.getElementById("mRailFill");
     const mRailDots = Array.from(document.querySelectorAll("[data-mstep]"));
     const mRailHint = document.getElementById("mRailHint");
-    if (storyRail) {
+    if (storyRail && storyRailViewport && storyTrack && storySticky) {
       storyRail.innerHTML = STEPS.map((s, i) => {
         const mobHtml = s.html
           .replace('class="btn-terracotta" id="approveBtn"', 'class="btn-terracotta js-mob-approve"')
@@ -1600,37 +1637,42 @@
         if (mRailHint) {
           mRailHint.textContent = mActive === mCards.length - 1
             ? `0${mActive + 1} / 04 · Committed`
-            : `0${mActive + 1} / 04 · Swipe ->`;
+            : `0${mActive + 1} / 04 · Scroll ->`;
         }
       }
 
-      function scrollToMobileCard(idx) {
-        const card = mCards[idx];
-        if (!card) return;
-        const padLeft = parseFloat(getComputedStyle(storyRail).paddingLeft) || 14;
-        storyRail.scrollTo({ left: Math.max(0, card.offsetLeft - padLeft), behavior: reduced ? "instant" : "smooth" });
-        setMobileActive(idx);
+      function getMobileMetrics() {
+        const sr = storyTrack.getBoundingClientRect();
+        const stickyTop = parseFloat(getComputedStyle(storySticky).top) || 72;
+        const scrollable = Math.max(1, sr.height - storySticky.offsetHeight);
+        const padRight = parseFloat(getComputedStyle(storyRail).paddingRight) || 14;
+        const lastCard = mCards[mCards.length - 1];
+        const totalW = lastCard ? (lastCard.offsetLeft + lastCard.offsetWidth + padRight) : storyRail.scrollWidth;
+        const maxX = Math.max(0, totalW - storyRailViewport.clientWidth);
+        return { sr, stickyTop, scrollable, maxX };
       }
 
-      let railRaf = 0;
-      storyRail.addEventListener("scroll", () => {
-        if (railRaf) return;
-        railRaf = requestAnimationFrame(() => {
-          railRaf = 0;
-          const padLeft = parseFloat(getComputedStyle(storyRail).paddingLeft) || 14;
-          const targetX = storyRail.scrollLeft + padLeft;
-          let best = 0;
-          let bestDist = Infinity;
-          mCards.forEach((card, i) => {
-            const dist = Math.abs(card.offsetLeft - targetX);
-            if (dist < bestDist) { bestDist = dist; best = i; }
-          });
-          if (best !== mActive) setMobileActive(best);
-        });
-      }, { passive: true });
+      updateMobileStickyRail = function () {
+        if (window.innerWidth > 920 || reduced) return;
+        const { sr, stickyTop, scrollable, maxX } = getMobileMetrics();
+        const sp = Math.max(0, Math.min(1, (stickyTop - sr.top) / scrollable));
+        const tx = sp * maxX;
+        storyRail.style.transform = `translate3d(${(-tx).toFixed(2)}px, 0, 0)`;
+        if (mRailFill) mRailFill.style.transform = `scaleX(${Math.max(0.06, sp).toFixed(4)})`;
+        const idx = Math.min(mCards.length - 1, Math.round(sp * (mCards.length - 1)));
+        if (idx !== mActive) setMobileActive(idx);
+      };
+
+      function scrollToMobileStep(idx) {
+        const { sr, stickyTop, scrollable } = getMobileMetrics();
+        const trackTopDoc = sr.top + window.scrollY;
+        const frac = idx / Math.max(1, mCards.length - 1);
+        const targetY = Math.round(trackTopDoc - stickyTop + frac * scrollable);
+        smoothScrollTo(targetY, 620);
+      }
 
       mRailDots.forEach((dot) => {
-        dot.addEventListener("click", () => scrollToMobileCard(Number(dot.dataset.mstep)));
+        dot.addEventListener("click", () => scrollToMobileStep(Number(dot.dataset.mstep)));
       });
 
       const mobAppBtn = storyRail.querySelector(".js-mob-approve");
@@ -1638,8 +1680,8 @@
       const mobFb = storyRail.querySelector(".js-mob-feedback");
       if (mobAppBtn && mobFb) {
         mobAppBtn.addEventListener("click", () => {
-          mobFb.textContent = "Approved by operator -> sliding to Step 4 commit...";
-          setTimeout(() => scrollToMobileCard(3), 650);
+          mobFb.textContent = "Approved by operator -> advancing to Step 4 commit...";
+          setTimeout(() => scrollToMobileStep(3), 650);
         });
       }
       if (mobHoldBtn && mobFb) {
@@ -1647,6 +1689,8 @@
           mobFb.textContent = "Kept safely in #finance-approvals hold queue (zero data loss).";
         });
       }
+
+      updateMobileStickyRail();
     }
 
     // 4. Helicon-Inspired Interactive Incident Replay Workbench
