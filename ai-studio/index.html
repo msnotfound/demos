@@ -711,13 +711,13 @@
 
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="#bench">Live Topology</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#cost">Cost Bench</a>
-        <a href="#scope">Scope</a>
+        <a href="#architecture">Guarantees</a>
+        <a href="#cost">Pricing Bench</a>
+        <a href="#quickstart">Quickstart</a>
       </nav>
 
       <div class="nav-cta-row">
-        <a href="#scope" class="btn btn--white">Scope a Pipeline</a>
+        <a href="#quickstart" class="btn btn--white">Start Free</a>
       </div>
     </div>
   </header>
@@ -727,21 +727,20 @@
     <section class="hero">
       <div class="wrap hero-grid">
         <div>
-          <div class="eyebrow">Durable AI Workflow Engineering</div>
           <h1>
             MAKE EVERY<br/>
             AI PIPELINE<br/>
             <span class="h1-outline">UNBREAKABLE.</span>
           </h1>
           <p class="hero-sub">
-            Replace fragile no-code zaps with typed FastAPI / Node.js webhooks, strict JSON model routing, automatic dead-letter recovery, and human approval queues running inside your own Git repository.
+            Orchestrate webhooks, strict JSON model routing, exponential retries, and human-in-the-loop approvals in plain TypeScript or Python. One SDK, zero fragile glue code.
           </p>
           <div class="hero-actions">
             <button type="button" class="btn btn--ghost copy-pill" id="copyCurlBtn">
-              <span class="mono">curl -X POST /v1/relay/triage</span>
+              <span class="mono">npm install @relayfoundry/sdk</span>
               <span class="copy-tag" id="copyFeedback"></span>
             </button>
-            <a href="#bench" class="btn btn--accent">Run Live Simulator</a>
+            <a href="#quickstart" class="btn btn--accent">Start Free in Cloud</a>
           </div>
         </div>
 
@@ -968,19 +967,29 @@
       </div>
     </section>
 
-    <!-- DIRECT SCOPE CTA -->
-    <section class="cta-sec" id="scope">
+    <!-- QUICKSTART & CLOUD ACCESS CTA (Industry-Leader Dev-Infra Pattern) -->
+    <section class="cta-sec" id="quickstart">
       <div class="wrap">
         <div class="cta-box">
-          <div>
-            <div class="eyebrow">Direct Engineering Engagement</div>
-            <h2>Ship your first durable AI pipeline in 7 days</h2>
-            <p>Fixed-scope delivery with 100% source code ownership, staging webhook replay tests, and direct engineer access from brief to production.</p>
+          <div style="flex:1;min-width:260px;">
+            <div class="eyebrow">Start Locally, Scale Globally</div>
+            <h2>Deploy your first durable step in 60 seconds</h2>
+            <p>50,000 free monthly step runs in Relay Cloud, or self-host the open runtime in your own VPC with Docker and PostgreSQL.</p>
+            <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:18px;font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-2);">
+              <span>Hobby: $0 / mo</span>
+              <span>Pro: $79 / mo</span>
+              <span>VPC Enterprise: Custom</span>
+            </div>
           </div>
-          <div style="display:flex;flex-wrap:wrap;gap:12px;">
-            <a href="https://wa.me/919302493307?text=Hi%20Mayank%2C%20I%20want%20to%20scope%20an%20AI%20workflow%20%2F%20webhook%20pipeline." target="_blank" rel="noopener" class="btn btn--accent">Message on WhatsApp</a>
-            <a href="mailto:108mayanksahu@gmail.com?subject=AI%20Workflow%20%26%20Webhook%20Pipeline%20Scope" class="btn btn--ghost">Email Technical Brief</a>
-          </div>
+
+          <form id="sandboxForm" style="display:flex;flex-direction:column;gap:10px;width:min(380px, 100%);">
+            <input type="email" id="workEmailInput" required placeholder="you@company.com" aria-label="Work email" style="height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--line-strong);background:var(--bg);color:var(--ink);font-family:var(--font-mono);font-size:0.82rem;" />
+            <div style="display:flex;gap:8px;">
+              <button type="submit" class="btn btn--accent" style="flex:1;">Provision Sandbox Key</button>
+              <a href="#bench" class="btn btn--ghost">Docs</a>
+            </div>
+            <div id="sandboxStatus" class="mono" style="font-size:0.74rem;color:var(--ok);min-height:18px;" role="status"></div>
+          </form>
         </div>
       </div>
     </section>
@@ -988,12 +997,12 @@
 
   <footer>
     <div class="wrap footer-inner">
-      <span>Relay Foundry | Engineered by Mayank Sahu</span>
+      <span>Relay Foundry &middot; Durable Execution Runtime</span>
       <div class="footer-links">
-        <a href="https://mayanksahu.dev/" target="_blank" rel="noopener">mayanksahu.dev</a>
-        <a href="https://github.com/msnotfound/hookguard" target="_blank" rel="noopener">HookGuard (GitHub)</a>
-        <a href="https://github.com/msnotfound/mnemium" target="_blank" rel="noopener">Mnemium (GitHub)</a>
-        <a href="../">All Demos</a>
+        <a href="#bench">Topology</a>
+        <a href="#architecture">Guarantees</a>
+        <a href="#cost">Pricing Bench</a>
+        <a href="https://mayanksahu.dev/" target="_blank" rel="noopener">Concept by Mayank Sahu</a>
       </div>
     </div>
   </footer>
@@ -1029,12 +1038,23 @@
       });
     });
 
-    // 2. Copy Curl Command Button
+    // 2. Copy SDK Install Command Button
     document.getElementById("copyCurlBtn").addEventListener("click", () => {
-      navigator.clipboard?.writeText("curl -X POST https://api.relayfoundry.dev/v1/relay/triage -H 'X-Relay-Sig: sha256=...'").catch(() => {});
+      navigator.clipboard?.writeText("npm install @relayfoundry/sdk").catch(() => {});
       const fb = document.getElementById("copyFeedback");
       fb.textContent = "Copied";
       setTimeout(() => { fb.textContent = ""; }, 1800);
+    });
+
+    // 2B. Interactive Sandbox Key Provisioning Form
+    document.getElementById("sandboxForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("workEmailInput").value.trim();
+      const st = document.getElementById("sandboxStatus");
+      if (!email) return;
+      const key = "rf_live_" + Math.random().toString(36).slice(2, 10);
+      st.textContent = `Sandbox provisioned for ${email} -> ${key}`;
+      document.getElementById("workEmailInput").value = "";
     });
 
     // 3. Live Animated Code Step Cycling
