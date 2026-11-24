@@ -1,269 +1,61 @@
-/* SoundPlus Unified Web Player Engine
-   Real 5-Band Web Audio Synth + EQ Chain, Hash Routing, Offline Vault, Zero External Dependencies */
+/* SoundPlus Unified Web Player Engine (Live Real Songs via SoundPlus API + YouTube IFrame API)
+   Zero Freesound URLs, zero cache-purge reloads, zero letterboxed black bars, zero layout collisions */
 
 (function () {
   "use strict";
 
+  const API_BASE = "https://music.graphikrafts.com/webplayer/api/search.php";
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  let sleeveSeq = 0;
-
-  // Bespoke 1:1 square studio sleeve artwork generator (unique gradient ID per instance)
-  function makeSleeve(c1, c2, accent, shape, label) {
-    const uid = `sg-${++sleeveSeq}`;
-    const geom = {
-      rings: `<circle cx="110" cy="110" r="78" fill="none" stroke="${accent}" stroke-width="2" opacity="0.55"/><circle cx="110" cy="110" r="52" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.55"/><circle cx="110" cy="110" r="22" fill="${accent}" opacity="0.88"/>`,
-      bars: `<rect x="44" y="88" width="14" height="62" rx="7" fill="#ffffff" opacity="0.82"/><rect x="70" y="54" width="14" height="96" rx="7" fill="${accent}" opacity="0.92"/><rect x="96" y="72" width="14" height="78" rx="7" fill="#ffffff" opacity="0.72"/><rect x="122" y="42" width="14" height="108" rx="7" fill="${accent}" opacity="0.85"/><rect x="148" y="80" width="14" height="70" rx="7" fill="#ffffff" opacity="0.68"/>`,
-      arc: `<path d="M24 166 Q110 24 196 166" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.72"/><path d="M48 166 Q110 66 172 166" fill="none" stroke="${accent}" stroke-width="5" opacity="0.9"/><circle cx="110" cy="112" r="18" fill="#ffffff" opacity="0.86"/>`,
-      grid: `<rect x="44" y="44" width="58" height="58" rx="14" fill="#ffffff" opacity="0.22"/><rect x="114" y="44" width="58" height="58" rx="14" fill="${accent}" opacity="0.82"/><rect x="44" y="114" width="58" height="58" rx="29" fill="${accent}" opacity="0.65"/><rect x="114" y="114" width="58" height="58" rx="14" fill="#ffffff" opacity="0.34"/>`,
-      wave: `<path d="M18 112 C56 54, 88 164, 126 106 C154 64, 180 128, 204 94" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity="0.85"/><path d="M18 134 C56 76, 88 186, 126 128 C154 86, 180 150, 204 116" fill="none" stroke="${accent}" stroke-width="4" stroke-linecap="round" opacity="0.8"/>`
-    }[shape] || "";
-    return `<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}">
-      <defs>
-        <linearGradient id="${uid}" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="${c1}" />
-          <stop offset="100%" stop-color="${c2}" />
-        </linearGradient>
-      </defs>
-      <rect width="220" height="220" fill="url(#${uid})" />
-      ${geom}
-      <text x="18" y="200" fill="#ffffff" opacity="0.72" font-family="monospace" font-size="11" letter-spacing="1.5">${label.toUpperCase().slice(0, 14)}</text>
-    </svg>`;
+  // Clean 16:9 thumbnail helper: mqdefault has ZERO 4:3 black letterbox bars (falls back cleanly if needed)
+  function cleanThumb(url, id) {
+    if (id && /^[a-zA-Z0-9_-]{11}$/.test(id)) {
+      return `https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
+    }
+    if (!url) return "";
+    return url.replace("/hqdefault.jpg", "/mqdefault.jpg");
   }
 
-  // Rich Catalog (Every track has real chord progression, BPM, bassline, synced lyrics, and file size for Offline Vault)
-  const TRACKS = [
-    {
-      id: "midnight-telemetry",
-      title: "Midnight Telemetry",
-      artist: "Kora & Velvet",
-      genre: "Synthwave",
-      duration: 204,
-      mb: 5.8,
-      bpm: 112,
-      chords: [[220, 261.63, 329.63], [174.61, 220, 261.63], [196, 246.94, 293.66], [164.81, 196, 246.94]],
-      bass: [55, 43.65, 49, 41.2],
-      art: ["#1f2447", "#5948a8", "#a5b4fc", "rings"],
-      lyrics: [
-        [0, "City lights hum low across the wet asphalt"],
-        [14, "Signal locking clean at sixty hertz below"],
-        [28, "No interruptions when the screen fades out"],
-        [44, "Midnight telemetry guiding every mile home"],
-        [62, "Warm analog air through open studio cans"],
-        [80, "Hold the frequency until the skyline clears"]
-      ]
-    },
-    {
-      id: "monsoon-veranda",
-      title: "Monsoon Veranda",
-      artist: "Aarav Sen",
-      genre: "Bollywood",
-      duration: 218,
-      mb: 5.6,
-      bpm: 96,
-      chords: [[261.63, 329.63, 392], [220, 261.63, 329.63], [174.61, 220, 261.63], [196, 246.94, 293.66]],
-      bass: [65.4, 55, 43.65, 49],
-      art: ["#4a231c", "#b85639", "#fed7aa", "arc"],
-      lyrics: [
-        [0, "First rain tapping slow on the terracotta roof"],
-        [16, "Warm chai steam rising by the open grille"],
-        [32, "Acoustic chords drifting down the quiet lane"],
-        [50, "Stay a little longer while the clouds roll in"]
-      ]
-    },
-    {
-      id: "paper-lantern-lofi",
-      title: "Paper Lantern Study",
-      artist: "Mina Sato",
-      genre: "Lo-Fi",
-      duration: 186,
-      mb: 4.9,
-      bpm: 84,
-      chords: [[196, 246.94, 293.66, 369.99], [164.81, 196, 246.94, 293.66], [146.83, 185, 220, 261.63], [196, 246.94, 293.66, 329.63]],
-      bass: [49, 41.2, 36.7, 49],
-      art: ["#1d3a36", "#3f7d6e", "#a7f3d0", "grid"],
-      lyrics: [
-        [0, "Soft vinyl grain over late-night desk lamps"],
-        [15, "Keystrokes falling right inside the pocket"],
-        [31, "Zero ad breaks, zero clutter on the screen"],
-        [48, "Keep the tape rolling through the midnight build"]
-      ]
-    },
-    {
-      id: "glass-harbor",
-      title: "Glass Harbor",
-      artist: "Northline Collective",
-      genre: "Ambient",
-      duration: 242,
-      mb: 6.4,
-      bpm: 78,
-      chords: [[246.94, 293.66, 369.99], [220, 277.18, 329.63], [196, 246.94, 293.66], [185, 220, 277.18]],
-      bass: [61.7, 55, 49, 46.25],
-      art: ["#162d47", "#3668a6", "#bfdbfe", "wave"],
-      lyrics: [
-        [0, "Still water holding pale morning reflections"],
-        [18, "Wide stereo field breathing in slow motion"],
-        [36, "Every overtone balanced with clean headroom"],
-        [56, "Drift out past the breakwater before sunrise"]
-      ]
-    },
-    {
-      id: "kinetic-pulse",
-      title: "Kinetic Pulse 124",
-      artist: "Rohan & Vera",
-      genre: "Deep House",
-      duration: 198,
-      mb: 5.3,
-      bpm: 124,
-      chords: [[233.08, 277.18, 349.23], [207.65, 261.63, 311.13], [174.61, 207.65, 261.63], [196, 233.08, 293.66]],
-      bass: [58.27, 51.91, 43.65, 49],
-      art: ["#2f1d45", "#8045a8", "#f5d0fe", "bars"],
-      lyrics: [
-        [0, "Four on the floor with tight sub-bass control"],
-        [14, "Clean transient snap on every open hat"],
-        [28, "Dial the 60 hertz shelf to feel the room move"],
-        [46, "Lock into the groove until the final bar"]
-      ]
-    },
-    {
-      id: "sunlit-transit",
-      title: "Sunlit Transit",
-      artist: "Clara & The Pines",
-      genre: "Indie Pop",
-      duration: 192,
-      mb: 5.1,
-      bpm: 108,
-      chords: [[293.66, 369.99, 440], [246.94, 293.66, 369.99], [196, 246.94, 293.66], [220, 277.18, 329.63]],
-      bass: [73.42, 61.74, 49, 55],
-      art: ["#4a3217", "#b87f35", "#fde68a", "rings"],
-      lyrics: [
-        [0, "Window seat eastbound through the golden hour"],
-        [15, "Headphones on, offline vault ready for tunnels"],
-        [30, "Bright guitar harmonics cutting through the hum"],
-        [47, "Every station feels closer than yesterday"]
-      ]
-    },
-    {
-      id: "deccan-dusk",
-      title: "Deccan Dusk (Unplugged)",
-      artist: "Meera Kulkarni",
-      genre: "Bollywood",
-      duration: 226,
-      mb: 6.0,
-      bpm: 90,
-      chords: [[220, 261.63, 329.63], [196, 246.94, 293.66], [174.61, 220, 261.63], [164.81, 207.65, 246.94]],
-      bass: [55, 49, 43.65, 41.2],
-      art: ["#47202e", "#9e3f5c", "#fbcfe8", "arc"],
-      lyrics: [
-        [0, "Warm amber dusk settling across the terrace"],
-        [16, "Soft vocal focus tuned at 910 hertz"],
-        [34, "Strings answering slow in the evening breeze"],
-        [52, "Hold the melody long after the chorus ends"]
-      ]
-    },
-    {
-      id: "tokyo-overpass",
-      title: "Tokyo Overpass",
-      artist: "Kenji Wave",
-      genre: "Synthwave",
-      duration: 210,
-      mb: 5.5,
-      bpm: 118,
-      chords: [[261.63, 311.13, 392], [233.08, 293.66, 349.23], [207.65, 261.63, 311.13], [196, 246.94, 293.66]],
-      bass: [65.41, 58.27, 51.91, 49],
-      art: ["#1a2238", "#3e548a", "#93c5fd", "bars"],
-      lyrics: [
-        [0, "Sodium lamps streaking past the expressway"],
-        [15, "Arpeggiated chords pulsing crisp in stereo"],
-        [32, "Zero buffering, instant seek on every track"],
-        [48, "Keep driving straight into the cobalt night"]
-      ]
-    },
-    {
-      id: "ceramic-rain",
-      title: "Ceramic Rain",
-      artist: "Mina Sato",
-      genre: "Lo-Fi",
-      duration: 174,
-      mb: 4.6,
-      bpm: 82,
-      chords: [[174.61, 220, 261.63, 329.63], [196, 246.94, 293.66, 349.23], [164.81, 196, 246.94, 293.66], [220, 261.63, 329.63, 392]],
-      bass: [43.65, 49, 41.2, 55],
-      art: ["#26362b", "#54785e", "#bbf7d0", "wave"],
-      lyrics: [
-        [0, "Quiet studio afternoon with rain on glass"],
-        [15, "Gentle felt keys floating over brushed snares"],
-        [30, "Zero popups breaking your deep work session"],
-        [45, "Loop seamlessly while the afternoon unfolds"]
-      ]
-    },
-    {
-      id: "subterranean-bloom",
-      title: "Subterranean Bloom",
-      artist: "Rohan & Vera",
-      genre: "Deep House",
-      duration: 215,
-      mb: 5.7,
-      bpm: 122,
-      chords: [[196, 233.08, 293.66], [174.61, 207.65, 261.63], [155.56, 196, 233.08], [174.61, 220, 261.63]],
-      bass: [49, 43.65, 38.89, 43.65],
-      art: ["#222831", "#4b5a6e", "#cbd5e1", "grid"],
-      lyrics: [
-        [0, "Deep resonant filter opening step by step"],
-        [15, "Clean bass headroom without distortion"],
-        [30, "Every transition built for real headphones"],
-        [48, "Stay inside the rhythm past midnight"]
-      ]
+  function escHtml(s) {
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function artMarkup(item, fallbackGradient) {
+    const src = cleanThumb(item.thumbnailUrl, item.id);
+    if (src) {
+      return `<img src="${escHtml(src)}" alt="${escHtml(item.title || item.name)}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${escHtml(item.id)}/hqdefault.jpg'" />`;
     }
+    const bg = fallbackGradient || "linear-gradient(135deg, #312e81, #6366f1)";
+    return `<div style="width:100%;height:100%;background:${bg};display:flex;align-items:flex-end;padding:12px;color:#fff;font-family:var(--font-mono);font-size:0.72rem;">${escHtml((item.title || "SOUNDPLUS").slice(0, 18))}</div>`;
+  }
+
+  // Verified live seed tracks from feed=home so first paint is instant before live API hydration completes
+  const SEED_TRACKS = [
+    { id: "Sv5yCzPCkv8", title: "SZA - Snooze", artist: "SZA", duration: 204, genre: "Trending", thumbnailUrl: "https://i.ytimg.com/vi/Sv5yCzPCkv8/mqdefault.jpg" },
+    { id: "qCTMq7xvdXU", title: "Billie Eilish - everything i wanted", artist: "Billie Eilish", duration: 247, genre: "Pop", thumbnailUrl: "https://i.ytimg.com/vi/qCTMq7xvdXU/mqdefault.jpg" },
+    { id: "ZAz3rnLGthg", title: "Flashing Lights", artist: "Kanye West", duration: 238, genre: "Hip-Hop", thumbnailUrl: "https://i.ytimg.com/vi/ZAz3rnLGthg/mqdefault.jpg" },
+    { id: "5sgc8RJezrE", title: "Dom Dolla - Saving Up", artist: "Dom Dolla", duration: 208, genre: "Dance", thumbnailUrl: "https://i.ytimg.com/vi/5sgc8RJezrE/mqdefault.jpg" },
+    { id: "YykjpeuMNEk", title: "Coldplay - Hymn For The Weekend", artist: "Coldplay", duration: 261, genre: "Pop", thumbnailUrl: "https://i.ytimg.com/vi/YykjpeuMNEk/mqdefault.jpg" },
+    { id: "1G4isv_Fylg", title: "Coldplay - Paradise", artist: "Coldplay", duration: 261, genre: "Rock", thumbnailUrl: "https://i.ytimg.com/vi/1G4isv_Fylg/mqdefault.jpg" },
+    { id: "MOQV__Z55eE", title: "Foo Fighters - Learn to Fly", artist: "Foo Fighters", duration: 236, genre: "Rock", thumbnailUrl: "https://i.ytimg.com/vi/MOQV__Z55eE/mqdefault.jpg" },
+    { id: "yGHEis32s2Y", title: "Steve Lacy - oh yeah?", artist: "Steve Lacy", duration: 170, genre: "Chill", thumbnailUrl: "https://i.ytimg.com/vi/yGHEis32s2Y/mqdefault.jpg" }
   ];
 
-  const PODCASTS = [
-    {
-      id: "pod-dsp-craft",
-      title: "Designing Zero-Latency Mobile Audio Engines",
-      artist: "Signal & Craft Podcast",
-      category: "Audio Engineering",
-      duration: 1840,
-      mb: 16.2,
-      bpm: 72,
-      chords: [[196, 246.94, 293.66], [174.61, 220, 261.63]],
-      bass: [49, 43.65],
-      art: ["#1f2a44", "#455e96", "#c7d2fe", "wave"],
-      desc: "Why native Media3 pipelines beat nested WebViews on battery life, lock-screen stability, and true hardware EQ."
-    },
-    {
-      id: "pod-design-systems",
-      title: "One Token System Across Web & Native Apps",
-      artist: "Interface Notes",
-      category: "Design & Craft",
-      duration: 1420,
-      mb: 12.8,
-      bpm: 74,
-      chords: [[220, 261.63, 329.63], [196, 246.94, 293.66]],
-      bass: [55, 49],
-      art: ["#3d261e", "#8f543e", "#fed7aa", "grid"],
-      desc: "How unifying marketing sites, web players, and offline vaults eliminates visual drift and speeds up releases."
-    },
-    {
-      id: "pod-indie-scale",
-      title: "Turning a Side-Project APK into a Durable Product",
-      artist: "Founders in Production",
-      category: "Indie Founders",
-      duration: 2110,
-      mb: 18.4,
-      bpm: 76,
-      chords: [[174.61, 220, 261.63], [164.81, 196, 246.94]],
-      bass: [43.65, 41.2],
-      art: ["#1d362f", "#3d7061", "#a7f3d0", "rings"],
-      desc: "Real lessons from migrating legacy PHP sites, protecting organic SEO URLs, and shipping signed builds users trust."
-    }
+  const SEED_MIXES = [
+    { id: "top_hits", title: "Today's Top Hits", subtitle: "Sabrina Carpenter, Billie Eilish, Post Malone", badge: "GLOBAL CHARTS", gradient: "linear-gradient(135deg, #2563eb, #0d9488)", seedArtist: "Sabrina Carpenter Espresso" },
+    { id: "hiphop_hype", title: "Hip-Hop & Rap", subtitle: "Travis Scott, Kendrick Lamar, Kanye West", badge: "HOTLIST", gradient: "linear-gradient(135deg, #c2410c, #db2777)", seedArtist: "Kendrick Lamar" },
+    { id: "hindi_unplugged", title: "Bollywood Acoustic", subtitle: "Arijit Singh, Pritam, Shreya Ghoshal", badge: "INDIA HUB", gradient: "linear-gradient(135deg, #7c3aed, #2563eb)", seedArtist: "Arijit Singh" },
+    { id: "late_chill", title: "Late Night Chill", subtitle: "SZA, Steve Lacy, Frank Ocean", badge: "AFTER HOURS", gradient: "linear-gradient(135deg, #0f766e, #334155)", seedArtist: "SZA chill" }
   ];
 
-  const PLAYLISTS = [
-    { id: "pl-drive", name: "Late Night Drive", desc: "Synthwave & Deep House for midnight roads", trackIds: ["midnight-telemetry", "tokyo-overpass", "kinetic-pulse", "subterranean-bloom"], art: ["#1f2447", "#5948a8", "#a5b4fc", "rings"] },
-    { id: "pl-code", name: "Coding Flow", desc: "Zero-distraction Lo-Fi & Ambient focus", trackIds: ["paper-lantern-lofi", "glass-harbor", "ceramic-rain", "sunlit-transit"], art: ["#1d3a36", "#3f7d6e", "#a7f3d0", "grid"] },
-    { id: "pl-bollywood", name: "Bollywood Acoustic", desc: "Warm unplugged Hindi & indie sessions", trackIds: ["monsoon-veranda", "deccan-dusk", "sunlit-transit"], art: ["#4a231c", "#b85639", "#fed7aa", "arc"] },
-    { id: "pl-workout", name: "Workout Energy", desc: "High-tempo 120+ BPM studio beats", trackIds: ["kinetic-pulse", "tokyo-overpass", "subterranean-bloom"], art: ["#2f1d45", "#8045a8", "#f5d0fe", "bars"] }
+  const USER_PLAYLISTS = [
+    { id: "pl-trending", name: "Trending Now", desc: "Live SoundPlus chart rotation", trackIds: ["Sv5yCzPCkv8", "qCTMq7xvdXU", "ZAz3rnLGthg", "5sgc8RJezrE"], gradient: "linear-gradient(135deg, #312e81, #6366f1)" },
+    { id: "pl-chill", name: "Focus & Chill", desc: "Smooth melodies & late-night grooves", trackIds: ["qCTMq7xvdXU", "yGHEis32s2Y", "YykjpeuMNEk"], gradient: "linear-gradient(135deg, #134e4a, #0d9488)" },
+    { id: "pl-rock", name: "Anthems & Rock", desc: "High-energy classics & festival hits", trackIds: ["1G4isv_Fylg", "MOQV__Z55eE", "ZAz3rnLGthg"], gradient: "linear-gradient(135deg, #7c2d12, #ea580c)" }
   ];
 
   const EQ_PRESETS = {
@@ -275,7 +67,6 @@
   const EQ_FREQS = [60, 230, 910, 3600, 14000];
   const EQ_LABELS = ["60Hz", "230Hz", "910Hz", "3.6kHz", "14kHz"];
 
-  // Persistent State
   function loadSet(key, fallback) {
     try {
       const raw = localStorage.getItem(key);
@@ -285,229 +76,283 @@
     }
   }
 
+  const catalogById = new Map();
+  function registerItems(list) {
+    list.forEach((raw) => {
+      if (!raw || !raw.id) return;
+      const item = {
+        id: raw.id,
+        title: raw.title || "Untitled Track",
+        artist: raw.artist || raw.showTitle || "SoundPlus Artist",
+        duration: Number(raw.durationSeconds || raw.duration || 210),
+        genre: raw.genre || (raw.showTitle ? "Podcast" : "Trending"),
+        category: raw.showTitle || raw.genre || "Podcast",
+        thumbnailUrl: cleanThumb(raw.thumbnailUrl, raw.id),
+        publishedDate: raw.publishedDate || "",
+        desc: raw.description || ""
+      };
+      catalogById.set(item.id, item);
+    });
+  }
+  registerItems(SEED_TRACKS);
+
   const state = {
     view: "home",
+    tracks: [...SEED_TRACKS],
+    mixes: [...SEED_MIXES],
+    podcasts: [],
+    artists: [],
+    searchResults: [],
+    searchLoading: false,
     genreFilter: "All",
     podFilter: "All",
     searchScope: "all",
     searchQuery: "",
     activeLibraryId: "likes",
-    queue: TRACKS.map((t) => t.id),
-    currentId: TRACKS[0].id,
+    queue: SEED_TRACKS.map((t) => t.id),
+    currentId: SEED_TRACKS[0].id,
     reelIdx: 0,
     isPlaying: false,
     isTestBeat: false,
+    showVideo: false,
     elapsed: 0,
-    volume: 0.8,
+    duration: SEED_TRACKS[0].duration,
+    volume: 80,
     muted: false,
     shuffle: false,
-    repeat: "off", // off | all | one
+    repeat: "off",
     sleepMins: 0,
     simOffline: false,
-    liked: loadSet("sp_liked_v2", ["midnight-telemetry", "paper-lantern-lofi"]),
-    offline: loadSet("sp_offline_v2", ["midnight-telemetry", "monsoon-veranda"]),
+    liked: loadSet("sp_liked_live_v1", ["Sv5yCzPCkv8", "qCTMq7xvdXU"]),
+    offline: loadSet("sp_saved_live_v1", ["Sv5yCzPCkv8", "YykjpeuMNEk"]),
     eqGains: [...EQ_PRESETS.bass.gains],
     bassBoost: EQ_PRESETS.bass.bass
   };
 
-  function allAudioItems() { return [...TRACKS, ...PODCASTS]; }
-  function getItem(id) { return allAudioItems().find((x) => x.id === id) || TRACKS[0]; }
+  function getItem(id) {
+    return catalogById.get(id) || state.tracks[0] || SEED_TRACKS[0];
+  }
+
   function fmtTime(sec) {
-    const s = Math.max(0, Math.floor(sec));
-    const m = Math.floor(s / 60);
+    const s = Math.max(0, Math.floor(sec || 0));
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
     const r = s % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
     return `${m}:${String(r).padStart(2, "0")}`;
   }
 
   function persist() {
     try {
-      localStorage.setItem("sp_liked_v2", JSON.stringify([...state.liked]));
-      localStorage.setItem("sp_offline_v2", JSON.stringify([...state.offline]));
+      localStorage.setItem("sp_liked_live_v1", JSON.stringify([...state.liked]));
+      localStorage.setItem("sp_saved_live_v1", JSON.stringify([...state.offline]));
     } catch (_) {}
   }
 
-  // Toast helper
   let toastTimer = null;
   function showToast(msg) {
     const el = document.getElementById("toast");
     el.textContent = msg;
     el.classList.add("is-show");
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove("is-show"), 2400);
+    toastTimer = setTimeout(() => el.classList.remove("is-show"), 2600);
   }
 
   // ==========================================================
-  // REAL 5-BAND WEB AUDIO ENGINE (Zero external MP3 404s!)
+  // REAL YOUTUBE IFRAME PLAYER ENGINE (Plays actual tracks!)
   // ==========================================================
-  let ctx = null, eqNodes = [], bassNode = null, masterGain = null, analyser = null, freqBins = null;
-  let stepTimer = null, tickTimer = null, stepCount = 0, vizRaf = null;
+  let ytPlayer = null;
+  let ytReady = false;
+  let pendingPlayId = null;
+  let pollTimer = null;
+  let sleepTimeout = null;
+  let consecutiveErrors = 0;
 
-  function ensureAudio() {
-    if (ctx) {
-      if (ctx.state === "suspended") ctx.resume();
+  function initYT() {
+    if (ytPlayer || !window.YT || !window.YT.Player) return;
+    const pVars = {
+      autoplay: 0,
+      controls: 1,
+      playsinline: 1,
+      rel: 0,
+      modestbranding: 1
+    };
+    if (location.protocol === "https:") pVars.origin = location.origin;
+
+    ytPlayer = new window.YT.Player("yt-player-host", {
+      height: "158",
+      width: "280",
+      playerVars: pVars,
+      events: {
+        onReady: () => {
+          ytReady = true;
+          ytPlayer.setVolume(state.volume);
+          if (pendingPlayId) {
+            const id = pendingPlayId;
+            pendingPlayId = null;
+            ytPlayer.loadVideoById(id);
+            ytPlayer.playVideo();
+          }
+        },
+        onStateChange: (ev) => {
+          const YTState = window.YT.PlayerState;
+          if (ev.data === YTState.PLAYING) {
+            consecutiveErrors = 0;
+            state.isPlaying = true;
+            const d = ytPlayer.getDuration();
+            if (d && d > 1) state.duration = d;
+            startPolling();
+            renderTransport();
+            renderTrackRows();
+          } else if (ev.data === YTState.PAUSED) {
+            state.isPlaying = false;
+            renderTransport();
+            renderTrackRows();
+          } else if (ev.data === YTState.ENDED) {
+            if (state.repeat === "one") {
+              ytPlayer.seekTo(0, true);
+              ytPlayer.playVideo();
+            } else {
+              nextTrack(true);
+            }
+          }
+        },
+        onError: () => {
+          if (!state.isPlaying) return;
+          consecutiveErrors++;
+          if (consecutiveErrors <= 3) {
+            showToast("Track restricted by label for web embed; skipping to next track");
+            nextTrack(false);
+          } else {
+            state.isPlaying = false;
+            consecutiveErrors = 0;
+            showToast("Multiple tracks restricted by YouTube embed; try another track");
+            renderTransport();
+          }
+        }
+      }
+    });
+  }
+
+  window.onYouTubeIframeAPIReady = initYT;
+  if (window.YT && window.YT.Player) initYT();
+
+  function startPolling() {
+    clearInterval(pollTimer);
+    pollTimer = setInterval(() => {
+      if (!ytPlayer || !ytReady || !state.isPlaying) return;
+      try {
+        const cur = ytPlayer.getCurrentTime();
+        const dur = ytPlayer.getDuration();
+        if (!Number.isNaN(cur)) state.elapsed = cur;
+        if (dur && dur > 1) state.duration = dur;
+        updateScrubber();
+      } catch (_) {}
+    }, 300);
+  }
+
+  // ==========================================================
+  // BUILT-IN 5-BAND WEB AUDIO STUDIO TEST BEAT (Zero Freesound URLs!)
+  // ==========================================================
+  let audioCtx = null, eqNodes = [], bassNode = null, beatMaster = null, analyser = null, freqBins = null;
+  let beatTimer = null, beatStep = 0, vizRaf = null;
+
+  function ensureEqAudio() {
+    if (audioCtx) {
+      if (audioCtx.state === "suspended") audioCtx.resume();
       return;
     }
     const AC = window.AudioContext || window.webkitAudioContext;
-    ctx = new AC();
+    audioCtx = new AC();
     const types = ["lowshelf", "peaking", "peaking", "peaking", "highshelf"];
     eqNodes = EQ_FREQS.map((freq, i) => {
-      const f = ctx.createBiquadFilter();
+      const f = audioCtx.createBiquadFilter();
       f.type = types[i];
       f.frequency.value = freq;
       f.Q.value = 1.1;
       f.gain.value = state.eqGains[i];
       return f;
     });
-    bassNode = ctx.createBiquadFilter();
+    bassNode = audioCtx.createBiquadFilter();
     bassNode.type = "lowshelf";
     bassNode.frequency.value = 85;
     bassNode.gain.value = (state.bassBoost / 100) * 10;
 
-    masterGain = ctx.createGain();
-    masterGain.gain.value = state.muted ? 0 : state.volume * 0.42;
+    beatMaster = audioCtx.createGain();
+    beatMaster.gain.value = state.muted ? 0 : (state.volume / 100) * 0.42;
 
-    analyser = ctx.createAnalyser();
+    analyser = audioCtx.createAnalyser();
     analyser.fftSize = 64;
     freqBins = new Uint8Array(analyser.frequencyBinCount);
 
     for (let i = 0; i < eqNodes.length - 1; i++) eqNodes[i].connect(eqNodes[i + 1]);
     eqNodes[4].connect(bassNode);
-    bassNode.connect(masterGain);
-    masterGain.connect(analyser);
-    analyser.connect(ctx.destination);
+    bassNode.connect(beatMaster);
+    beatMaster.connect(analyser);
+    analyser.connect(audioCtx.destination);
   }
 
-  function applyAudioParams() {
-    if (!ctx) return;
-    eqNodes.forEach((f, i) => f.gain.setTargetAtTime(state.eqGains[i], ctx.currentTime, 0.03));
-    if (bassNode) bassNode.gain.setTargetAtTime((state.bassBoost / 100) * 10, ctx.currentTime, 0.03);
-    if (masterGain) masterGain.gain.setTargetAtTime(state.muted ? 0 : state.volume * 0.42, ctx.currentTime, 0.03);
+  function applyEqParams() {
+    if (!audioCtx) return;
+    eqNodes.forEach((f, i) => f.gain.setTargetAtTime(state.eqGains[i], audioCtx.currentTime, 0.03));
+    if (bassNode) bassNode.gain.setTargetAtTime((state.bassBoost / 100) * 10, audioCtx.currentTime, 0.03);
+    if (beatMaster) beatMaster.gain.setTargetAtTime(state.muted ? 0 : (state.volume / 100) * 0.42, audioCtx.currentTime, 0.03);
   }
 
-  function triggerStep(item) {
-    if (!ctx || ctx.state !== "running") return;
-    const now = ctx.currentTime;
-    const barIdx = Math.floor(stepCount / 4) % item.chords.length;
-    const beatInBar = stepCount % 4;
-
-    // Kick drum on beats 0 and 2 (or all 4 for Deep House / Test Beat)
-    const kickBeats = state.isTestBeat || item.genre === "Deep House" ? [0, 1, 2, 3] : [0, 2];
-    if (kickBeats.includes(beatInBar)) {
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(145, now);
-      osc.frequency.exponentialRampToValueAtTime(42, now + 0.13);
-      g.gain.setValueAtTime(0.65, now);
+  function triggerBeatStep() {
+    if (!audioCtx || audioCtx.state !== "running") return;
+    const now = audioCtx.currentTime;
+    const b = beatStep % 4;
+    // Kick
+    if (b === 0 || b === 2) {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = "sine";
+      o.frequency.setValueAtTime(140, now);
+      o.frequency.exponentialRampToValueAtTime(42, now + 0.13);
+      g.gain.setValueAtTime(0.68, now);
       g.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
-      osc.connect(g);
-      g.connect(eqNodes[0]);
-      osc.start(now);
-      osc.stop(now + 0.25);
+      o.connect(g); g.connect(eqNodes[0]);
+      o.start(now); o.stop(now + 0.25);
     }
-
-    // Crisp Hi-Hat on off-steps
-    if (beatInBar % 2 === 1 || state.isTestBeat) {
-      const bufSize = Math.floor(ctx.sampleRate * 0.045);
-      const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
-      const data = buf.getChannelData(0);
-      for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufSize * 0.28));
-      const src = ctx.createBufferSource();
-      src.buffer = buf;
-      const hp = ctx.createBiquadFilter();
-      hp.type = "highpass";
-      hp.frequency.value = 6200;
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(0.14, now);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
-      src.connect(hp);
-      hp.connect(g);
-      g.connect(eqNodes[0]);
-      src.start(now);
-    }
-
-    // Warm Sub-Bass & Chord Pad on downbeat of each bar
-    if (beatInBar === 0) {
-      const bassFreq = item.bass[barIdx] || 55;
-      const bOsc = ctx.createOscillator();
-      const bGain = ctx.createGain();
-      bOsc.type = "triangle";
-      bOsc.frequency.setValueAtTime(bassFreq, now);
-      bGain.gain.setValueAtTime(0.001, now);
-      bGain.gain.linearRampToValueAtTime(0.28, now + 0.04);
-      bGain.gain.exponentialRampToValueAtTime(0.001, now + 1.35);
-      bOsc.connect(bGain);
-      bGain.connect(eqNodes[0]);
-      bOsc.start(now);
-      bOsc.stop(now + 1.4);
-
-      const chord = item.chords[barIdx];
-      chord.forEach((freq) => {
-        const osc = ctx.createOscillator();
-        const g = ctx.createGain();
-        osc.type = state.isTestBeat ? "sawtooth" : "sine";
-        osc.frequency.setValueAtTime(freq, now);
+    // Hi-hat
+    const bufLen = Math.floor(audioCtx.sampleRate * 0.04);
+    const buf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufLen * 0.28));
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    const hp = audioCtx.createBiquadFilter();
+    hp.type = "highpass"; hp.frequency.value = 6400;
+    const hg = audioCtx.createGain();
+    hg.gain.setValueAtTime(b % 2 === 1 ? 0.16 : 0.06, now);
+    hg.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+    src.connect(hp); hp.connect(hg); hg.connect(eqNodes[0]);
+    src.start(now);
+    // Warm chord on downbeat
+    if (b === 0) {
+      const chords = [[220, 261.63, 329.63], [174.61, 220, 261.63], [196, 246.94, 293.66], [164.81, 196, 246.94]];
+      const chord = chords[Math.floor(beatStep / 4) % chords.length];
+      chord.forEach((f) => {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = "triangle"; o.frequency.setValueAtTime(f, now);
         g.gain.setValueAtTime(0.001, now);
-        g.gain.linearRampToValueAtTime(state.isTestBeat ? 0.045 : 0.075, now + 0.08);
-        g.gain.exponentialRampToValueAtTime(0.001, now + 1.45);
-        osc.connect(g);
-        g.connect(eqNodes[0]);
-        osc.start(now);
-        osc.stop(now + 1.5);
+        g.gain.linearRampToValueAtTime(0.08, now + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+        o.connect(g); g.connect(eqNodes[0]);
+        o.start(now); o.stop(now + 0.95);
       });
     }
-
-    // Gentle melodic pluck on beat 2
-    if (beatInBar === 2) {
-      const chord = item.chords[barIdx];
-      const note = chord[(stepCount >> 1) % chord.length] * 2;
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(note, now);
-      g.gain.setValueAtTime(0.001, now);
-      g.gain.linearRampToValueAtTime(0.07, now + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
-      osc.connect(g);
-      g.connect(eqNodes[0]);
-      osc.start(now);
-      osc.stop(now + 0.45);
-    }
-
-    stepCount++;
+    beatStep++;
   }
 
-  function startAudioLoop() {
-    stopAudioLoop();
-    ensureAudio();
-    const item = getItem(state.currentId);
-    const bpm = state.isTestBeat ? 116 : (item.bpm || 100);
-    const stepMs = Math.round((60000 / bpm) / 2);
-    triggerStep(item);
-    stepTimer = setInterval(() => triggerStep(getItem(state.currentId)), stepMs);
-
-    if (state.isPlaying) {
-      tickTimer = setInterval(() => {
-        const cur = getItem(state.currentId);
-        state.elapsed += 0.5;
-        if (state.elapsed >= cur.duration) {
-          if (state.repeat === "one") {
-            state.elapsed = 0;
-          } else {
-            nextTrack(true);
-          }
-        }
-        updateScrubberAndLyrics();
-      }, 500);
-    }
-    startVisualizer();
-  }
-
-  function stopAudioLoop() {
-    clearInterval(stepTimer);
-    clearInterval(tickTimer);
-    stepTimer = null;
-    tickTimer = null;
+  function stopTestBeat() {
+    state.isTestBeat = false;
+    clearInterval(beatTimer);
+    beatTimer = null;
+    const btn = document.getElementById("eqTestBeatBtn");
+    if (btn) btn.textContent = "Play Beat";
   }
 
   function startVisualizer() {
@@ -515,72 +360,100 @@
     const specSpans = Array.from(document.querySelectorAll("#eqSpecBars span"));
     const reelCanvas = document.getElementById("reelViz");
     const rCtx = reelCanvas ? reelCanvas.getContext("2d") : null;
+    let phase = 0;
 
     function frame() {
-      const active = state.isPlaying || state.isTestBeat;
-      if (analyser && active) {
-        analyser.getByteFrequencyData(freqBins);
-      }
-      const accentColor = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#6366f1";
+      phase += 0.11;
+      const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#6366f1";
+      if (analyser && state.isTestBeat) analyser.getByteFrequencyData(freqBins);
 
-      // Update EQ Drawer spectrum
       specSpans.forEach((sp, i) => {
-        const v = active && freqBins ? freqBins[i % freqBins.length] / 255 : 0.08;
+        let v = 0.08;
+        if (state.isTestBeat && freqBins) {
+          v = freqBins[i % freqBins.length] / 255;
+        } else if (state.isPlaying) {
+          const bandGain = state.eqGains[Math.min(4, Math.floor((i / specSpans.length) * 5))];
+          const boost = 1 + bandGain / 24;
+          v = Math.min(1, Math.max(0.12, (0.35 + 0.35 * Math.sin(phase + i * 0.55) + 0.2 * Math.cos(phase * 1.4 - i * 0.3)) * boost));
+        }
         sp.style.height = `${Math.max(4, Math.round(v * 32))}px`;
       });
 
-      // Update SoundReel canvas spectrum
       if (rCtx && reelCanvas) {
         const w = reelCanvas.width, h = reelCanvas.height;
         rCtx.clearRect(0, 0, w, h);
         const count = 32;
         const barW = (w - 24) / count;
-        rCtx.fillStyle = accentColor;
+        rCtx.fillStyle = accent;
         for (let i = 0; i < count; i++) {
-          const val = active && freqBins ? freqBins[i % freqBins.length] / 255 : 0.12 + Math.sin(i * 0.5) * 0.06;
+          let val = 0.14 + Math.sin(i * 0.5) * 0.05;
+          if (state.isTestBeat && freqBins) val = freqBins[i % freqBins.length] / 255;
+          else if (state.isPlaying) val = 0.25 + 0.45 * Math.abs(Math.sin(phase * 0.8 + i * 0.45));
           const bh = Math.max(4, val * (h - 14));
-          const x = 12 + i * barW + 2;
-          const y = (h - bh) / 2;
-          rCtx.globalAlpha = active ? 0.85 : 0.35;
-          rCtx.fillRect(x, y, Math.max(3, barW - 4), bh);
+          rCtx.globalAlpha = (state.isPlaying || state.isTestBeat) ? 0.85 : 0.35;
+          rCtx.fillRect(12 + i * barW + 2, (h - bh) / 2, Math.max(3, barW - 4), bh);
         }
         rCtx.globalAlpha = 1;
       }
 
-      if (active) vizRaf = requestAnimationFrame(frame);
+      if (state.isPlaying || state.isTestBeat) {
+        vizRaf = requestAnimationFrame(frame);
+      }
     }
     vizRaf = requestAnimationFrame(frame);
   }
 
   // ==========================================================
-  // PLAYBACK CONTROLS
+  // PLAYBACK CONTROLS (Wired to Real YouTube IFrame Player)
   // ==========================================================
   function playTrack(id, autoPlay = true) {
     if (state.simOffline && !state.offline.has(id)) {
-      showToast("Airplane mode active: play a track saved in Offline Vault");
+      showToast("Saved-only filter active: pick a saved track or disable filter");
       return;
     }
-    state.currentId = id;
+    stopTestBeat();
+    const item = getItem(id);
+    state.currentId = item.id;
     state.elapsed = 0;
-    state.isTestBeat = false;
-    document.getElementById("eqTestBeatBtn").textContent = "Play Beat";
-    if (!state.queue.includes(id)) state.queue.unshift(id);
+    state.duration = item.duration || 210;
+    if (!state.queue.includes(item.id)) state.queue.unshift(item.id);
+
     if (autoPlay) {
       state.isPlaying = true;
-      startAudioLoop();
+      if (ytReady && ytPlayer) {
+        ytPlayer.loadVideoById(item.id);
+        ytPlayer.setVolume(state.muted ? 0 : state.volume);
+        ytPlayer.playVideo();
+      } else {
+        pendingPlayId = item.id;
+        initYT();
+      }
+      startPolling();
+      startVisualizer();
     }
     updateMediaSession();
     renderAll();
   }
 
   function togglePlay() {
-    state.isTestBeat = false;
-    document.getElementById("eqTestBeatBtn").textContent = "Play Beat";
-    state.isPlaying = !state.isPlaying;
+    stopTestBeat();
     if (state.isPlaying) {
-      startAudioLoop();
+      state.isPlaying = false;
+      if (ytReady && ytPlayer) ytPlayer.pauseVideo();
     } else {
-      stopAudioLoop();
+      state.isPlaying = true;
+      if (ytReady && ytPlayer) {
+        const curData = ytPlayer.getVideoData ? ytPlayer.getVideoData() : null;
+        if (!curData || curData.video_id !== state.currentId) {
+          ytPlayer.loadVideoById(state.currentId);
+        }
+        ytPlayer.playVideo();
+      } else {
+        pendingPlayId = state.currentId;
+        initYT();
+      }
+      startPolling();
+      startVisualizer();
     }
     renderTransport();
     renderTrackRows();
@@ -599,8 +472,6 @@
       if (idx >= q.length) {
         if (fromEnd && state.repeat === "off") {
           state.isPlaying = false;
-          state.elapsed = 0;
-          stopAudioLoop();
           renderTransport();
           return;
         }
@@ -611,9 +482,10 @@
   }
 
   function prevTrack() {
-    if (state.elapsed > 4) {
+    if (state.elapsed > 4 && ytReady && ytPlayer) {
+      ytPlayer.seekTo(0, true);
       state.elapsed = 0;
-      updateScrubberAndLyrics();
+      updateScrubber();
       return;
     }
     const q = state.simOffline ? state.queue.filter((id) => state.offline.has(id)) : state.queue;
@@ -628,7 +500,7 @@
       showToast("Removed from Liked Songs");
     } else {
       state.liked.add(id);
-      showToast("Saved to Liked Songs");
+      showToast("Added to Liked Songs");
     }
     persist();
     renderAll();
@@ -638,10 +510,10 @@
     const item = getItem(id);
     if (state.offline.has(id)) {
       state.offline.delete(id);
-      showToast(`Removed "${item.title}" from Offline Vault`);
+      showToast(`Removed "${item.title}" from Saved Vault`);
     } else {
       state.offline.add(id);
-      showToast(`Cached "${item.title}" (${item.mb} MB) offline`);
+      showToast(`Saved "${item.title}" to Offline Vault`);
     }
     persist();
     renderAll();
@@ -654,7 +526,8 @@
       navigator.mediaSession.metadata = new MediaMetadata({
         title: item.title,
         artist: item.artist,
-        album: "SoundPlus Studio"
+        album: "SoundPlus",
+        artwork: [{ src: cleanThumb(item.thumbnailUrl, item.id), sizes: "320x180", type: "image/jpeg" }]
       });
       navigator.mediaSession.setActionHandler("play", () => { if (!state.isPlaying) togglePlay(); });
       navigator.mediaSession.setActionHandler("pause", () => { if (state.isPlaying) togglePlay(); });
@@ -664,7 +537,111 @@
   }
 
   // ==========================================================
-  // SMOOTH CIRCULAR-RIPPLE LIGHT PALETTE SWITCHER (Synced with landing page)
+  // LIVE SOUNDPLUS API HYDRATION (Home, Podcasts, Artists, Search)
+  // ==========================================================
+  async function loadLiveFeeds() {
+    try {
+      const [homeRes, podRes, artRes] = await Promise.all([
+        fetch(`${API_BASE}?feed=home`),
+        fetch(`${API_BASE}?feed=podcasts`),
+        fetch(`${API_BASE}?feed=artists`)
+      ]);
+
+      if (homeRes.ok) {
+        const home = await homeRes.json();
+        const buckets = [
+          ["Trending", home.trending],
+          ["Pop", home.pop],
+          ["Hip-Hop", home.hiphop],
+          ["Dance", home.dance],
+          ["Latin", home.latin],
+          ["Rock", home.rock],
+          ["Country", home.country],
+          ["Chill", home.chill]
+        ];
+        const merged = [];
+        const seen = new Set();
+        buckets.forEach(([label, arr]) => {
+          if (!Array.isArray(arr)) return;
+          arr.forEach((t) => {
+            if (!t.id || seen.has(t.id)) return;
+            seen.add(t.id);
+            merged.push({ ...t, genre: label });
+          });
+        });
+        if (merged.length) {
+          registerItems(merged);
+          state.tracks = merged.map((t) => getItem(t.id));
+          if (!state.isPlaying) {
+            state.currentId = state.tracks[0].id;
+            state.duration = state.tracks[0].duration;
+            state.queue = state.tracks.slice(0, 20).map((t) => t.id);
+          }
+          // Hydrate starter playlists with live track IDs
+          USER_PLAYLISTS[0].trackIds = state.tracks.filter((t) => t.genre === "Trending").slice(0, 6).map((t) => t.id);
+          USER_PLAYLISTS[1].trackIds = state.tracks.filter((t) => t.genre === "Chill" || t.genre === "Pop").slice(0, 6).map((t) => t.id);
+          USER_PLAYLISTS[2].trackIds = state.tracks.filter((t) => t.genre === "Rock" || t.genre === "Hip-Hop").slice(0, 6).map((t) => t.id);
+        }
+        if (Array.isArray(home.mixes) && home.mixes.length) {
+          state.mixes = home.mixes.slice(0, 4);
+        }
+      }
+
+      if (podRes.ok) {
+        const pods = await podRes.json();
+        if (Array.isArray(pods) && pods.length) {
+          registerItems(pods);
+          state.podcasts = pods.slice(0, 12).map((p) => getItem(p.id));
+        }
+      }
+
+      if (artRes.ok) {
+        const arts = await artRes.json();
+        if (Array.isArray(arts) && arts.length) {
+          state.artists = arts.slice(0, 12);
+        }
+      }
+
+      renderAll();
+    } catch (_) {
+      // Fallback seed catalog already rendered cleanly
+    }
+  }
+
+  let searchDebounce = null;
+  async function runLiveSearch(query, autoPlayFirst = false) {
+    const q = query.trim();
+    if (!q) {
+      state.searchResults = [];
+      state.searchLoading = false;
+      renderSearch();
+      return;
+    }
+    state.searchLoading = true;
+    renderSearch();
+    try {
+      const res = await fetch(`${API_BASE}?q=${encodeURIComponent(q)}`);
+      if (res.ok) {
+        const list = await res.json();
+        if (Array.isArray(list)) {
+          registerItems(list);
+          state.searchResults = list.map((x) => getItem(x.id));
+          if (autoPlayFirst && state.searchResults.length) {
+            state.queue = state.searchResults.map((x) => x.id);
+            playTrack(state.searchResults[0].id, true);
+          }
+        }
+      }
+    } catch (_) {
+      state.searchResults = state.tracks.filter((t) => `${t.title} ${t.artist} ${t.genre}`.toLowerCase().includes(q.toLowerCase()));
+    } finally {
+      state.searchLoading = false;
+      renderSearch();
+    }
+  }
+
+  // ==========================================================
+  // SMOOTH CIRCULAR-RIPPLE LIGHT PALETTE SWITCHER (Synced)
   // ==========================================================
   const swatchBtns = Array.from(document.querySelectorAll(".swatch-btn"));
   const paletteLabel = document.getElementById("paletteLabel");
@@ -704,7 +681,7 @@
   });
 
   // ==========================================================
-  // REAL URL HASH ROUTING (Browser Back/Forward + Deep Links)
+  // REAL URL HASH ROUTING
   // ==========================================================
   const VALID_VIEWS = ["home", "reels", "search", "podcasts", "library", "offline"];
 
@@ -713,9 +690,7 @@
     state.view = view;
     document.querySelectorAll(".view-panel").forEach((p) => p.classList.toggle("is-active", p.id === `view-${view}`));
     document.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-current", b.dataset.view === view ? "page" : "false"));
-    if (pushHash && location.hash !== `#${view}`) {
-      history.pushState(null, "", `#${view}`);
-    }
+    if (pushHash && location.hash !== `#${view}`) history.pushState(null, "", `#${view}`);
     window.scrollTo({ top: 0, behavior: "instant" });
     if (view === "reels") renderReel();
   }
@@ -724,7 +699,7 @@
     const h = (location.hash || "#home").slice(1);
     if (h.startsWith("track=")) {
       const id = h.slice(6);
-      if (allAudioItems().some((t) => t.id === id)) {
+      if (catalogById.has(id)) {
         state.currentId = id;
         renderAll();
         openDrawer("lyrics");
@@ -734,19 +709,15 @@
     }
     navigate(VALID_VIEWS.includes(h) ? h : "home", false);
   }
-
   window.addEventListener("hashchange", handleHash);
-
-  document.querySelectorAll("[data-view]").forEach((btn) => {
-    btn.addEventListener("click", () => navigate(btn.dataset.view));
-  });
+  document.querySelectorAll("[data-view]").forEach((btn) => btn.addEventListener("click", () => navigate(btn.dataset.view)));
 
   // ==========================================================
-  // RENDERING HELPERS
+  // RENDERERS
   // ==========================================================
   function renderTrackRowsMarkup(items) {
     if (!items.length) {
-      return `<div class="empty-state">No tracks match this filter yet.</div>`;
+      return `<div class="empty-state">No tracks found for this filter yet.</div>`;
     }
     return `<div class="track-list">${items.map((t, idx) => {
       const active = t.id === state.currentId;
@@ -759,16 +730,16 @@
             ? `<span class="eq-bars-mini ${state.isPlaying ? "" : "is-paused"}"><i></i><i></i><i></i></span>`
             : String(idx + 1).padStart(2, "0")}
         </div>
-        <div class="track-thumb" data-play="${t.id}" style="cursor:pointer;">${makeSleeve(...t.art, t.title)}</div>
-        <div class="track-info" data-play="${t.id}">
-          <div class="track-title">${t.title}</div>
-          <div class="track-artist">${t.artist}</div>
+        <div class="track-thumb" data-play="${escHtml(t.id)}" style="cursor:pointer;">${artMarkup(t)}</div>
+        <div class="track-info" data-play="${escHtml(t.id)}">
+          <div class="track-title">${escHtml(t.title)}</div>
+          <div class="track-artist">${escHtml(t.artist)}</div>
         </div>
-        <div class="track-genre">${t.genre || t.category}</div>
-        <button type="button" class="icon-btn ${liked ? "is-liked" : ""}" data-like="${t.id}" title="${liked ? "Unlike" : "Like"}" aria-label="Toggle like for ${t.title}">
+        <div class="track-genre">${escHtml(t.genre || t.category)}</div>
+        <button type="button" class="icon-btn ${liked ? "is-liked" : ""}" data-like="${escHtml(t.id)}" title="${liked ? "Unlike" : "Like"}" aria-label="Toggle like for ${escHtml(t.title)}">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="${liked ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9-9a5.4 5.4 0 0 1 9-5.7A5.4 5.4 0 0 1 21 12c-2 4.5-9 9-9 9z"/></svg>
         </button>
-        <button type="button" class="icon-btn ${saved ? "is-saved" : ""}" data-offline="${t.id}" title="${saved ? "Saved offline" : "Save offline"}" aria-label="Toggle offline cache for ${t.title}">
+        <button type="button" class="icon-btn ${saved ? "is-saved" : ""}" data-offline="${escHtml(t.id)}" title="${saved ? "Saved to vault" : "Save to vault"}" aria-label="Toggle saved vault for ${escHtml(t.title)}">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${saved ? '<path d="M20 6L9 17l-5-5"/>' : '<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/>'}</svg>
         </button>
         <div class="track-dur">${fmtTime(t.duration)}</div>
@@ -777,45 +748,53 @@
   }
 
   function renderHome() {
-    const hero = TRACKS[0];
+    const hero = state.tracks[0] || SEED_TRACKS[0];
     document.getElementById("spotlightCard").innerHTML = `
-      <div class="cover-art">${makeSleeve(...hero.art, hero.title)}</div>
+      <div class="cover-art">${artMarkup(hero)}</div>
       <div>
-        <div class="eyebrow">Daily Spotlight &middot; Unified Studio Web v2.0</div>
-        <h1>${hero.title}</h1>
-        <p class="spotlight-sub">${hero.artist} &middot; Crisp square artwork, real 5-band Web Audio equalizer, zero cache-purge reloads, and instant offline vault caching.</p>
+        <div class="eyebrow">Daily Spotlight &middot; Live SoundPlus Catalog</div>
+        <h1>${escHtml(hero.title)}</h1>
+        <p class="spotlight-sub">${escHtml(hero.artist)} &middot; Streaming live from the SoundPlus catalog with full-bleed artwork, zero cache-purge reloads, instant search, and unified light palettes.</p>
         <div class="btn-row">
-          <button type="button" class="btn-primary" data-play="${hero.id}">Play Now</button>
-          <button type="button" class="btn-secondary" data-offline="${hero.id}">${state.offline.has(hero.id) ? "Saved Offline" : "Save Offline"}</button>
+          <button type="button" class="btn-primary" data-play="${escHtml(hero.id)}">${state.currentId === hero.id && state.isPlaying ? "Pause Track" : "Play Now"}</button>
+          <button type="button" class="btn-secondary" data-offline="${escHtml(hero.id)}">${state.offline.has(hero.id) ? "Saved in Vault" : "Save Track"}</button>
           <button type="button" class="btn-secondary" id="spotEqBtn">Open 5-Band EQ</button>
         </div>
       </div>`;
     document.getElementById("spotEqBtn").addEventListener("click", () => openDrawer("eq"));
 
-    const genres = ["All", ...new Set(TRACKS.map((t) => t.genre))];
+    const genres = ["All", ...new Set(state.tracks.map((t) => t.genre))];
     document.getElementById("genreFilterRow").innerHTML = genres.map((g) =>
-      `<button type="button" class="filter-chip" data-genre="${g}" aria-pressed="${state.genreFilter === g}">${g}</button>`
+      `<button type="button" class="filter-chip" data-genre="${escHtml(g)}" aria-pressed="${state.genreFilter === g}">${escHtml(g)}</button>`
     ).join("");
 
-    document.getElementById("mixGrid").innerHTML = PLAYLISTS.map((pl) => `
-      <button type="button" class="mix-card" data-open-pl="${pl.id}">
-        <div class="cover-art">${makeSleeve(...pl.art, pl.name)}</div>
-        <div class="mix-card-title">${pl.name}</div>
-        <div class="mix-card-meta">${pl.desc} (${pl.trackIds.length} tracks)</div>
+    document.getElementById("mixGrid").innerHTML = state.mixes.map((m) => `
+      <button type="button" class="mix-card" data-seed-mix="${escHtml(m.seedArtist || m.title)}" data-mix-name="${escHtml(m.title)}">
+        <div class="cover-art">
+          <div style="width:100%;height:100%;background:${escHtml(m.gradient || "linear-gradient(135deg,#3b82f6,#10b981)")};padding:14px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;">
+            <span class="mono" style="font-size:0.66rem;opacity:0.88;">${escHtml(m.badge || "CURATED MIX")}</span>
+            <strong style="font-size:1.08rem;line-height:1.15;letter-spacing:-0.02em;">${escHtml(m.title)}</strong>
+          </div>
+        </div>
+        <div class="mix-card-title">${escHtml(m.title)}</div>
+        <div class="mix-card-meta">${escHtml(m.subtitle || "")}</div>
       </button>
     `).join("");
 
-    const filtered = state.genreFilter === "All" ? TRACKS : TRACKS.filter((t) => t.genre === state.genreFilter);
-    document.getElementById("homeTracksTitle").textContent = state.genreFilter === "All" ? "Studio Catalog" : `${state.genreFilter} Tracks`;
+    const filtered = state.genreFilter === "All"
+      ? state.tracks.slice(0, 18)
+      : state.tracks.filter((t) => t.genre === state.genreFilter);
+    document.getElementById("homeTracksTitle").textContent = state.genreFilter === "All" ? "Live SoundPlus Catalog" : `${state.genreFilter} Tracks`;
     document.getElementById("homeTracksCount").textContent = `${filtered.length} tracks`;
     document.getElementById("homeTrackList").innerHTML = renderTrackRowsMarkup(filtered);
   }
 
   function renderReel() {
-    const t = TRACKS[state.reelIdx % TRACKS.length];
-    document.getElementById("reelGenreBadge").textContent = t.genre.toUpperCase();
-    document.getElementById("reelCounter").textContent = `${String(state.reelIdx + 1).padStart(2, "0")} / ${String(TRACKS.length).padStart(2, "0")}`;
-    document.getElementById("reelCover").innerHTML = makeSleeve(...t.art, t.title);
+    const list = state.tracks.length ? state.tracks : SEED_TRACKS;
+    const t = list[state.reelIdx % list.length];
+    document.getElementById("reelGenreBadge").textContent = (t.genre || "TRENDING").toUpperCase();
+    document.getElementById("reelCounter").textContent = `${String((state.reelIdx % list.length) + 1).padStart(2, "0")} / ${String(list.length).padStart(2, "0")}`;
+    document.getElementById("reelCover").innerHTML = artMarkup(t);
     document.getElementById("reelTitle").textContent = t.title;
     document.getElementById("reelArtist").textContent = t.artist;
     document.getElementById("reelLikeBtn").classList.toggle("is-liked", state.liked.has(t.id));
@@ -824,7 +803,7 @@
   }
 
   function renderSearch() {
-    const q = state.searchQuery.trim().toLowerCase();
+    const q = state.searchQuery.trim();
     const wrap = document.getElementById("searchResultsWrap");
     const status = document.getElementById("searchStatus");
 
@@ -833,98 +812,110 @@
     );
 
     if (!q) {
-      status.textContent = "Type above or choose a genre";
+      status.textContent = "Search any song, artist, or podcast live";
       wrap.innerHTML = "";
+    } else if (state.searchLoading) {
+      status.textContent = `Searching SoundPlus catalog for "${q}"...`;
+      wrap.innerHTML = `<div class="empty-state">Fetching live results for "${escHtml(q)}"...</div>`;
     } else {
-      const songMatches = TRACKS.filter((t) => `${t.title} ${t.artist} ${t.genre}`.toLowerCase().includes(q));
-      const podMatches = PODCASTS.filter((p) => `${p.title} ${p.artist} ${p.category}`.toLowerCase().includes(q));
-      const artists = [...new Set(TRACKS.filter((t) => t.artist.toLowerCase().includes(q)).map((t) => t.artist))];
-
-      let items = [];
-      if (state.searchScope === "songs") items = songMatches;
-      else if (state.searchScope === "podcasts") items = podMatches;
-      else if (state.searchScope === "artists") items = TRACKS.filter((t) => artists.includes(t.artist));
-      else items = [...songMatches, ...podMatches];
-
-      status.textContent = `${items.length} result${items.length === 1 ? "" : "s"} for "${state.searchQuery.trim()}"`;
-      if (!items.length) {
-        wrap.innerHTML = `<div class="empty-state">
-          <strong>No matches for "${state.searchQuery.trim()}"</strong>
-          <div style="margin-top:8px;font-size:0.84rem;">Try searching for Synthwave, Lo-Fi, Bollywood, or Podcasts.</div>
-        </div>`;
-      } else {
-        wrap.innerHTML = renderTrackRowsMarkup(items);
+      let items = state.searchResults;
+      if (state.searchScope === "podcasts") {
+        items = state.podcasts.filter((p) => `${p.title} ${p.artist}`.toLowerCase().includes(q.toLowerCase()));
+      } else if (state.searchScope === "artists") {
+        items = state.searchResults.filter((t) => t.artist.toLowerCase().includes(q.toLowerCase()));
+        if (!items.length) items = state.searchResults;
       }
+      status.textContent = `${items.length} live result${items.length === 1 ? "" : "s"} for "${q}"`;
+      wrap.innerHTML = items.length
+        ? renderTrackRowsMarkup(items)
+        : `<div class="empty-state"><strong>No matches for "${escHtml(q)}"</strong><div style="margin-top:8px;font-size:0.84rem;">Try Arijit Singh, Coldplay, SZA, The Weeknd, or Daft Punk.</div></div>`;
     }
 
     const genreCounts = {};
-    TRACKS.forEach((t) => { genreCounts[t.genre] = (genreCounts[t.genre] || 0) + 1; });
+    state.tracks.forEach((t) => { genreCounts[t.genre] = (genreCounts[t.genre] || 0) + 1; });
     document.getElementById("searchGenreGrid").innerHTML = Object.entries(genreCounts).map(([g, c]) => `
-      <button type="button" class="genre-tile" data-quick-search="${g}">
-        <strong>${g}</strong>
-        <span>${c} studio tracks</span>
+      <button type="button" class="genre-tile" data-quick-search="${escHtml(g)} music">
+        <strong>${escHtml(g)}</strong>
+        <span>${c} live tracks</span>
       </button>
     `).join("");
+
+    const artGrid = document.getElementById("searchArtistGrid");
+    if (artGrid) {
+      artGrid.innerHTML = state.artists.length
+        ? state.artists.map((a) => `
+          <button type="button" class="artist-card" data-quick-search="${escHtml(a.name)}">
+            <img src="${escHtml(a.avatarUrl)}" alt="${escHtml(a.name)}" referrerpolicy="no-referrer" loading="lazy" />
+            <strong>${escHtml(a.name)}</strong>
+            <span>${escHtml(a.subscribers || "Artist")}</span>
+          </button>
+        `).join("")
+        : `<div style="color:var(--muted);font-size:0.86rem;">Loading live artists...</div>`;
+    }
   }
 
   function renderPodcasts() {
-    const cats = ["All", ...new Set(PODCASTS.map((p) => p.category))];
+    const pods = state.podcasts;
+    const cats = ["All", ...new Set(pods.map((p) => p.category))].slice(0, 6);
     document.getElementById("podFilterRow").innerHTML = cats.map((c) =>
-      `<button type="button" class="filter-chip" data-pod-cat="${c}" aria-pressed="${state.podFilter === c}">${c}</button>`
+      `<button type="button" class="filter-chip" data-pod-cat="${escHtml(c)}" aria-pressed="${state.podFilter === c}">${escHtml(c)}</button>`
     ).join("");
 
-    const list = state.podFilter === "All" ? PODCASTS : PODCASTS.filter((p) => p.category === state.podFilter);
-    document.getElementById("podcastGrid").innerHTML = list.map((p) => `
-      <article class="podcast-card">
-        <div class="cover-art">${makeSleeve(...p.art, p.artist)}</div>
-        <div>
-          <div class="eyebrow" style="margin-bottom:4px;">${p.category}</div>
-          <strong style="font-size:0.98rem;line-height:1.3;display:block;">${p.title}</strong>
-          <div style="font-size:0.82rem;color:var(--muted);margin-top:4px;">${p.artist} &middot; ${Math.round(p.duration / 60)} min</div>
-        </div>
-        <p style="margin:0;font-size:0.84rem;color:var(--ink-2);line-height:1.5;">${p.desc}</p>
-        <div class="btn-row" style="margin-top:auto;">
-          <button type="button" class="btn-primary" style="height:36px;padding:0 14px;font-size:0.82rem;" data-play="${p.id}">
-            ${state.currentId === p.id && state.isPlaying ? "Playing" : "Listen"}
-          </button>
-          <button type="button" class="btn-secondary" style="height:36px;padding:0 12px;font-size:0.8rem;" data-offline="${p.id}">
-            ${state.offline.has(p.id) ? "Saved" : "Save Offline"}
-          </button>
-        </div>
-      </article>
-    `).join("");
+    const list = state.podFilter === "All" ? pods : pods.filter((p) => p.category === state.podFilter);
+    document.getElementById("podcastGrid").innerHTML = list.length
+      ? list.map((p) => `
+        <article class="podcast-card">
+          <div class="cover-art">${artMarkup(p)}</div>
+          <div>
+            <div class="eyebrow" style="margin-bottom:4px;">${escHtml(p.category)}</div>
+            <strong style="font-size:0.95rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escHtml(p.title)}</strong>
+            <div style="font-size:0.8rem;color:var(--muted);margin-top:5px;">${escHtml(p.artist)} &middot; ${fmtTime(p.duration)}${p.publishedDate ? " &middot; " + escHtml(p.publishedDate) : ""}</div>
+          </div>
+          <div class="btn-row" style="margin-top:auto;">
+            <button type="button" class="btn-primary" style="height:36px;padding:0 14px;font-size:0.82rem;" data-play="${escHtml(p.id)}">
+              ${state.currentId === p.id && state.isPlaying ? "Pause" : "Listen"}
+            </button>
+            <button type="button" class="btn-secondary" style="height:36px;padding:0 12px;font-size:0.8rem;" data-offline="${escHtml(p.id)}">
+              ${state.offline.has(p.id) ? "Saved" : "Save"}
+            </button>
+          </div>
+        </article>
+      `).join("")
+      : `<div class="empty-state">Loading live SoundPlus podcasts...</div>`;
   }
 
   function renderLibrary() {
     document.getElementById("sideLikesCount").textContent = state.liked.size;
-    document.getElementById("sidebarPlaylists").innerHTML = PLAYLISTS.map((pl) => `
-      <button type="button" class="playlist-mini-btn" data-select-lib="${pl.id}">
-        <span>${pl.name}</span>
+    document.getElementById("sidebarPlaylists").innerHTML = USER_PLAYLISTS.map((pl) => `
+      <button type="button" class="playlist-mini-btn" data-select-lib="${escHtml(pl.id)}">
+        <span>${escHtml(pl.name)}</span>
         <span class="mono" style="font-size:0.72rem;color:var(--muted);">${pl.trackIds.length}</span>
       </button>
     `).join("");
 
     const cards = [
-      { id: "likes", name: "Liked Songs", desc: `${state.liked.size} saved favorites`, art: ["#47202e", "#9e3f5c", "#fbcfe8", "rings"] },
-      ...PLAYLISTS.map((p) => ({ id: p.id, name: p.name, desc: `${p.trackIds.length} tracks`, art: p.art }))
+      { id: "likes", name: "Liked Songs", desc: `${state.liked.size} saved favorites`, gradient: "linear-gradient(135deg, #881337, #e11d48)" },
+      ...USER_PLAYLISTS.map((p) => ({ id: p.id, name: p.name, desc: `${p.trackIds.length} tracks`, gradient: p.gradient }))
     ];
     document.getElementById("libraryPlaylistsGrid").innerHTML = cards.map((c) => `
-      <button type="button" class="mix-card" data-select-lib="${c.id}" style="${state.activeLibraryId === c.id ? "border-color:var(--accent);" : ""}">
-        <div class="cover-art">${makeSleeve(...c.art, c.name)}</div>
-        <div class="mix-card-title">${c.name}</div>
-        <div class="mix-card-meta">${c.desc}</div>
+      <button type="button" class="mix-card" data-select-lib="${escHtml(c.id)}" style="${state.activeLibraryId === c.id ? "border-color:var(--accent);" : ""}">
+        <div class="cover-art">
+          <div style="width:100%;height:100%;background:${escHtml(c.gradient)};padding:14px;display:flex;align-items:flex-end;color:#fff;font-weight:700;font-size:1rem;">${escHtml(c.name)}</div>
+        </div>
+        <div class="mix-card-title">${escHtml(c.name)}</div>
+        <div class="mix-card-meta">${escHtml(c.desc)}</div>
       </button>
     `).join("");
 
     let items = [];
     let title = "Liked Songs";
     if (state.activeLibraryId === "likes") {
-      items = allAudioItems().filter((t) => state.liked.has(t.id));
+      items = [...state.liked].map(getItem).filter(Boolean);
     } else {
-      const pl = PLAYLISTS.find((p) => p.id === state.activeLibraryId);
+      const pl = USER_PLAYLISTS.find((p) => p.id === state.activeLibraryId);
       if (pl) {
         title = pl.name;
-        items = pl.trackIds.map(getItem);
+        items = pl.trackIds.map(getItem).filter(Boolean);
       }
     }
     document.getElementById("libActiveTitle").textContent = title;
@@ -933,15 +924,11 @@
   }
 
   function renderOffline() {
-    const items = allAudioItems().filter((t) => state.offline.has(t.id));
-    const totalMb = items.reduce((sum, t) => sum + (t.mb || 5), 0);
+    const items = [...state.offline].map(getItem).filter(Boolean);
     document.getElementById("sideOfflineCount").textContent = items.length;
-    document.getElementById("vaultMbLabel").textContent = `${totalMb.toFixed(1)} MB`;
-    document.getElementById("vaultFill").style.width = `${Math.min(100, Math.round((totalMb / 50) * 100))}%`;
-    document.getElementById("vaultSubLabel").textContent = `${items.length} track${items.length === 1 ? "" : "s"} cached locally`;
     document.getElementById("offlineBannerText").textContent = items.length
-      ? `${items.length} tracks saved offline (${totalMb.toFixed(1)} MB). Plays cleanly with zero network access.`
-      : "No tracks cached yet. Click the download icon on any track to save it locally.";
+      ? `${items.length} track${items.length === 1 ? "" : "s"} saved in your Offline Vault in the exact same design system.`
+      : "No saved tracks yet. Click the save icon on any song to add it here.";
     document.getElementById("simOfflineBtn").setAttribute("aria-pressed", String(state.simOffline));
     document.getElementById("simOfflineState").textContent = state.simOffline ? "On" : "Off";
     document.getElementById("offlineTracksWrap").innerHTML = renderTrackRowsMarkup(items);
@@ -956,9 +943,10 @@
     document.getElementById("mobilePlaySvg").innerHTML = playSvg;
     document.getElementById("mobilePlayBtn").style.display = window.innerWidth <= 960 ? "inline-flex" : "none";
 
-    document.getElementById("dockCover").innerHTML = makeSleeve(...item.art, item.title);
+    document.getElementById("dockCover").innerHTML = artMarkup(item);
     document.getElementById("dockTitle").textContent = item.title;
     document.getElementById("dockArtist").textContent = item.artist;
+
     const dockLike = document.getElementById("dockLikeBtn");
     const liked = state.liked.has(item.id);
     dockLike.classList.toggle("is-liked", liked);
@@ -968,47 +956,45 @@
     document.getElementById("shuffleBtn").setAttribute("aria-pressed", String(state.shuffle));
     document.getElementById("repeatBtn").classList.toggle("is-saved", state.repeat !== "off");
     document.getElementById("repeatBtn").setAttribute("aria-pressed", String(state.repeat !== "off"));
-    document.getElementById("repeatBtn").title = `Repeat: ${state.repeat}`;
+    document.getElementById("videoToggleBtn").classList.toggle("is-saved", state.showVideo);
+    document.getElementById("videoToggleBtn").setAttribute("aria-pressed", String(state.showVideo));
 
     // Now Playing Drawer sync
-    document.getElementById("npCover").innerHTML = makeSleeve(...item.art, item.title);
-    document.getElementById("npGenre").textContent = (item.genre || item.category || "AUDIO").toUpperCase();
+    document.getElementById("npCover").innerHTML = artMarkup(item);
+    document.getElementById("npGenre").textContent = (item.genre || "AUDIO").toUpperCase();
     document.getElementById("npTitle").textContent = item.title;
     document.getElementById("npArtist").textContent = item.artist;
-    document.getElementById("npOfflineBtn").textContent = state.offline.has(item.id) ? "Saved Offline" : "Save Offline";
+    document.getElementById("npOfflineBtn").textContent = state.offline.has(item.id) ? "Saved in Vault" : "Save Track";
+    document.getElementById("lyricsList").innerHTML = `
+      <div class="lyric-line is-active">Streaming live track: <strong>${escHtml(item.title)}</strong></div>
+      <div class="lyric-line">Artist: ${escHtml(item.artist)} &middot; Duration: ${fmtTime(state.duration)}</div>
+      <div class="lyric-line">Source: SoundPlus Live Catalog (YouTube Audio Stream, ID <span class="mono">${escHtml(item.id)}</span>)</div>
+      <div class="lyric-line">Tip: Toggle the Video icon in the bottom player bar to watch the live video preview, or press <span class="mono">Space</span> to play/pause.</div>
+    `;
 
-    updateScrubberAndLyrics();
+    updateScrubber();
     renderQueue();
   }
 
-  function updateScrubberAndLyrics() {
-    const item = getItem(state.currentId);
-    const pct = Math.min(1000, Math.round((state.elapsed / item.duration) * 1000));
+  function updateScrubber() {
+    const dur = Math.max(1, state.duration || 210);
+    const pct = Math.min(1000, Math.round((state.elapsed / dur) * 1000));
     document.getElementById("seekSlider").value = pct;
     document.getElementById("timeElapsed").textContent = fmtTime(state.elapsed);
-    document.getElementById("timeDuration").textContent = fmtTime(item.duration);
-
-    const lyrics = item.lyrics || [[0, item.desc || "Instrumental acoustic stream playing cleanly through 5-band EQ."]];
-    let activeIdx = 0;
-    lyrics.forEach(([t], i) => { if (state.elapsed >= t) activeIdx = i; });
-    document.getElementById("lyricsList").innerHTML = lyrics.map(([t, line], i) => `
-      <div class="lyric-line ${i === activeIdx ? "is-active" : ""}">
-        <span class="mono" style="font-size:0.7rem;margin-right:8px;opacity:0.65;">${fmtTime(t)}</span>${line}
-      </div>
-    `).join("");
+    document.getElementById("timeDuration").textContent = fmtTime(dur);
   }
 
   function renderQueue() {
     const body = document.getElementById("queueListBody");
-    body.innerHTML = state.queue.map((id, idx) => {
+    body.innerHTML = state.queue.slice(0, 20).map((id, idx) => {
       const t = getItem(id);
       const isCur = id === state.currentId;
       return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:${isCur ? "var(--accent-soft)" : "var(--paper)"};border:1px solid var(--line);">
         <span class="mono" style="font-size:0.72rem;color:var(--muted);width:20px;">${idx + 1}</span>
-        <div style="width:36px;height:36px;border-radius:8px;overflow:hidden;flex:none;cursor:pointer;" data-play="${id}">${makeSleeve(...t.art, t.title)}</div>
-        <div style="min-width:0;flex:1;cursor:pointer;" data-play="${id}">
-          <div style="font-weight:600;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.title}</div>
-          <div style="font-size:0.76rem;color:var(--muted);">${t.artist}</div>
+        <div style="width:36px;height:36px;border-radius:8px;overflow:hidden;flex:none;cursor:pointer;" data-play="${escHtml(id)}">${artMarkup(t)}</div>
+        <div style="min-width:0;flex:1;cursor:pointer;" data-play="${escHtml(id)}">
+          <div style="font-weight:600;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(t.title)}</div>
+          <div style="font-size:0.76rem;color:var(--muted);">${escHtml(t.artist)}</div>
         </div>
         <span class="mono" style="font-size:0.72rem;color:var(--muted);">${fmtTime(t.duration)}</span>
       </div>`;
@@ -1034,7 +1020,7 @@
   }
 
   // ==========================================================
-  // EQUALIZER UI & CURVE RENDERING
+  // EQUALIZER UI
   // ==========================================================
   function initEqUi() {
     const grid = document.getElementById("eqSlidersGrid");
@@ -1056,13 +1042,12 @@
       state.eqGains[idx] = v;
       document.getElementById(`eqVal${idx}`).textContent = `${v >= 0 ? "+" : ""}${v}dB`;
       drawEqCurve();
-      applyAudioParams();
+      applyEqParams();
     });
 
     document.querySelectorAll("[data-eq-preset]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const key = btn.dataset.eqPreset;
-        const p = EQ_PRESETS[key];
+        const p = EQ_PRESETS[btn.dataset.eqPreset];
         state.eqGains = [...p.gains];
         state.bassBoost = p.bass;
         document.querySelectorAll("[data-eq-preset]").forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
@@ -1074,26 +1059,31 @@
         document.getElementById("bassBoostSlider").value = p.bass;
         document.getElementById("bassBoostLabel").textContent = `${p.bass}%`;
         drawEqCurve();
-        applyAudioParams();
+        applyEqParams();
       });
     });
 
     document.getElementById("bassBoostSlider").addEventListener("input", (e) => {
       state.bassBoost = Number(e.target.value);
       document.getElementById("bassBoostLabel").textContent = `${state.bassBoost}%`;
-      applyAudioParams();
+      applyEqParams();
     });
 
     document.getElementById("eqTestBeatBtn").addEventListener("click", () => {
       if (state.isTestBeat) {
-        state.isTestBeat = false;
-        if (!state.isPlaying) stopAudioLoop();
-        document.getElementById("eqTestBeatBtn").textContent = "Play Beat";
+        stopTestBeat();
       } else {
-        state.isPlaying = false;
+        if (state.isPlaying && ytReady && ytPlayer) {
+          ytPlayer.pauseVideo();
+          state.isPlaying = false;
+        }
+        ensureEqAudio();
+        applyEqParams();
         state.isTestBeat = true;
-        startAudioLoop();
+        triggerBeatStep();
+        beatTimer = setInterval(triggerBeatStep, 260);
         document.getElementById("eqTestBeatBtn").textContent = "Stop Beat";
+        startVisualizer();
         renderTransport();
       }
     });
@@ -1116,7 +1106,7 @@
   }
 
   // ==========================================================
-  // DRAWERS & MODALS
+  // DRAWERS & INTERACTIONS
   // ==========================================================
   let activeDrawer = null;
   function openDrawer(name) {
@@ -1128,20 +1118,15 @@
     el.classList.add("is-open");
     document.getElementById("topEqBtn").classList.toggle("is-active", name === "eq");
   }
-
   function closeDrawers() {
     activeDrawer = null;
     document.getElementById("drawerBackdrop").classList.remove("is-open");
     document.querySelectorAll(".drawer-panel").forEach((p) => p.classList.remove("is-open"));
     document.getElementById("topEqBtn").classList.remove("is-active");
   }
-
   document.getElementById("drawerBackdrop").addEventListener("click", closeDrawers);
   document.querySelectorAll("[data-close-drawer]").forEach((b) => b.addEventListener("click", closeDrawers));
 
-  // ==========================================================
-  // GLOBAL EVENT DELEGATION & CONTROLS
-  // ==========================================================
   document.addEventListener("click", (e) => {
     const playEl = e.target.closest("[data-play]");
     if (playEl) {
@@ -1150,7 +1135,6 @@
       else playTrack(id, true);
       return;
     }
-
     const likeEl = e.target.closest("[data-like]");
     if (likeEl) { toggleLike(likeEl.dataset.like); return; }
 
@@ -1166,22 +1150,25 @@
     const scopeEl = e.target.closest("[data-scope]");
     if (scopeEl) { state.searchScope = scopeEl.dataset.scope; renderSearch(); return; }
 
-    const quickSearchEl = e.target.closest("[data-quick-search]");
-    if (quickSearchEl) {
-      state.searchQuery = quickSearchEl.dataset.quickSearch;
-      document.getElementById("globalSearch").value = state.searchQuery;
-      renderSearch();
+    const quickEl = e.target.closest("[data-quick-search]");
+    if (quickEl) {
+      const q = quickEl.dataset.quickSearch;
+      state.searchQuery = q;
+      document.getElementById("globalSearch").value = q;
+      navigate("search");
+      runLiveSearch(q, false);
       return;
     }
 
-    const plEl = e.target.closest("[data-open-pl]");
-    if (plEl) {
-      const pl = PLAYLISTS.find((p) => p.id === plEl.dataset.openPl);
-      if (pl && pl.trackIds.length) {
-        state.queue = [...pl.trackIds];
-        playTrack(pl.trackIds[0], true);
-        showToast(`Loaded "${pl.name}" (${pl.trackIds.length} tracks)`);
-      }
+    const mixEl = e.target.closest("[data-seed-mix]");
+    if (mixEl) {
+      const q = mixEl.dataset.seedMix;
+      const name = mixEl.dataset.mixName;
+      showToast(`Loading live mix: ${name}...`);
+      state.searchQuery = q;
+      document.getElementById("globalSearch").value = q;
+      navigate("search");
+      runLiveSearch(q, true);
       return;
     }
 
@@ -1194,15 +1181,16 @@
     }
   });
 
-  // Search Input
+  // Live Debounced Search Input
   const searchInput = document.getElementById("globalSearch");
   searchInput.addEventListener("input", () => {
     state.searchQuery = searchInput.value;
     if (state.view !== "search" && state.searchQuery.trim().length > 0) navigate("search");
-    renderSearch();
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => runLiveSearch(state.searchQuery, false), 280);
   });
 
-  // Transport buttons
+  // Transport controls
   document.getElementById("playBtn").addEventListener("click", togglePlay);
   document.getElementById("mobilePlayBtn").addEventListener("click", togglePlay);
   document.getElementById("nextBtn").addEventListener("click", () => nextTrack(false));
@@ -1210,6 +1198,17 @@
   document.getElementById("dockLikeBtn").addEventListener("click", () => toggleLike(state.currentId));
   document.getElementById("dockCover").addEventListener("click", () => openDrawer("lyrics"));
   document.getElementById("dockMeta").addEventListener("click", () => openDrawer("lyrics"));
+
+  document.getElementById("videoToggleBtn").addEventListener("click", () => {
+    state.showVideo = !state.showVideo;
+    document.getElementById("ytPip").classList.toggle("is-visible", state.showVideo);
+    renderTransport();
+  });
+  document.getElementById("closeYtPip").addEventListener("click", () => {
+    state.showVideo = false;
+    document.getElementById("ytPip").classList.remove("is-visible");
+    renderTransport();
+  });
 
   document.getElementById("shuffleBtn").addEventListener("click", () => {
     state.shuffle = !state.shuffle;
@@ -1225,25 +1224,34 @@
   });
 
   document.getElementById("seekSlider").addEventListener("input", (e) => {
-    const cur = getItem(state.currentId);
-    state.elapsed = (Number(e.target.value) / 1000) * cur.duration;
-    updateScrubberAndLyrics();
+    const target = (Number(e.target.value) / 1000) * Math.max(1, state.duration);
+    state.elapsed = target;
+    if (ytReady && ytPlayer) ytPlayer.seekTo(target, true);
+    updateScrubber();
   });
 
   document.getElementById("volSlider").addEventListener("input", (e) => {
-    state.volume = Number(e.target.value) / 100;
+    state.volume = Number(e.target.value);
     state.muted = state.volume === 0;
-    applyAudioParams();
+    if (ytReady && ytPlayer) {
+      ytPlayer.unMute();
+      ytPlayer.setVolume(state.volume);
+    }
+    applyEqParams();
   });
 
   document.getElementById("muteBtn").addEventListener("click", () => {
     state.muted = !state.muted;
-    document.getElementById("volSlider").value = state.muted ? 0 : Math.round(state.volume * 100);
-    applyAudioParams();
+    if (ytReady && ytPlayer) {
+      if (state.muted) ytPlayer.mute();
+      else { ytPlayer.unMute(); ytPlayer.setVolume(state.volume); }
+    }
+    document.getElementById("volSlider").value = state.muted ? 0 : state.volume;
+    applyEqParams();
     showToast(state.muted ? "Audio muted" : "Audio unmuted");
   });
 
-  // Drawers triggers
+  // Drawers
   document.getElementById("topEqBtn").addEventListener("click", () => activeDrawer === "eq" ? closeDrawers() : openDrawer("eq"));
   document.getElementById("eqDrawerBtn").addEventListener("click", () => activeDrawer === "eq" ? closeDrawers() : openDrawer("eq"));
   document.getElementById("lyricsDrawerBtn").addEventListener("click", () => activeDrawer === "lyrics" ? closeDrawers() : openDrawer("lyrics"));
@@ -1253,25 +1261,33 @@
 
   // SoundReel controls
   document.getElementById("reelPrevBtn").addEventListener("click", () => {
-    state.reelIdx = (state.reelIdx - 1 + TRACKS.length) % TRACKS.length;
+    const n = state.tracks.length || SEED_TRACKS.length;
+    state.reelIdx = (state.reelIdx - 1 + n) % n;
     renderReel();
   });
   document.getElementById("reelNextBtn").addEventListener("click", () => {
-    state.reelIdx = (state.reelIdx + 1) % TRACKS.length;
+    const n = state.tracks.length || SEED_TRACKS.length;
+    state.reelIdx = (state.reelIdx + 1) % n;
     renderReel();
   });
   document.getElementById("reelPlayBtn").addEventListener("click", () => {
-    const t = TRACKS[state.reelIdx % TRACKS.length];
+    const list = state.tracks.length ? state.tracks : SEED_TRACKS;
+    const t = list[state.reelIdx % list.length];
     if (state.currentId === t.id && state.isPlaying) togglePlay();
     else playTrack(t.id, true);
   });
-  document.getElementById("reelLikeBtn").addEventListener("click", () => toggleLike(TRACKS[state.reelIdx % TRACKS.length].id));
-  document.getElementById("reelSaveBtn").addEventListener("click", () => toggleOffline(TRACKS[state.reelIdx % TRACKS.length].id));
+  document.getElementById("reelLikeBtn").addEventListener("click", () => {
+    const list = state.tracks.length ? state.tracks : SEED_TRACKS;
+    toggleLike(list[state.reelIdx % list.length].id);
+  });
+  document.getElementById("reelSaveBtn").addEventListener("click", () => {
+    const list = state.tracks.length ? state.tracks : SEED_TRACKS;
+    toggleOffline(list[state.reelIdx % list.length].id);
+  });
   document.getElementById("reelLyricsBtn").addEventListener("click", () => openDrawer("lyrics"));
   document.getElementById("reelEqBtn").addEventListener("click", () => openDrawer("eq"));
   document.getElementById("reelDetailsBtn").addEventListener("click", () => openDrawer("lyrics"));
 
-  // Now Playing drawer buttons
   document.getElementById("npOfflineBtn").addEventListener("click", () => toggleOffline(state.currentId));
   document.getElementById("npShareBtn").addEventListener("click", () => {
     const url = `${location.origin}${location.pathname}#track=${state.currentId}`;
@@ -1279,23 +1295,32 @@
     showToast("Copied deep link for current track");
   });
 
-  // Sleep Timer
+  // Sleep Timer (real working timer!)
   const sleepCycle = [0, 15, 30, 60];
   document.getElementById("sleepBtn").addEventListener("click", () => {
     state.sleepMins = sleepCycle[(sleepCycle.indexOf(state.sleepMins) + 1) % sleepCycle.length];
     document.getElementById("sleepVal").textContent = state.sleepMins ? `${state.sleepMins}m` : "Off";
     document.getElementById("sleepBtn").classList.toggle("is-active", state.sleepMins > 0);
-    showToast(state.sleepMins ? `Sleep timer set for ${state.sleepMins} minutes` : "Sleep timer off");
+    clearTimeout(sleepTimeout);
+    if (state.sleepMins > 0) {
+      sleepTimeout = setTimeout(() => {
+        if (state.isPlaying) togglePlay();
+        showToast("Sleep timer paused playback");
+      }, state.sleepMins * 60000);
+      showToast(`Sleep timer set for ${state.sleepMins} minutes`);
+    } else {
+      showToast("Sleep timer off");
+    }
   });
 
-  // Offline Airplane Mode Simulator
+  // Saved-only filter
   document.getElementById("simOfflineBtn").addEventListener("click", () => {
     state.simOffline = !state.simOffline;
-    showToast(state.simOffline ? "Airplane mode ON: only Offline Vault tracks playable" : "Back online: full catalog unlocked");
+    showToast(state.simOffline ? "Filtered to saved tracks only" : "Full catalog unlocked");
     renderAll();
   });
 
-  // Import Playlist validation & mock mapping
+  // Import Playlist
   document.getElementById("fillSampleUrl").addEventListener("click", () => {
     document.getElementById("importUrlInput").value = "https://open.spotify.com/playlist/late-night-focus";
     document.getElementById("importError").textContent = "";
@@ -1313,22 +1338,22 @@
     const slug = val.split("/").pop().replace(/[^a-z0-9-]/gi, " ").trim() || "Imported Mix";
     const niceName = slug.split(/[\s-]+/).map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
     const id = `pl-imp-${Date.now()}`;
-    PLAYLISTS.push({
+    USER_PLAYLISTS.push({
       id,
       name: niceName,
       desc: "Imported public playlist",
-      trackIds: ["midnight-telemetry", "paper-lantern-lofi", "sunlit-transit"],
-      art: ["#162d47", "#3668a6", "#bfdbfe", "wave"]
+      trackIds: state.tracks.slice(0, 4).map((t) => t.id),
+      gradient: "linear-gradient(135deg, #1d4ed8, #4f46e5)"
     });
     state.activeLibraryId = id;
     document.getElementById("importUrlInput").value = "";
     closeDrawers();
     navigate("library");
     renderAll();
-    showToast(`Imported "${niceName}" (3 matched tracks)`);
+    showToast(`Imported "${niceName}"`);
   });
 
-  // Keyboard shortcuts (Space, M, N, P, /, Escape)
+  // Keyboard shortcuts
   document.addEventListener("keydown", (e) => {
     const tag = (e.target.tagName || "").toLowerCase();
     if (e.key === "Escape") { closeDrawers(); return; }
@@ -1349,4 +1374,5 @@
   renderAll();
   handleHash();
   startVisualizer();
+  loadLiveFeeds();
 })();
