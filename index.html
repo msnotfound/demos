@@ -246,8 +246,8 @@
 
     .work-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 28px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
     }
 
     .work-card {
@@ -305,21 +305,26 @@
 
     .work-top {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 12px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      margin-bottom: 10px;
     }
 
     .work-title {
-      font-size: 1.32rem;
+      font-size: 1.24rem;
       font-weight: 600;
       letter-spacing: -0.02em;
+      line-height: 1.15;
     }
 
     .work-cat {
       font-family: var(--font-mono);
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       color: var(--muted);
+      order: -1;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
     .work-desc {
@@ -691,7 +696,7 @@
           <article class="work-card reveal">
             <div class="work-stage g3">
               <div class="work-shot">
-                <img src="./assets/preview-ai.png" alt="Relay Foundry production AI workflow engineering simulator" />
+                <img src="./assets/preview-ai.png" alt="Relay Foundry autonomous AI pipeline orchestration showcase" />
               </div>
             </div>
             <div class="work-body">
@@ -701,30 +706,10 @@
                   <span class="work-cat">AI &amp; Webhook Pipelines</span>
                 </div>
                 <p class="work-desc">
-                  Technical systems showcase with an interactive SVG webhook-to-CRM execution graph, dead-letter hold queue simulation, and custom-code vs no-code cost calculator.
+                  Architectural AI workflow platform showcase with a scroll-pinned 4-step pipeline storyboard, live incident replay workbench, and warm editorial motion.
                 </p>
               </div>
               <a class="work-link" href="./ai-studio/" target="_blank" rel="noopener">Open live showcase</a>
-            </div>
-          </article>
-
-          <article class="work-card reveal">
-            <div class="work-stage g4">
-              <div class="work-shot">
-                <img src="./assets/preview-realestate.png" alt="Alder and Mere contemporary architectural property brokerage" />
-              </div>
-            </div>
-            <div class="work-body">
-              <div>
-                <div class="work-top">
-                  <h2 class="work-title">Alder &amp; Mere</h2>
-                  <span class="work-cat">Architectural Brokerage</span>
-                </div>
-                <p class="work-desc">
-                  Full-bleed property showcase with interactive 3-residence hero rail, per-home measured floorplan dossier drawer, and post-April 2025 UK stamp duty calculator.
-                </p>
-              </div>
-              <a class="work-link" id="reLiveLink" href="https://msnotfound.github.io/real-estate-demo/" target="_blank" rel="noopener">Open live showcase</a>
             </div>
           </article>
         </div>
@@ -862,9 +847,6 @@
   <script>
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduced) document.documentElement.classList.add("js-ready");
-
-    const isLocal = location.hostname === "127.0.0.1" || location.hostname === "localhost";
-    document.getElementById("reLiveLink").href = isLocal ? "http://127.0.0.1:8082/" : "https://msnotfound.github.io/real-estate-demo/";
 
     // Silky Eased Smooth Anchor Scroll
     let scrollRaf = null;
