@@ -217,6 +217,17 @@
             renderTransport();
             renderTrackRows();
           } else if (ev.data === YTState.ENDED) {
+            if (state.sleepMode === "eot") {
+              state.sleepMode = "off";
+              state.isPlaying = false;
+              const sv = document.getElementById("sleepVal");
+              const sb = document.getElementById("sleepBtn");
+              if (sv) sv.textContent = "Off";
+              if (sb) sb.classList.remove("is-active");
+              showToast("Sleep timer paused at end of track");
+              renderTransport();
+              return;
+            }
             if (state.repeat === "one") {
               ytPlayer.seekTo(0, true);
               ytPlayer.playVideo();
@@ -993,6 +1004,7 @@
     document.getElementById("shuffleBtn").setAttribute("aria-pressed", String(state.shuffle));
     document.getElementById("repeatBtn").classList.toggle("is-saved", state.repeat !== "off");
     document.getElementById("repeatBtn").setAttribute("aria-pressed", String(state.repeat !== "off"));
+    document.getElementById("repeatBtn").dataset.repeat = state.repeat;
     document.getElementById("videoToggleBtn").classList.toggle("is-saved", state.showVideo);
     document.getElementById("videoToggleBtn").setAttribute("aria-pressed", String(state.showVideo));
 
@@ -1010,6 +1022,7 @@
     npLike.querySelector("svg").setAttribute("fill", liked ? "currentColor" : "none");
     document.getElementById("npShuffleBtn").classList.toggle("is-saved", state.shuffle);
     document.getElementById("npRepeatBtn").classList.toggle("is-saved", state.repeat !== "off");
+    document.getElementById("npRepeatBtn").dataset.repeat = state.repeat;
 
     const curIdx = state.queue.indexOf(item.id);
     const nextId = state.queue[(curIdx + 1) % Math.max(1, state.queue.length)];
@@ -1032,14 +1045,31 @@
     renderQueue();
   }
 
+  function setSliderFill(el, pct) {
+    if (!el) return;
+    const clamped = Math.max(0, Math.min(100, pct));
+    el.style.setProperty("--fill", `${clamped.toFixed(2)}%`);
+  }
+
   function updateScrubber() {
     const dur = Math.max(1, state.duration || 210);
-    const pct = Math.min(1000, Math.round((state.elapsed / dur) * 1000));
-    document.getElementById("seekSlider").value = pct;
+    const ratio = Math.max(0, Math.min(1, state.elapsed / dur));
+    const pct1000 = Math.round(ratio * 1000);
+    const pct100 = ratio * 100;
+    const seekEl = document.getElementById("seekSlider");
+    if (seekEl) {
+      seekEl.value = pct1000;
+      setSliderFill(seekEl, pct100);
+    }
     document.getElementById("timeElapsed").textContent = fmtTime(state.elapsed);
     document.getElementById("timeDuration").textContent = fmtTime(dur);
     const npSeek = document.getElementById("npSeekSlider");
-    if (npSeek) npSeek.value = pct;
+    if (npSeek) {
+      npSeek.value = pct1000;
+      setSliderFill(npSeek, pct100);
+    }
+    const dockEl = document.querySelector(".player-dock");
+    if (dockEl) dockEl.style.setProperty("--dock-fill", `${pct100.toFixed(2)}%`);
     const npEl = document.getElementById("npElapsed");
     if (npEl) npEl.textContent = fmtTime(state.elapsed);
     const npDur = document.getElementById("npDuration");
@@ -1118,15 +1148,20 @@
           if (inp) inp.value = g;
           document.getElementById(`eqVal${i}`).textContent = `${g >= 0 ? "+" : ""}${g}dB`;
         });
-        document.getElementById("bassBoostSlider").value = p.bass;
+        const bassEl = document.getElementById("bassBoostSlider");
+        bassEl.value = p.bass;
+        setSliderFill(bassEl, p.bass);
         document.getElementById("bassBoostLabel").textContent = `${p.bass}%`;
         drawEqCurve();
         applyEqParams();
       });
     });
 
-    document.getElementById("bassBoostSlider").addEventListener("input", (e) => {
+    const bassSlider = document.getElementById("bassBoostSlider");
+    setSliderFill(bassSlider, Number(bassSlider.value));
+    bassSlider.addEventListener("input", (e) => {
       state.bassBoost = Number(e.target.value);
+      setSliderFill(bassSlider, state.bassBoost);
       document.getElementById("bassBoostLabel").textContent = `${state.bassBoost}%`;
       applyEqParams();
     });
@@ -1307,9 +1342,12 @@
     updateScrubber();
   });
 
-  document.getElementById("volSlider").addEventListener("input", (e) => {
+  const volSliderEl = document.getElementById("volSlider");
+  setSliderFill(volSliderEl, state.muted ? 0 : state.volume);
+  volSliderEl.addEventListener("input", (e) => {
     state.volume = Number(e.target.value);
     state.muted = state.volume === 0;
+    setSliderFill(volSliderEl, state.volume);
     if (ytReady && ytPlayer) {
       ytPlayer.unMute();
       ytPlayer.setVolume(state.volume);
@@ -1323,7 +1361,9 @@
       if (state.muted) ytPlayer.mute();
       else { ytPlayer.unMute(); ytPlayer.setVolume(state.volume); }
     }
-    document.getElementById("volSlider").value = state.muted ? 0 : state.volume;
+    const v = state.muted ? 0 : state.volume;
+    volSliderEl.value = v;
+    setSliderFill(volSliderEl, v);
     applyEqParams();
     showToast(state.muted ? "Audio muted" : "Audio unmuted");
   });
@@ -1372,21 +1412,43 @@
     showToast("Copied deep link for current track");
   });
 
-  // Sleep Timer (real working timer!)
-  const sleepCycle = [0, 15, 30, 60];
+  // Sleep Timer (Off / End of track / 15m / 30m / 60m with live countdown)
+  const sleepCycle = ["off", "eot", 15, 30, 60];
+  state.sleepMode = "off";
+  let sleepInterval = null;
   document.getElementById("sleepBtn").addEventListener("click", () => {
-    state.sleepMins = sleepCycle[(sleepCycle.indexOf(state.sleepMins) + 1) % sleepCycle.length];
-    document.getElementById("sleepVal").textContent = state.sleepMins ? `${state.sleepMins}m` : "Off";
-    document.getElementById("sleepBtn").classList.toggle("is-active", state.sleepMins > 0);
+    const nextIdx = (sleepCycle.indexOf(state.sleepMode) + 1) % sleepCycle.length;
+    state.sleepMode = sleepCycle[nextIdx];
     clearTimeout(sleepTimeout);
-    if (state.sleepMins > 0) {
+    clearInterval(sleepInterval);
+    const valEl = document.getElementById("sleepVal");
+    const btnEl = document.getElementById("sleepBtn");
+
+    if (state.sleepMode === "off") {
+      valEl.textContent = "Off";
+      btnEl.classList.remove("is-active");
+      showToast("Sleep timer off");
+    } else if (state.sleepMode === "eot") {
+      valEl.textContent = "End of track";
+      btnEl.classList.add("is-active");
+      showToast("Playback will pause at end of current track");
+    } else {
+      let remMins = state.sleepMode;
+      valEl.textContent = `${remMins}m`;
+      btnEl.classList.add("is-active");
+      sleepInterval = setInterval(() => {
+        remMins = Math.max(0, remMins - 1);
+        valEl.textContent = remMins > 0 ? `${remMins}m` : "Off";
+      }, 60000);
       sleepTimeout = setTimeout(() => {
+        clearInterval(sleepInterval);
+        state.sleepMode = "off";
+        valEl.textContent = "Off";
+        btnEl.classList.remove("is-active");
         if (state.isPlaying) togglePlay();
         showToast("Sleep timer paused playback");
-      }, state.sleepMins * 60000);
-      showToast(`Sleep timer set for ${state.sleepMins} minutes`);
-    } else {
-      showToast("Sleep timer off");
+      }, state.sleepMode * 60000);
+      showToast(`Sleep timer set for ${state.sleepMode} minutes`);
     }
   });
 
