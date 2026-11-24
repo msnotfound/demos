@@ -26,7 +26,13 @@
         <a href="#install">Install</a>
       </nav>
       <div class="bar-right">
-        <button type="button" class="theme-toggle" id="theme-btn" aria-label="Toggle dark and light appearance">Dark mode</button>
+        <div class="palette-widget" role="group" aria-label="Switch acoustic color theme">
+          <span class="palette-label" id="palette-name">Violet</span>
+          <button type="button" class="swatch-btn sw-violet" data-palette="violet" data-label="Violet" aria-label="Violet theme" aria-pressed="true"></button>
+          <button type="button" class="swatch-btn sw-ember" data-palette="ember" data-label="Ember" aria-label="Ember theme" aria-pressed="false"></button>
+          <button type="button" class="swatch-btn sw-sage" data-palette="sage" data-label="Sage" aria-label="Sage theme" aria-pressed="false"></button>
+          <button type="button" class="swatch-btn sw-cobalt" data-palette="cobalt" data-label="Cobalt" aria-label="Cobalt theme" aria-pressed="false"></button>
+        </div>
         <a href="https://music.graphikrafts.com/SoundPlus.apk" class="btn btn--dark btn--sm">Download APK</a>
       </div>
     </header>
@@ -418,17 +424,31 @@
       });
     });
 
-    // 2. Light / Dark Theme Toggle (helicon.sh inspiration)
-    const themeBtn = document.getElementById("theme-btn");
-    themeBtn.addEventListener("click", () => {
-      const dark = document.documentElement.getAttribute("data-theme") === "dark";
-      if (dark) {
-        document.documentElement.removeAttribute("data-theme");
-        themeBtn.textContent = "Dark mode";
-      } else {
-        document.documentElement.setAttribute("data-theme", "dark");
-        themeBtn.textContent = "Light mode";
-      }
+    // 2. Smooth Circular-Wave Light Acoustic Palette Switcher
+    const paletteBtns = Array.from(document.querySelectorAll(".swatch-btn"));
+    const paletteName = document.getElementById("palette-name");
+
+    function applyPalette(pal, label) {
+      if (pal === "violet") document.documentElement.removeAttribute("data-palette");
+      else document.documentElement.setAttribute("data-palette", pal);
+      paletteName.textContent = label;
+      paletteBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.palette === pal)));
+    }
+
+    paletteBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const pal = btn.dataset.palette;
+        const label = btn.dataset.label;
+        const rect = btn.getBoundingClientRect();
+        document.documentElement.style.setProperty("--vt-x", `${Math.round(rect.left + rect.width / 2)}px`);
+        document.documentElement.style.setProperty("--vt-y", `${Math.round(rect.top + rect.height / 2)}px`);
+
+        if (document.startViewTransition && !reduced) {
+          document.startViewTransition(() => applyPalette(pal, label));
+        } else {
+          applyPalette(pal, label);
+        }
+      });
     });
 
     // 3. Scroll-Linked Word-by-Word Manifesto Illumination (orchalabs.dev inspiration)

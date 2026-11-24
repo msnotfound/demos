@@ -6,7 +6,7 @@
   --surface-tint: oklch(94.2% 0.018 286);
   --ink: oklch(18% 0.014 255);
   --ink-2: oklch(36% 0.012 255);
-  --muted: oklch(52% 0.012 255);
+  --muted: oklch(50% 0.012 255);
   --line: oklch(90% 0.006 255);
   --line-strong: oklch(82% 0.008 255);
   --accent: oklch(54% 0.21 278);
@@ -24,24 +24,30 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-html[data-theme="dark"] {
-  color-scheme: dark;
-  --paper: oklch(13% 0.012 275);
-  --surface: oklch(17% 0.015 275);
-  --surface-muted: oklch(21% 0.018 275);
-  --surface-tint: oklch(23% 0.035 280);
-  --ink: oklch(95% 0.008 280);
-  --ink-2: oklch(78% 0.012 280);
-  --muted: oklch(62% 0.014 280);
-  --line: oklch(26% 0.016 275);
-  --line-strong: oklch(35% 0.02 275);
-  --accent: oklch(64% 0.21 280);
-  --accent-soft: oklch(26% 0.06 280);
-  --accent-ink: oklch(99% 0.004 280);
-  --btn-dark: oklch(96% 0.006 280);
-  --btn-dark-ink: oklch(15% 0.012 275);
-  --shadow-bar: 0 8px 32px oklch(5% 0.01 275 / 0.55);
-  --shadow-card: 0 12px 34px oklch(5% 0.01 275 / 0.45);
-  --shadow-btn: 0 8px 24px oklch(5% 0.01 275 / 0.4);
-  --stage-grad: linear-gradient(125deg, oklch(24% 0.055 20) 0%, oklch(22% 0.05 310) 48%, oklch(24% 0.09 282) 100%);
+/* Smooth Light Acoustic Palette Themes (Strictly Light Mode, Zero Dark Mode) */
+html[data-palette="ember"] {
+  --paper: oklch(97.8% 0.007 72);
+  --surface-muted: oklch(95.4% 0.01 70);
+  --surface-tint: oklch(93.8% 0.024 45);
+  --accent: oklch(55% 0.175 38);
+  --accent-soft: oklch(93.5% 0.042 44);
+  --stage-grad: linear-gradient(125deg, oklch(93.5% 0.045 75) 0%, oklch(92% 0.05 42) 52%, oklch(91% 0.048 22) 100%);
+}
+
+html[data-palette="sage"] {
+  --paper: oklch(97.6% 0.006 155);
+  --surface-muted: oklch(95.2% 0.01 155);
+  --surface-tint: oklch(93.5% 0.022 158);
+  --accent: oklch(46% 0.125 162);
+  --accent-soft: oklch(92.5% 0.036 160);
+  --stage-grad: linear-gradient(125deg, oklch(93.5% 0.035 182) 0%, oklch(93% 0.04 156) 50%, oklch(92% 0.045 128) 100%);
+}
+
+html[data-palette="cobalt"] {
+  --paper: oklch(97.8% 0.005 245);
+  --surface-muted: oklch(95.4% 0.008 245);
+  --surface-tint: oklch(93.5% 0.024 252);
+  --accent: oklch(50% 0.19 258);
+  --accent-soft: oklch(93% 0.04 256);
+  --stage-grad: linear-gradient(125deg, oklch(93% 0.04 215) 0%, oklch(93.5% 0.035 245) 50%, oklch(90% 0.06 266) 100%);
 }
