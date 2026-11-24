@@ -404,64 +404,70 @@
     </div>
   </aside>
 
-  <!-- Drawer 2: Spotify-Style Immersive Now Playing Screen -->
+  <!-- Drawer 2: True Full-Screen Spotify-Style Now Playing Screen -->
   <aside class="drawer-panel np-sheet" id="drawer-lyrics" aria-label="Now Playing">
-    <div class="drawer-head">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="eyebrow" id="npGenre" style="margin:0;">NOW PLAYING</span>
+    <div class="np-topbar">
+      <button type="button" class="icon-btn np-collapse-btn" data-close-drawer aria-label="Collapse Now Playing" title="Collapse">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="np-top-center">
+        <span class="mono" style="font-size:0.68rem;color:var(--muted);letter-spacing:0.08em;">PLAYING FROM SOUNDPLUS</span>
+        <strong class="mono" id="npGenre" style="font-size:0.74rem;color:var(--accent);">TRENDING</strong>
       </div>
-      <button type="button" class="icon-btn" data-close-drawer aria-label="Close Now Playing">&times;</button>
+      <button type="button" class="np-vid-pill" id="npVideoBtn">Watch Video</button>
     </div>
-    <div class="drawer-body np-body">
-      <div class="np-stage-art">
+
+    <div class="np-canvas">
+      <div class="np-art-col">
         <div class="cover-art np-big-cover" id="npCover"></div>
-        <button type="button" class="np-vid-pill" id="npVideoBtn">Watch Video</button>
       </div>
 
-      <div class="np-meta-row">
-        <div style="min-width:0;">
-          <div class="np-title" id="npTitle">SZA - Snooze</div>
-          <div class="np-artist" id="npArtist">SZA</div>
+      <div class="np-ctrl-col">
+        <div class="np-meta-row">
+          <div style="min-width:0;">
+            <div class="np-title" id="npTitle">SZA - Snooze</div>
+            <div class="np-artist" id="npArtist">SZA</div>
+          </div>
+          <button type="button" class="icon-btn" id="npLikeBtn" title="Like track" aria-label="Like track">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9-9a5.4 5.4 0 0 1 9-5.7A5.4 5.4 0 0 1 21 12c-2 4.5-9 9-9 9z"/></svg>
+          </button>
         </div>
-        <button type="button" class="icon-btn" id="npLikeBtn" title="Like track" aria-label="Like track">
-          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9-9a5.4 5.4 0 0 1 9-5.7A5.4 5.4 0 0 1 21 12c-2 4.5-9 9-9 9z"/></svg>
-        </button>
-      </div>
 
-      <div class="np-scrub-wrap">
-        <input type="range" id="npSeekSlider" class="range-slider" min="0" max="1000" value="0" aria-label="Seek track position" />
-        <div class="np-time-row mono">
-          <span id="npElapsed">0:00</span>
-          <span id="npDuration">3:24</span>
+        <div class="np-scrub-wrap">
+          <input type="range" id="npSeekSlider" class="range-slider" min="0" max="1000" value="0" aria-label="Seek track position" />
+          <div class="np-time-row mono">
+            <span id="npElapsed">0:00</span>
+            <span id="npDuration">3:24</span>
+          </div>
         </div>
-      </div>
 
-      <div class="np-transport">
-        <button type="button" class="icon-btn" id="npShuffleBtn" aria-label="Shuffle">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
-        </button>
-        <button type="button" class="icon-btn" id="npPrevBtn" aria-label="Previous track">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-        </button>
-        <button type="button" class="play-fab np-play-fab" id="npPlayBtn" aria-label="Play or pause">
-          <svg id="npPlaySvg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-        </button>
-        <button type="button" class="icon-btn" id="npNextBtn" aria-label="Next track">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg>
-        </button>
-        <button type="button" class="icon-btn" id="npRepeatBtn" aria-label="Repeat">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-        </button>
-      </div>
+        <div class="np-transport">
+          <button type="button" class="icon-btn" id="npShuffleBtn" aria-label="Shuffle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+          </button>
+          <button type="button" class="icon-btn" id="npPrevBtn" aria-label="Previous track">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button type="button" class="play-fab np-play-fab" id="npPlayBtn" aria-label="Play or pause">
+            <svg id="npPlaySvg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+          </button>
+          <button type="button" class="icon-btn" id="npNextBtn" aria-label="Next track">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg>
+          </button>
+          <button type="button" class="icon-btn" id="npRepeatBtn" aria-label="Repeat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          </button>
+        </div>
 
-      <div class="np-actions-bar">
-        <button type="button" class="np-action-pill" id="npOfflineBtn">Download</button>
-        <button type="button" class="np-action-pill" id="npEqBtn">5-Band EQ</button>
-        <button type="button" class="np-action-pill" id="npQueueBtn">Queue</button>
-        <button type="button" class="np-action-pill" id="npShareBtn">Share</button>
-      </div>
+        <div class="np-actions-bar">
+          <button type="button" class="np-action-pill" id="npOfflineBtn">Download</button>
+          <button type="button" class="np-action-pill" id="npEqBtn">5-Band EQ</button>
+          <button type="button" class="np-action-pill" id="npQueueBtn">Queue</button>
+          <button type="button" class="np-action-pill" id="npShareBtn">Share</button>
+        </div>
 
-      <div class="np-upnext" id="npUpNextCard"></div>
+        <div class="np-upnext" id="npUpNextCard"></div>
+      </div>
     </div>
   </aside>
 

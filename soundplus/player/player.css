@@ -552,7 +552,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   transform: translateY(10px);
 }
 .yt-pip.is-visible {
-  z-index: 95;
+  z-index: 110;
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
@@ -1301,102 +1301,169 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-weight: 600;
 }
 
-/* Spotify-Style Immersive Now Playing Sheet */
-.np-body { gap: 16px; }
-.np-stage-art {
-  position: relative;
-  padding: 16px;
-  border-radius: 20px;
-  background: var(--stage-grad);
-  border: 1px solid color-mix(in oklch, var(--line) 70%, transparent);
+/* True Full-Screen Spotify-Style Now Playing Screen (100vw x 100dvh) */
+.drawer-panel.np-sheet {
+  inset: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+  z-index: 100;
+  background: linear-gradient(180deg, var(--surface-tint) 0%, var(--paper) 46%, var(--paper) 100%);
+  transform: translateY(100%);
+  transition: transform 0.36s var(--ease-out), visibility 0.36s ease;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 }
-.np-big-cover {
-  width: min(268px, 100%);
-  border-radius: 14px;
-  box-shadow: 0 20px 44px oklch(10% 0.03 255 / 0.28);
+.drawer-panel.np-sheet.is-open {
+  transform: translateY(0);
+}
+
+.np-topbar {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 18px 24px 10px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.np-collapse-btn { justify-self: start; width: 40px; height: 40px; }
+.np-top-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
 }
 .np-vid-pill {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  padding: 5px 11px;
+  justify-self: end;
+  height: 34px;
+  padding: 0 13px;
   border-radius: 999px;
-  font-size: 0.74rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  background: color-mix(in oklch, var(--surface) 90%, transparent);
-  backdrop-filter: blur(10px);
+  background: var(--surface);
   border: 1px solid var(--line);
   color: var(--ink);
+  white-space: nowrap;
 }
 .np-vid-pill:hover { border-color: var(--accent); color: var(--accent); }
+
+.np-canvas {
+  flex: 1;
+  width: min(1020px, 100%);
+  margin: 0 auto;
+  padding: 16px 32px 36px;
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+  align-items: center;
+  gap: 56px;
+  overflow-y: auto;
+}
+.np-art-col {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.np-big-cover {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 22px;
+  box-shadow: 0 28px 64px oklch(10% 0.03 255 / 0.28);
+}
+.np-ctrl-col {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 0;
+}
 .np-meta-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
 }
 .np-title {
   font-weight: 700;
-  font-size: 1.24rem;
-  letter-spacing: -0.025em;
-  line-height: 1.2;
+  font-size: clamp(1.38rem, 2.5vw, 2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
 }
 .np-artist {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--muted);
-  margin-top: 3px;
+  margin-top: 4px;
 }
 .np-scrub-wrap {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 .np-time-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.74rem;
+  font-size: 0.76rem;
   color: var(--muted);
 }
 .np-transport {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 12px;
+  padding: 4px 8px;
 }
 .np-play-fab {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
 }
 .np-actions-bar {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 .np-action-pill {
-  height: 36px;
-  border-radius: 10px;
+  height: 40px;
+  border-radius: 12px;
   border: 1px solid var(--line);
-  background: var(--paper);
-  font-size: 0.78rem;
+  background: var(--surface);
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--ink-2);
   white-space: nowrap;
 }
 .np-action-pill:hover { border-color: var(--accent); color: var(--accent); }
 .np-upnext {
-  margin-top: auto;
-  padding: 12px;
+  padding: 13px 14px;
   border-radius: 14px;
-  background: var(--surface-muted);
+  background: var(--surface);
   border: 1px solid var(--line);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
 }
 .np-upnext:hover { border-color: var(--line-strong); }
+
+@media (max-width: 860px) {
+  .np-topbar { padding: 14px 16px 6px; }
+  .np-canvas {
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 22px;
+    padding: 12px 22px 28px;
+    max-width: 440px;
+  }
+  .np-big-cover { max-width: min(316px, 82vw); border-radius: 18px; }
+  .np-ctrl-col { gap: 18px; }
+  .np-play-fab { width: 60px; height: 60px; }
+  .np-action-pill { height: 38px; font-size: 0.78rem; }
+}
 
 /* Toast Notification */
 .toast {
