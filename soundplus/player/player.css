@@ -491,7 +491,13 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 25%;
   display: block;
+}
+.cover-art img.is-square-art,
+.track-thumb img.is-square-art,
+.dock-thumb img.is-square-art {
+  object-position: center center;
 }
 
 .artist-grid {
@@ -1057,6 +1063,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   grid-template-columns: minmax(210px, 1fr) minmax(300px, 1.45fr) minmax(220px, 1fr);
   align-items: center;
   gap: 18px;
+  cursor: pointer;
 }
 
 .dock-track {
@@ -1097,6 +1104,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  cursor: default;
 }
 
 .transport-row {
@@ -1219,6 +1227,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   align-items: center;
   gap: 6px;
   width: 118px;
+  cursor: default;
 }
 
 /* Slide-Over Drawers (EQ, Lyrics/Now Playing, Queue, Import Modal) */
