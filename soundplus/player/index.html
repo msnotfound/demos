@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="description" content="SoundPlus Web Player redesign concept: unified design system, real 5-band Web Audio equalizer, instant search, synced lyrics, offline vault, and zero layout collisions." />
   <title>SoundPlus Web Player | Unified Acoustic Redesign</title>
   <link rel="icon" type="image/png" href="../assets/icon-512.png" />
@@ -55,7 +56,7 @@
         </button>
         <button type="button" class="nav-btn" data-view="offline">
           <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
-          <span>Offline Vault</span>
+          <span>Downloaded Songs</span>
           <span class="nav-pill-count" id="sideOfflineCount">2</span>
         </button>
       </nav>
@@ -79,7 +80,11 @@
         </div>
 
         <div class="topbar-right">
-          <div class="palette-pill" role="group" aria-label="Acoustic light theme">
+          <div class="palette-pill" role="group" aria-label="Theme and acoustic palette">
+            <button type="button" class="mode-toggle-btn" id="modeToggleBtn" title="Switch Light / Dark mode" aria-label="Switch Light or Dark mode" aria-pressed="false">
+              <svg id="modeIconSvg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <span class="palette-sep" aria-hidden="true"></span>
             <span class="palette-label" id="paletteLabel">Violet</span>
             <button type="button" class="swatch-btn" data-palette="violet" data-label="Violet" aria-label="Violet palette" aria-pressed="true"></button>
             <button type="button" class="swatch-btn" data-palette="ember" data-label="Ember" aria-label="Ember palette" aria-pressed="false"></button>
@@ -240,20 +245,20 @@
           <div id="libraryTracksWrap"></div>
         </section>
 
-        <!-- VIEW 6: SAVED / OFFLINE VAULT (Unified Design System) -->
-        <section class="view-panel" id="view-offline" aria-label="Saved tracks vault">
+        <!-- VIEW 6: DOWNLOADED SONGS (Unified Design System) -->
+        <section class="view-panel" id="view-offline" aria-label="Downloaded songs">
           <div class="sec-head" style="margin-top:0;">
-            <h2>Offline Vault</h2>
-            <span>Unified palette + saved listening list</span>
+            <h2>Downloaded Songs</h2>
+            <span>Saved tracks ready for instant playback</span>
           </div>
 
           <div class="vault-banner">
             <div>
-              <strong style="font-size:1rem;">Saved Tracks for Quick Access</strong>
-              <div style="font-size:0.84rem;color:var(--muted);margin-top:3px;" id="offlineBannerText">Tracks you bookmark for offline download on Android appear here in the exact same design system.</div>
+              <strong style="font-size:1rem;">Your Downloaded Library</strong>
+              <div style="font-size:0.84rem;color:var(--muted);margin-top:3px;" id="offlineBannerText">Tracks you download appear here in the exact same design system.</div>
             </div>
             <button type="button" class="switch-pill" id="simOfflineBtn" aria-pressed="false">
-              <span>Filter to Saved Only: <strong id="simOfflineState">Off</strong></span>
+              <span>Play Downloaded Only: <strong id="simOfflineState">Off</strong></span>
             </button>
           </div>
 

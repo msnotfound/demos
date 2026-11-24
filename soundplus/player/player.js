@@ -4,6 +4,13 @@
 (function () {
   "use strict";
 
+  // YouTube Content ID blocks licensed music embeds on raw numeric IP 127.0.0.1,
+  // while allowing localhost and HTTPS domains cleanly.
+  if (location.hostname === "127.0.0.1") {
+    location.replace(location.href.replace("://127.0.0.1", "://localhost"));
+    return;
+  }
+
   const API_BASE = "https://music.graphikrafts.com/webplayer/api/search.php";
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -173,11 +180,12 @@
     const pVars = {
       autoplay: 0,
       controls: 1,
+      enablejsapi: 1,
       playsinline: 1,
       rel: 0,
-      modestbranding: 1
+      modestbranding: 1,
+      origin: window.location.origin
     };
-    if (location.protocol === "https:") pVars.origin = location.origin;
 
     ytPlayer = new window.YT.Player("yt-player-host", {
       height: "158",
@@ -510,10 +518,10 @@
     const item = getItem(id);
     if (state.offline.has(id)) {
       state.offline.delete(id);
-      showToast(`Removed "${item.title}" from Saved Vault`);
+      showToast(`Removed "${item.title}" from Downloaded Songs`);
     } else {
       state.offline.add(id);
-      showToast(`Saved "${item.title}" to Offline Vault`);
+      showToast(`Downloaded "${item.title}" to Downloaded Songs`);
     }
     persist();
     renderAll();
@@ -641,10 +649,39 @@
   }
 
   // ==========================================================
-  // SMOOTH CIRCULAR-RIPPLE LIGHT PALETTE SWITCHER (Synced)
+  // SMOOTH CIRCULAR-RIPPLE LIGHT/DARK MODE + PALETTE SWITCHER
   // ==========================================================
   const swatchBtns = Array.from(document.querySelectorAll(".swatch-btn"));
   const paletteLabel = document.getElementById("paletteLabel");
+  const modeToggleBtn = document.getElementById("modeToggleBtn");
+  const modeIconSvg = document.getElementById("modeIconSvg");
+  let isDarkMode = false;
+
+  function applyMode(dark) {
+    isDarkMode = !!dark;
+    if (isDarkMode) document.documentElement.setAttribute("data-mode", "dark");
+    else document.documentElement.removeAttribute("data-mode");
+    modeToggleBtn.setAttribute("aria-pressed", String(isDarkMode));
+    modeIconSvg.innerHTML = isDarkMode
+      ? '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>'
+      : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+    try { localStorage.setItem("sp_player_mode", isDarkMode ? "dark" : "light"); } catch (_) {}
+  }
+
+  try {
+    if (localStorage.getItem("sp_player_mode") === "dark") applyMode(true);
+  } catch (_) {}
+
+  modeToggleBtn.addEventListener("click", () => {
+    const r = modeToggleBtn.getBoundingClientRect();
+    document.documentElement.style.setProperty("--vt-x", `${Math.round(r.left + r.width / 2)}px`);
+    document.documentElement.style.setProperty("--vt-y", `${Math.round(r.top + r.height / 2)}px`);
+    if (document.startViewTransition && !reducedMotion) {
+      document.startViewTransition(() => applyMode(!isDarkMode));
+    } else {
+      applyMode(!isDarkMode);
+    }
+  });
 
   function applyPalette(pal, label) {
     if (!pal || pal === "violet") {
@@ -757,7 +794,7 @@
         <p class="spotlight-sub">${escHtml(hero.artist)} &middot; Streaming live from the SoundPlus catalog with full-bleed artwork, zero cache-purge reloads, instant search, and unified light palettes.</p>
         <div class="btn-row">
           <button type="button" class="btn-primary" data-play="${escHtml(hero.id)}">${state.currentId === hero.id && state.isPlaying ? "Pause Track" : "Play Now"}</button>
-          <button type="button" class="btn-secondary" data-offline="${escHtml(hero.id)}">${state.offline.has(hero.id) ? "Saved in Vault" : "Save Track"}</button>
+          <button type="button" class="btn-secondary" data-offline="${escHtml(hero.id)}">${state.offline.has(hero.id) ? "Downloaded" : "Download"}</button>
           <button type="button" class="btn-secondary" id="spotEqBtn">Open 5-Band EQ</button>
         </div>
       </div>`;
@@ -927,8 +964,8 @@
     const items = [...state.offline].map(getItem).filter(Boolean);
     document.getElementById("sideOfflineCount").textContent = items.length;
     document.getElementById("offlineBannerText").textContent = items.length
-      ? `${items.length} track${items.length === 1 ? "" : "s"} saved in your Offline Vault in the exact same design system.`
-      : "No saved tracks yet. Click the save icon on any song to add it here.";
+      ? `${items.length} downloaded track${items.length === 1 ? "" : "s"} in your SoundPlus library, styled in the exact same design system.`
+      : "No downloaded songs yet. Click the download icon on any track to save it here.";
     document.getElementById("simOfflineBtn").setAttribute("aria-pressed", String(state.simOffline));
     document.getElementById("simOfflineState").textContent = state.simOffline ? "On" : "Off";
     document.getElementById("offlineTracksWrap").innerHTML = renderTrackRowsMarkup(items);
@@ -964,7 +1001,7 @@
     document.getElementById("npGenre").textContent = (item.genre || "AUDIO").toUpperCase();
     document.getElementById("npTitle").textContent = item.title;
     document.getElementById("npArtist").textContent = item.artist;
-    document.getElementById("npOfflineBtn").textContent = state.offline.has(item.id) ? "Saved in Vault" : "Save Track";
+    document.getElementById("npOfflineBtn").textContent = state.offline.has(item.id) ? "Downloaded" : "Download Song";
     document.getElementById("lyricsList").innerHTML = `
       <div class="lyric-line is-active">Streaming live track: <strong>${escHtml(item.title)}</strong></div>
       <div class="lyric-line">Artist: ${escHtml(item.artist)} &middot; Duration: ${fmtTime(state.duration)}</div>

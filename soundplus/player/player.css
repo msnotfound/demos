@@ -14,7 +14,7 @@ html, body {
   overflow-x: clip;
 }
 
-/* Circular expanding ripple for palette switch */
+/* Circular expanding ripple for theme & palette switch */
 ::view-transition-old(root) { animation: none; z-index: 1; }
 ::view-transition-new(root) {
   animation: sp-palette-wave 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -23,6 +23,76 @@ html, body {
 @keyframes sp-palette-wave {
   from { clip-path: circle(0px at var(--vt-x, 50%) var(--vt-y, 44px)); }
   to { clip-path: circle(160vmax at var(--vt-x, 50%) var(--vt-y, 44px)); }
+}
+
+/* Smooth Dark Mode Support Inside Web Player (Adapts to all 4 acoustic palettes!) */
+html[data-mode="dark"] {
+  color-scheme: dark;
+  --paper: oklch(14% 0.012 260);
+  --surface: oklch(18.5% 0.014 260);
+  --surface-muted: oklch(22.5% 0.016 260);
+  --surface-tint: oklch(24% 0.028 278);
+  --ink: oklch(95% 0.006 260);
+  --ink-2: oklch(78% 0.008 260);
+  --muted: oklch(62% 0.01 260);
+  --line: oklch(27% 0.014 260);
+  --line-strong: oklch(35% 0.016 260);
+  --accent: oklch(72% 0.17 280);
+  --accent-soft: oklch(26% 0.055 280);
+  --btn-dark: oklch(95% 0.006 260);
+  --btn-dark-ink: oklch(14% 0.012 260);
+  --shadow-card: 0 2px 10px oklch(0% 0 0 / 0.28), 0 14px 34px oklch(0% 0 0 / 0.32);
+  --shadow-btn: 0 2px 8px oklch(0% 0 0 / 0.35);
+  --stage-grad: linear-gradient(125deg, oklch(23% 0.04 290) 0%, oklch(20% 0.032 265) 52%, oklch(24% 0.05 278) 100%);
+}
+
+html[data-mode="dark"][data-palette="ember"] {
+  --paper: oklch(14.5% 0.012 48);
+  --surface: oklch(18.8% 0.014 48);
+  --surface-muted: oklch(23% 0.016 48);
+  --accent: oklch(72% 0.16 44);
+  --accent-soft: oklch(26% 0.055 44);
+  --stage-grad: linear-gradient(125deg, oklch(24% 0.042 42) 0%, oklch(20% 0.03 34) 55%, oklch(23% 0.045 24) 100%);
+}
+
+html[data-mode="dark"][data-palette="sage"] {
+  --paper: oklch(14.2% 0.011 162);
+  --surface: oklch(18.5% 0.014 162);
+  --surface-muted: oklch(22.5% 0.016 162);
+  --accent: oklch(70% 0.135 162);
+  --accent-soft: oklch(25% 0.048 162);
+  --stage-grad: linear-gradient(125deg, oklch(23% 0.036 172) 0%, oklch(20% 0.03 158) 55%, oklch(23% 0.04 142) 100%);
+}
+
+html[data-mode="dark"][data-palette="cobalt"] {
+  --paper: oklch(14% 0.013 252);
+  --surface: oklch(18.5% 0.015 252);
+  --surface-muted: oklch(22.8% 0.017 252);
+  --accent: oklch(71% 0.165 255);
+  --accent-soft: oklch(25% 0.055 255);
+  --stage-grad: linear-gradient(125deg, oklch(23% 0.042 232) 0%, oklch(20% 0.034 252) 55%, oklch(24% 0.05 264) 100%);
+}
+
+.mode-toggle-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  transition: background 0.16s ease, color 0.16s ease, transform 0.2s var(--ease-out);
+}
+.mode-toggle-btn:hover {
+  background: var(--surface-muted);
+  color: var(--ink);
+  transform: rotate(-12deg);
+}
+.palette-sep {
+  width: 1px;
+  height: 14px;
+  background: var(--line);
+  margin: 0 2px;
 }
 
 button, input {
