@@ -996,18 +996,37 @@
     document.getElementById("videoToggleBtn").classList.toggle("is-saved", state.showVideo);
     document.getElementById("videoToggleBtn").setAttribute("aria-pressed", String(state.showVideo));
 
-    // Now Playing Drawer sync
+    // Spotify-Style Now Playing Sheet sync
     document.getElementById("npCover").innerHTML = artMarkup(item);
-    document.getElementById("npGenre").textContent = (item.genre || "AUDIO").toUpperCase();
+    document.getElementById("npGenre").textContent = (item.genre || "NOW PLAYING").toUpperCase();
     document.getElementById("npTitle").textContent = item.title;
     document.getElementById("npArtist").textContent = item.artist;
-    document.getElementById("npOfflineBtn").textContent = state.offline.has(item.id) ? "Downloaded" : "Download Song";
-    document.getElementById("lyricsList").innerHTML = `
-      <div class="lyric-line is-active">Streaming live track: <strong>${escHtml(item.title)}</strong></div>
-      <div class="lyric-line">Artist: ${escHtml(item.artist)} &middot; Duration: ${fmtTime(state.duration)}</div>
-      <div class="lyric-line">Source: SoundPlus Live Catalog (YouTube Audio Stream, ID <span class="mono">${escHtml(item.id)}</span>)</div>
-      <div class="lyric-line">Tip: Toggle the Video icon in the bottom player bar to watch the live video preview, or press <span class="mono">Space</span> to play/pause.</div>
-    `;
+    document.getElementById("npPlaySvg").innerHTML = playSvg;
+    document.getElementById("npOfflineBtn").textContent = state.offline.has(item.id) ? "Downloaded" : "Download";
+    document.getElementById("npVideoBtn").textContent = state.showVideo ? "Hide Video" : "Watch Video";
+
+    const npLike = document.getElementById("npLikeBtn");
+    npLike.classList.toggle("is-liked", liked);
+    npLike.querySelector("svg").setAttribute("fill", liked ? "currentColor" : "none");
+    document.getElementById("npShuffleBtn").classList.toggle("is-saved", state.shuffle);
+    document.getElementById("npRepeatBtn").classList.toggle("is-saved", state.repeat !== "off");
+
+    const curIdx = state.queue.indexOf(item.id);
+    const nextId = state.queue[(curIdx + 1) % Math.max(1, state.queue.length)];
+    const nextItem = getItem(nextId);
+    const upNext = document.getElementById("npUpNextCard");
+    if (upNext && nextItem) {
+      upNext.dataset.play = nextItem.id;
+      upNext.innerHTML = `
+        <div style="width:40px;height:40px;border-radius:8px;overflow:hidden;flex:none;">${artMarkup(nextItem)}</div>
+        <div style="min-width:0;flex:1;">
+          <div class="mono" style="font-size:0.66rem;color:var(--accent);">UP NEXT</div>
+          <div style="font-weight:600;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(nextItem.title)}</div>
+          <div style="font-size:0.76rem;color:var(--muted);">${escHtml(nextItem.artist)}</div>
+        </div>
+        <span class="mono" style="font-size:0.74rem;color:var(--muted);">${fmtTime(nextItem.duration)}</span>
+      `;
+    }
 
     updateScrubber();
     renderQueue();
@@ -1019,6 +1038,12 @@
     document.getElementById("seekSlider").value = pct;
     document.getElementById("timeElapsed").textContent = fmtTime(state.elapsed);
     document.getElementById("timeDuration").textContent = fmtTime(dur);
+    const npSeek = document.getElementById("npSeekSlider");
+    if (npSeek) npSeek.value = pct;
+    const npEl = document.getElementById("npElapsed");
+    if (npEl) npEl.textContent = fmtTime(state.elapsed);
+    const npDur = document.getElementById("npDuration");
+    if (npDur) npDur.textContent = fmtTime(dur);
   }
 
   function renderQueue() {
@@ -1227,14 +1252,29 @@
     searchDebounce = setTimeout(() => runLiveSearch(state.searchQuery, false), 280);
   });
 
-  // Transport controls
+  // Transport controls (Dock + Immersive Now Playing Screen)
   document.getElementById("playBtn").addEventListener("click", togglePlay);
   document.getElementById("mobilePlayBtn").addEventListener("click", togglePlay);
+  document.getElementById("npPlayBtn").addEventListener("click", togglePlay);
   document.getElementById("nextBtn").addEventListener("click", () => nextTrack(false));
+  document.getElementById("npNextBtn").addEventListener("click", () => nextTrack(false));
   document.getElementById("prevBtn").addEventListener("click", prevTrack);
+  document.getElementById("npPrevBtn").addEventListener("click", prevTrack);
   document.getElementById("dockLikeBtn").addEventListener("click", () => toggleLike(state.currentId));
+  document.getElementById("npLikeBtn").addEventListener("click", () => toggleLike(state.currentId));
   document.getElementById("dockCover").addEventListener("click", () => openDrawer("lyrics"));
   document.getElementById("dockMeta").addEventListener("click", () => openDrawer("lyrics"));
+  document.getElementById("npEqBtn").addEventListener("click", () => openDrawer("eq"));
+  document.getElementById("npQueueBtn").addEventListener("click", () => openDrawer("queue"));
+  document.getElementById("npVideoBtn").addEventListener("click", () => document.getElementById("videoToggleBtn").click());
+  document.getElementById("npShuffleBtn").addEventListener("click", () => document.getElementById("shuffleBtn").click());
+  document.getElementById("npRepeatBtn").addEventListener("click", () => document.getElementById("repeatBtn").click());
+  document.getElementById("npSeekSlider").addEventListener("input", (e) => {
+    const target = (Number(e.target.value) / 1000) * Math.max(1, state.duration);
+    state.elapsed = target;
+    if (ytReady && ytPlayer) ytPlayer.seekTo(target, true);
+    updateScrubber();
+  });
 
   document.getElementById("videoToggleBtn").addEventListener("click", () => {
     state.showVideo = !state.showVideo;

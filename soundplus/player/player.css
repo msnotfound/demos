@@ -1301,6 +1301,103 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   font-weight: 600;
 }
 
+/* Spotify-Style Immersive Now Playing Sheet */
+.np-body { gap: 16px; }
+.np-stage-art {
+  position: relative;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--stage-grad);
+  border: 1px solid color-mix(in oklch, var(--line) 70%, transparent);
+  display: flex;
+  justify-content: center;
+}
+.np-big-cover {
+  width: min(268px, 100%);
+  border-radius: 14px;
+  box-shadow: 0 20px 44px oklch(10% 0.03 255 / 0.28);
+}
+.np-vid-pill {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  background: color-mix(in oklch, var(--surface) 90%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.np-vid-pill:hover { border-color: var(--accent); color: var(--accent); }
+.np-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.np-title {
+  font-weight: 700;
+  font-size: 1.24rem;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+.np-artist {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 3px;
+}
+.np-scrub-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.np-time-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+.np-transport {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+}
+.np-play-fab {
+  width: 56px;
+  height: 56px;
+}
+.np-actions-bar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.np-action-pill {
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.np-action-pill:hover { border-color: var(--accent); color: var(--accent); }
+.np-upnext {
+  margin-top: auto;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.np-upnext:hover { border-color: var(--line-strong); }
+
 /* Toast Notification */
 .toast {
   position: fixed;
