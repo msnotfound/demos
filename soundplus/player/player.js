@@ -668,7 +668,11 @@
         if (merged.length) {
           registerItems(merged);
           state.tracks = merged.map((t) => getItem(t.id));
-          if (!state.isPlaying) {
+          if (deepLinkedTrackId) {
+            const dlItem = getItem(deepLinkedTrackId);
+            if (dlItem && dlItem.duration) state.duration = dlItem.duration;
+            state.queue = [deepLinkedTrackId, ...state.tracks.slice(0, 20).map((t) => t.id).filter((x) => x !== deepLinkedTrackId)];
+          } else if (!state.isPlaying) {
             state.currentId = state.tracks[0].id;
             state.duration = state.tracks[0].duration;
             state.queue = state.tracks.slice(0, 20).map((t) => t.id);
@@ -810,6 +814,7 @@
   // REAL URL HASH ROUTING
   // ==========================================================
   const VALID_VIEWS = ["home", "reels", "search", "podcasts", "library", "offline"];
+  let deepLinkedTrackId = null;
 
   function navigate(view, pushHash = true) {
     if (!VALID_VIEWS.includes(view)) view = "home";
@@ -821,19 +826,61 @@
     if (view === "reels") renderReel();
   }
 
-  function handleHash() {
-    const h = (location.hash || "#home").slice(1);
-    if (h.startsWith("track=")) {
-      const id = h.slice(6);
-      if (catalogById.has(id)) {
-        state.currentId = id;
-        renderAll();
-        openDrawer("lyrics");
+  async function resolveBareTrackMeta(id) {
+    try {
+      const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${encodeURIComponent(id)}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data && data.title) {
+        const existing = catalogById.get(id);
+        if (existing) {
+          existing.title = data.title;
+          existing.artist = (data.author_name || existing.artist || "SoundPlus").replace(/\s*-\s*Topic$/i, "");
+          hydrateAlbumArt(existing);
+          renderAll();
+        }
       }
-      navigate("home", false);
-      return;
+    } catch (_) {}
+  }
+
+  function handleHash() {
+    const raw = (location.hash || "#home").slice(1);
+    if (raw.startsWith("track=")) {
+      const params = new URLSearchParams(raw);
+      const id = (params.get("track") || "").trim();
+      const titleParam = (params.get("t") || "").trim();
+      const artistParam = (params.get("a") || "").trim();
+      if (id) {
+        deepLinkedTrackId = id;
+        if (!catalogById.has(id)) {
+          registerItems([{
+            id,
+            title: titleParam || "Shared Track",
+            artist: artistParam || "SoundPlus",
+            duration: 210,
+            genre: "Shared",
+            thumbnailUrl: `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`
+          }]);
+          if (!titleParam) resolveBareTrackMeta(id);
+        }
+        const item = getItem(id);
+        state.currentId = item.id;
+        state.elapsed = 0;
+        state.duration = item.duration || 210;
+        if (!state.queue.includes(item.id)) state.queue.unshift(item.id);
+        hydrateAlbumArt(item);
+        renderAll();
+        navigate("home", false);
+        openDrawer("lyrics");
+        if (ytReady && ytPlayer && typeof ytPlayer.cueVideoById === "function") {
+          ytPlayer.cueVideoById(item.id);
+        } else {
+          pendingPlayId = item.id;
+        }
+        return;
+      }
     }
-    navigate(VALID_VIEWS.includes(h) ? h : "home", false);
+    navigate(VALID_VIEWS.includes(raw) ? raw : "home", false);
   }
   window.addEventListener("hashchange", handleHash);
   document.querySelectorAll("[data-view]").forEach((btn) => btn.addEventListener("click", () => navigate(btn.dataset.view)));
@@ -1738,11 +1785,48 @@
   document.getElementById("reelEqBtn").addEventListener("click", () => openDrawer("eq"));
   document.getElementById("reelDetailsBtn").addEventListener("click", () => openDrawer("lyrics"));
 
+  function copyTextFallback(text) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;left:-9999px;top:-9999px;opacity:0;";
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (_) {
+      return false;
+    }
+  }
+
   document.getElementById("npOfflineBtn").addEventListener("click", () => toggleOffline(state.currentId));
-  document.getElementById("npShareBtn").addEventListener("click", () => {
-    const url = `${location.origin}${location.pathname}#track=${state.currentId}`;
-    navigator.clipboard?.writeText(url).catch(() => {});
-    showToast("Copied deep link for current track");
+  document.getElementById("npShareBtn").addEventListener("click", async () => {
+    const item = getItem(state.currentId);
+    const params = new URLSearchParams({ track: item.id, t: item.title, a: item.artist });
+    const url = `${location.origin}${location.pathname}#${params.toString()}`;
+    history.replaceState(null, "", `#${params.toString()}`);
+
+    if (navigator.share && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      try {
+        await navigator.share({ title: item.title, text: `Listen to ${item.title} on SoundPlus`, url });
+        showToast("Shared track link");
+        return;
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+      }
+    }
+
+    let copied = false;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(url);
+        copied = true;
+      } catch (_) {}
+    }
+    if (!copied) copied = copyTextFallback(url);
+    showToast(copied ? "Copied share link to clipboard" : "Share link updated in address bar");
   });
 
   // Sleep Timer (Off / End of track / 15m / 30m / 60m with live countdown)
